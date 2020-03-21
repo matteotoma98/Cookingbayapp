@@ -2,4 +2,6 @@
     <string name="app_name">Cooking Bay</string>
     <string name="name">Nome</string>
     <string name="surname">Cognome</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
 </resources>
