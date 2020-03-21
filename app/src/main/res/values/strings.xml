@@ -4,4 +4,5 @@
     <string name="surname">Cognome</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
+    <string name="accedi">Accedi</string>
 </resources>
