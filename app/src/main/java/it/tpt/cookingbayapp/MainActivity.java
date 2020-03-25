@@ -9,7 +9,6 @@ import android.os.Bundle;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import it.tpt.cookingbayapp.R;
 
 public class MainActivity extends AppCompatActivity {
 

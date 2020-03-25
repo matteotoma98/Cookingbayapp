@@ -18,6 +18,10 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -46,15 +50,15 @@ public class LoginActivity extends AppCompatActivity {
                     //Il final serve per renderli visibili nella classe interna OnCompleteListener
                     final String name = textName.getText().toString();
                     final String surname = textSurname.getText().toString();
-                    String email = textEmail.getText().toString();
-                    String password = textPassword.getText().toString();
+                    final String email = textEmail.getText().toString();
+                    final String password = textPassword.getText().toString();
 
                     //Creazione dell'utente
                     mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if(task.isSuccessful()){
-                                FirebaseUser user = mAuth.getCurrentUser();
+                                final FirebaseUser user = mAuth.getCurrentUser();
                                 UserProfileChangeRequest profileChangeRequest = new UserProfileChangeRequest.Builder()
                                         .setDisplayName(name + " " + surname)
                                         .build();
@@ -62,6 +66,7 @@ public class LoginActivity extends AppCompatActivity {
                                 user.updateProfile(profileChangeRequest).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
+                                        writeUserToDb(name,surname,email,user.getUid());
                                         Intent intent = new Intent();
                                         intent.putExtra("name", textName.getText().toString());
                                         intent.putExtra("surname", textSurname.getText().toString());
@@ -86,7 +91,16 @@ public class LoginActivity extends AppCompatActivity {
 
         getSupportActionBar().setTitle(getString(R.string.login));
     }
-
+    private void writeUserToDb(String name, String surname, String email, String uid) {
+        //SCRIVO SUL DB DOPO LA REGISTRAZIONE
+        Map<String, Object> user = new HashMap<>();
+        user.put("nome", name);
+        user.put("cognome", surname);
+        user.put("email",email);
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("utenti").document(uid).set(user); //IL DOCUMENT E' L'UTENTE (STRING UID) CIOE' L'IDENTIFICATORE DEL DOCUMENTO
+        //OPERAZIONE EFFETTUATA IN MODO ASINCRONO, BISOGNEREBBE METTERE UN ONCOMPLETELISTENER (RIGA 62)
+    }
     @Override
     protected void onStart() {
         super.onStart();
