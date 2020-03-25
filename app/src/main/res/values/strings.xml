@@ -5,5 +5,6 @@
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="login">Accedi</string>
+    <string name="signup">Reigstrati</string>
 
 </resources>
