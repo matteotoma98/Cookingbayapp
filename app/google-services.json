@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "23791885719",
+    "firebase_url": "https://cookingbay-127ce.firebaseio.com",
+    "project_id": "cookingbay-127ce",
+    "storage_bucket": "cookingbay-127ce.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:23791885719:android:d1052c19cfe358f0d7b8d2",
+        "android_client_info": {
+          "package_name": "it.tpt.cookingbayapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "23791885719-q2tih2tkg7afgoaksblj50m07ds56coi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDfwVZllo3Ls1vklWGExeKgan4HB886ABM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "23791885719-q2tih2tkg7afgoaksblj50m07ds56coi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
