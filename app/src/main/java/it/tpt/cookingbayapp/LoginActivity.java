@@ -1,15 +1,23 @@
 package it.tpt.cookingbayapp;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import it.tpt.cookingbayapp.R;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -24,6 +32,7 @@ public class LoginActivity extends AppCompatActivity {
 
         //Istanza database firebase
         mAuth = FirebaseAuth.getInstance();
+
         textName = findViewById(R.id.textName);
         textSurname = findViewById(R.id.textSurname);
         textEmail = findViewById(R.id.textEmail);
@@ -33,14 +42,45 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent();
-                intent.putExtra("name", textName.getText().toString());
-                intent.putExtra("surname", textSurname.getText().toString());
-                intent.putExtra("email", textEmail.getText().toString());
-                intent.putExtra("password", textPassword.getText().toString());
+                try {
+                    //Il final serve per renderli visibili nella classe interna OnCompleteListener
+                    final String name = textName.getText().toString();
+                    final String surname = textSurname.getText().toString();
+                    final String email = textEmail.getText().toString();
+                    final String password = textPassword.getText().toString();
 
-                setResult(RESULT_OK, intent);
-                finish();
+                    //Creazione dell'utente
+                    mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if(task.isSuccessful()){
+                                FirebaseUser user = mAuth.getCurrentUser();
+                                UserProfileChangeRequest profileChangeRequest = new UserProfileChangeRequest.Builder()
+                                        .setDisplayName(name + " " + surname)
+                                        .build();
+
+                                user.updateProfile(profileChangeRequest).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        Intent intent = new Intent();
+                                        intent.putExtra("name", textName.getText().toString());
+                                        intent.putExtra("surname", textSurname.getText().toString());
+                                        intent.putExtra("email", textEmail.getText().toString());
+                                        intent.putExtra("password", textPassword.getText().toString());
+
+                                        setResult(RESULT_OK, intent);
+                                        finish();
+                                    }
+                                });
+                            }
+                            else Toast.makeText(LoginActivity.this, getString(R.string.errorSignup), Toast.LENGTH_LONG).show();
+                        }
+                    });
+
+                } catch(NullPointerException e) {
+                    Toast.makeText(LoginActivity.this, getString(R.string.required), Toast.LENGTH_LONG).show();
+                }
+
             }
         });
 
