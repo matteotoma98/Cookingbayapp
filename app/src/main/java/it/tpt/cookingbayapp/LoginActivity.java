@@ -22,7 +22,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        //Istanza database
+        //Istanza database firebase
         mAuth = FirebaseAuth.getInstance();
 
         textEmail = findViewById(R.id.textEmail);
