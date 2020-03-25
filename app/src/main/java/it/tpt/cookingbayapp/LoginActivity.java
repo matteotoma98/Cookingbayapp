@@ -13,7 +13,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private TextInputEditText textEmail, textPassword;
+    private TextInputEditText textName,textSurname,textEmail, textPassword;
     private Button btnRegistra;
     private FirebaseAuth mAuth;
 
@@ -24,7 +24,8 @@ public class LoginActivity extends AppCompatActivity {
 
         //Istanza database firebase
         mAuth = FirebaseAuth.getInstance();
-
+        textName = findViewById(R.id.textName);
+        textSurname = findViewById(R.id.textSurname);
         textEmail = findViewById(R.id.textEmail);
         textPassword = findViewById(R.id.textPassword);
         btnRegistra = findViewById(R.id.containedButton);
@@ -33,6 +34,8 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 Intent intent = new Intent();
+                intent.putExtra("name", textName.getText().toString());
+                intent.putExtra("surname", textSurname.getText().toString());
                 intent.putExtra("email", textEmail.getText().toString());
                 intent.putExtra("password", textPassword.getText().toString());
 
