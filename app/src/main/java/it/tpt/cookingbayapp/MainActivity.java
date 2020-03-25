@@ -1,10 +1,11 @@
-package com.example.cookingbayapp;
+package it.tpt.cookingbayapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
+
+import com.example.cookingbayapp.R;
 
 public class MainActivity extends AppCompatActivity {
 
