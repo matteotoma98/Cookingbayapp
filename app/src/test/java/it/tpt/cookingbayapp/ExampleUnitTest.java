@@ -1,4 +1,4 @@
-package com.example.cookingbayapp;
+package it.tpt.cookingbayapp;
 
 import org.junit.Test;
 

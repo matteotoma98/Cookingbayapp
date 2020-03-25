@@ -1,4 +1,4 @@
-package com.example.cookingbayapp;
+package it.tpt.cookingbayapp;
 
 import android.content.Context;
 
