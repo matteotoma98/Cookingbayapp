@@ -22,10 +22,10 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, intent);
         if(requestCode == LOGIN_REQUEST) {
             if(resultCode == RESULT_OK) {
-                String nome = intent.getExtras().getString("nome");
-                String cognome = intent.getExtras().getString("cognome");
+                String email = intent.getExtras().getString("email");
+                String password = intent.getExtras().getString("password");
 
-                getSupportActionBar().setTitle(nome + " " + cognome); //dà il nome e il cognome in alto nella action bar
+                getSupportActionBar().setTitle(email + " " + password); //dà il nome e il cognome in alto nella action bar
             }
         }
     }
