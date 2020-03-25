@@ -46,8 +46,8 @@ public class LoginActivity extends AppCompatActivity {
                     //Il final serve per renderli visibili nella classe interna OnCompleteListener
                     final String name = textName.getText().toString();
                     final String surname = textSurname.getText().toString();
-                    final String email = textEmail.getText().toString();
-                    final String password = textPassword.getText().toString();
+                    String email = textEmail.getText().toString();
+                    String password = textPassword.getText().toString();
 
                     //Creazione dell'utente
                     mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -77,7 +77,7 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     });
 
-                } catch(NullPointerException e) {
+                } catch(Exception e) {
                     Toast.makeText(LoginActivity.this, getString(R.string.required), Toast.LENGTH_LONG).show();
                 }
 
