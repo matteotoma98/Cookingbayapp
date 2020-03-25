@@ -39,10 +39,10 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, intent);
         if(requestCode == LOGIN_REQUEST) {
             if(resultCode == RESULT_OK) {
-                String email = intent.getExtras().getString("email");
-                String password = intent.getExtras().getString("password");
+                String name = intent.getExtras().getString("name");
+                String surname = intent.getExtras().getString("surname");
 
-                getSupportActionBar().setTitle(email + " " + password); //dà il nome e il cognome in alto nella action bar
+                getSupportActionBar().setTitle(name + " " + surname); //dà il nome e il cognome in alto nella action bar
 
                 SharedPreferences preferences = getSharedPreferences("login", MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();
