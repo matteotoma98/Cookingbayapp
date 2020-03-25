@@ -10,8 +10,10 @@ import android.widget.Button;
 import com.google.android.material.textfield.TextInputEditText;
 
 public class LoginActivity extends AppCompatActivity {
+
     private TextInputEditText textEmail, textPassword;
     private Button btnRegistra;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,7 +26,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.putExtra("email", textEmail.getText().toString()); //il to string nella edit text è necessario altrimenti get text non restituisce una stringa
+                intent.putExtra("email", textEmail.getText().toString());
                 intent.putExtra("password", textPassword.getText().toString());
 
                 setResult(RESULT_OK, intent);
@@ -32,8 +34,11 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        getSupportActionBar().setTitle(getString(R.string.login)); //strings è utile per le applicazioni multilingua (file strings per ogni lingua)
+        getSupportActionBar().setTitle(getString(R.string.login));
+    }
 
-
+    @Override
+    protected void onStart() {
+        super.onStart();
     }
 }

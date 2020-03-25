@@ -8,13 +8,18 @@ import android.os.Bundle;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final int LOGIN_REQUEST = 101;
+    public static final int LOGIN_REQUEST = 123;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Intent intent = new Intent(MainActivity.this, LoginActivity.class); //pushiamo la login activity
+        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
         startActivityForResult(intent, LOGIN_REQUEST);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
     }
 
     @Override
@@ -25,14 +30,10 @@ public class MainActivity extends AppCompatActivity {
                 String email = intent.getExtras().getString("email");
                 String password = intent.getExtras().getString("password");
 
-                getSupportActionBar().setTitle(email + " " + password); //dà il nome e il cognome in alto nella action bar
+                getSupportActionBar().setTitle(email + " " + password);
             }
         }
     }
-
-
-
-
 
 
 }
