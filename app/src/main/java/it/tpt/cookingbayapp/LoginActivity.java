@@ -9,16 +9,21 @@ import android.widget.Button;
 
 import it.tpt.cookingbayapp.R;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActivity extends AppCompatActivity {
 
     private TextInputEditText textEmail, textPassword;
     private Button btnRegistra;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        //Istanza database
+        mAuth = FirebaseAuth.getInstance();
 
         textEmail = findViewById(R.id.textEmail);
         textPassword = findViewById(R.id.textPassword);
@@ -26,6 +31,7 @@ public class LoginActivity extends AppCompatActivity {
         btnRegistra.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent intent = new Intent();
                 intent.putExtra("email", textEmail.getText().toString());
                 intent.putExtra("password", textPassword.getText().toString());
