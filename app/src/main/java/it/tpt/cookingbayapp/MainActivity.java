@@ -15,6 +15,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 
 public class MainActivity  extends AppCompatActivity {
+    
     private BottomNavigationView bottomNavigationView;
     public static final int LOGIN_REQUEST = 101;
     private FirebaseAuth mAuth;

@@ -16,11 +16,21 @@ public class RecipeCardRecyclerViewAdapter extends RecyclerView.Adapter<RecipeCa
     private List<List<String>> recipeList;
 
     RecipeCardRecyclerViewAdapter() {
-        List<String> entry = new ArrayList<String>();
         recipeList=new ArrayList<>();
+
+        List<String> entry = new ArrayList<String>();
         entry.add("Pizza Margerita");
         entry.add("Cracco");
+        List<String> entry2 = new ArrayList<String>();
+        entry2.add("Pasta");
+        entry2.add("Cracco");
+        List<String> entry3 = new ArrayList<String>();
+        entry3.add("Pasta");
+        entry3.add("Cracco");
+
         recipeList.add(entry);
+        recipeList.add(entry2);
+        recipeList.add(entry3);
     }
 
     @NonNull
