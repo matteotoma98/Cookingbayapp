@@ -8,4 +8,7 @@
     <string name="signup">Reigstrati</string>
     <string name="required">Inserire tutte le informazioni!</string>
     <string name="errorSignup">Errore</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

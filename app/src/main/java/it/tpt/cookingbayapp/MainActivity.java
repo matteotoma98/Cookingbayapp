@@ -10,7 +10,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity  extends AppCompatActivity {
 
     public static final int LOGIN_REQUEST = 101;
     private FirebaseAuth mAuth;
@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
