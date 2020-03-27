@@ -12,10 +12,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
-public class HomeFragment extends Fragment {
+public class RdgFragment extends Fragment {
 
 
-    public HomeFragment() {
+    public RdgFragment() {
         // Required empty public constructor
     }
 
@@ -28,7 +28,7 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment with the ProductGrid theme
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
+        View view = inflater.inflate(R.layout.fragment_rdg, container, false);
 
         // Set up the RecyclerView
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
