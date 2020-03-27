@@ -1,5 +1,7 @@
 package it.tpt.cookingbayapp;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +16,10 @@ import java.util.List;
 public class RecipeCardRecyclerViewAdapter extends RecyclerView.Adapter<RecipeCardViewHolder> {
 
     private List<List<String>> recipeList;
+    Context mContext;
 
-    RecipeCardRecyclerViewAdapter() {
+    RecipeCardRecyclerViewAdapter(Context c) {
+        mContext = c;
         recipeList=new ArrayList<>();
 
         List<String> entry = new ArrayList<String>();
@@ -25,8 +29,8 @@ public class RecipeCardRecyclerViewAdapter extends RecyclerView.Adapter<RecipeCa
         entry2.add("Pasta");
         entry2.add("Cracco");
         List<String> entry3 = new ArrayList<String>();
-        entry3.add("Pasta");
-        entry3.add("Cracco");
+        entry3.add("Chicken McNuggets");
+        entry3.add("Gaben");
 
         recipeList.add(entry);
         recipeList.add(entry2);
@@ -43,7 +47,7 @@ public class RecipeCardRecyclerViewAdapter extends RecyclerView.Adapter<RecipeCa
     @Override
     public void onBindViewHolder(@NonNull RecipeCardViewHolder holder, int position) {
         if (recipeList != null && position < recipeList.size()) {
-            List<String> recipe = recipeList.get(position);
+            final List<String> recipe = recipeList.get(position);
             holder.title.setText(recipe.get(0));
             holder.user.setText(recipe.get(1));
             //imageRequester.setImageFromUrl(holder.productImage, product.url);
@@ -53,7 +57,12 @@ public class RecipeCardRecyclerViewAdapter extends RecyclerView.Adapter<RecipeCa
             holder.setRecipeClickListener(new RecipeClickListener() {
                 @Override
                 public void onRecipeClickListener(View v, int position) {
-                    
+                    String recipeTitle = recipe.get(0);
+                    String recipeAuthor = recipe.get(1);
+                    Intent intent = new Intent(mContext, ViewRecipeActivity.class);
+                    intent.putExtra("recipeTitle", recipeTitle);
+                    intent.putExtra("recipeAuthor", recipeAuthor);
+                    mContext.startActivity(intent);
                 }
             });
         }
