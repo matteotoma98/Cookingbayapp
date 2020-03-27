@@ -33,7 +33,7 @@ public class RdgFragment extends Fragment {
         // Set up the RecyclerView
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2, GridLayoutManager.VERTICAL, false));
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1, GridLayoutManager.VERTICAL, false));
         //RecipeCardRecyclerViewAdapter adapter = new RecipeCardRecyclerViewAdapter(ProductEntry.initProductEntryList(getResources()));
         /* DOBBIAMO PASSARE AL COSTRUTTORE QUI SOTTO LA LISTA DESIDERATA
            PER ORA E' CREATA MANUALMENTE NELLA CLASSE RecipeCardRecyclerViewAdapter
