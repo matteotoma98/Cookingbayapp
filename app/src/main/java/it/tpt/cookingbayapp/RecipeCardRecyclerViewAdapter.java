@@ -17,6 +17,7 @@ public class RecipeCardRecyclerViewAdapter extends RecyclerView.Adapter<RecipeCa
 
     RecipeCardRecyclerViewAdapter() {
         List<String> entry = new ArrayList<String>();
+        recipeList=new ArrayList<>();
         entry.add("Pizza Margerita");
         entry.add("Cracco");
         recipeList.add(entry);
