@@ -48,6 +48,14 @@ public class RecipeCardRecyclerViewAdapter extends RecyclerView.Adapter<RecipeCa
             holder.user.setText(recipe.get(1));
             //imageRequester.setImageFromUrl(holder.productImage, product.url);
             holder.preview.setImageResource(R.drawable.maxresdefault);
+
+            //Rendere cliccabile la card
+            holder.setRecipeClickListener(new RecipeClickListener() {
+                @Override
+                public void onRecipeClickListener(View v, int position) {
+                    
+                }
+            });
         }
     }
 
