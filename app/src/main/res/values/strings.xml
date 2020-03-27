@@ -8,7 +8,10 @@
     <string name="signup">Reigstrati</string>
     <string name="required">Inserire tutte le informazioni!</string>
     <string name="errorSignup">Errore</string>
-
+    <string name="salvasp">Salva senza pubblicare</string>
+    <string name="exit">Esci senza salvare</string>
+    <string name="menuFile" />
+    <string name="menuExit" />
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

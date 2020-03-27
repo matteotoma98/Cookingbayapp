@@ -10,7 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".ViewRecipeActivity"></activity>
-        <activity android:name=".CreateRecipe"></activity>
+        <activity android:name=".CreateRecipe"
+            android:parentActivityName=".MainActivity"
+            ></activity>
         <activity android:name=".LoginActivity"></activity>
         <activity android:name=".MainActivity">
             <intent-filter>
