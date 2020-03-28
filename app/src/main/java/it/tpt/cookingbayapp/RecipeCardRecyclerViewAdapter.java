@@ -51,7 +51,7 @@ public class RecipeCardRecyclerViewAdapter extends RecyclerView.Adapter<RecipeCa
                     Intent intent = new Intent(mContext, ViewRecipeActivity.class);
                     intent.putExtra("recipeTitle", recipe.getTitle());
                     intent.putExtra("recipeAuthor", recipe.getAuthor());
-                    intent.putExtra("sectionsList", recipe.getSections());
+                    intent.putExtra("sectionList", recipe.getSections());
                     mContext.startActivity(intent);
                 }
             });
