@@ -11,6 +11,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+
+import it.tpt.cookingbayapp.recipeObject.Recipe;
+import it.tpt.cookingbayapp.recipeObject.Section;
+
 
 public class RdgFragment extends Fragment {
 
@@ -23,6 +28,14 @@ public class RdgFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    public ArrayList<Recipe> createRecipeList(){
+        ArrayList<Recipe> list = new ArrayList<>();
+        ArrayList<Section> slist = new ArrayList<>();
+        slist.add(new Section("Prova prova prova prova prova", "someUrl", 29));
+        list.add(new Recipe("Pasta al ragù", "25 min", "Mario", slist ));
+        return list;
     }
 
     @Override
@@ -38,7 +51,10 @@ public class RdgFragment extends Fragment {
         /* DOBBIAMO PASSARE AL COSTRUTTORE QUI SOTTO LA LISTA DESIDERATA
            PER ORA E' CREATA MANUALMENTE NELLA CLASSE RecipeCardRecyclerViewAdapter
          */
-        RecipeCardRecyclerViewAdapter adapter = new RecipeCardRecyclerViewAdapter(getActivity());
+
+        ArrayList<Recipe> recipeList = createRecipeList();
+
+        RecipeCardRecyclerViewAdapter adapter = new RecipeCardRecyclerViewAdapter(getActivity(), recipeList);
         recyclerView.setAdapter(adapter);
         //int largePadding = getResources().getDimensionPixelSize(R.dimen.shr_product_grid_spacing);
         //int smallPadding = getResources().getDimensionPixelSize(R.dimen.shr_product_grid_spacing_small);
