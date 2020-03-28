@@ -7,9 +7,14 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
@@ -35,6 +40,26 @@ public class RdgFragment extends Fragment {
         ArrayList<Section> slist = new ArrayList<>();
         slist.add(new Section("Prova prova prova prova prova", "someUrl", 29));
         list.add(new Recipe("Pasta al ragù", "25 min", "Mario", slist ));
+
+        //Test per aggiungere una ricetta 'Recipe' nel database
+        Recipe test = new Recipe("Pasta al ragù", "25 min", "Mario", slist );
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String id = "Pasta-al-ragù-id";
+        db.collection("Users").document("Remy").collection("Recipes").document(id)
+                .set(test)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("TAG", "DocumentSnapshot successfully written!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("TAG", "Error writing document", e);
+                    }
+                });
+
         return list;
     }
 
