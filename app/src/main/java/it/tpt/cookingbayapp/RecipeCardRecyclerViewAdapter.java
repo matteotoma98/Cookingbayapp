@@ -2,6 +2,7 @@ package it.tpt.cookingbayapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,31 +11,20 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import it.tpt.cookingbayapp.recipeObject.Recipe;
+
 public class RecipeCardRecyclerViewAdapter extends RecyclerView.Adapter<RecipeCardViewHolder> {
 
-    private List<List<String>> recipeList;
+    private List<Recipe> recipeList;
     Context mContext;
 
-    RecipeCardRecyclerViewAdapter(Context c) {
+    RecipeCardRecyclerViewAdapter(Context c, List<Recipe> recipeList) {
         mContext = c;
-        recipeList=new ArrayList<>();
-
-        List<String> entry = new ArrayList<String>();
-        entry.add("Pizza Margherita");
-        entry.add("Cracco");
-        List<String> entry2 = new ArrayList<String>();
-        entry2.add("Pasta");
-        entry2.add("Cracco");
-        List<String> entry3 = new ArrayList<String>();
-        entry3.add("Chicken McNuggets");
-        entry3.add("Gaben");
-
-        recipeList.add(entry);
-        recipeList.add(entry2);
-        recipeList.add(entry3);
+        this.recipeList = recipeList;
     }
 
     @NonNull
@@ -44,24 +34,24 @@ public class RecipeCardRecyclerViewAdapter extends RecyclerView.Adapter<RecipeCa
         return new RecipeCardViewHolder(layoutView);
     }
 
+    //Assegna le informazioni della ricetta dinamicamente alla card
     @Override
     public void onBindViewHolder(@NonNull RecipeCardViewHolder holder, int position) {
         if (recipeList != null && position < recipeList.size()) {
-            final List<String> recipe = recipeList.get(position);
-            holder.title.setText(recipe.get(0));
-            holder.user.setText(recipe.get(1));
+            final Recipe recipe = recipeList.get(position);
+            holder.title.setText(recipe.getTitle());
+            holder.user.setText(recipe.getAuthor());
             //imageRequester.setImageFromUrl(holder.productImage, product.url);
             holder.preview.setImageResource(R.drawable.maxresdefault);
 
-            //Rendere cliccabile la card
+            //Rendere cliccabile la card e passare le informazioni all'activity ViewRecipeActivity
             holder.setRecipeClickListener(new RecipeClickListener() {
                 @Override
                 public void onRecipeClickListener(View v, int position) {
-                    String recipeTitle = recipe.get(0);
-                    String recipeAuthor = recipe.get(1);
                     Intent intent = new Intent(mContext, ViewRecipeActivity.class);
-                    intent.putExtra("recipeTitle", recipeTitle);
-                    intent.putExtra("recipeAuthor", recipeAuthor);
+                    intent.putExtra("recipeTitle", recipe.getTitle());
+                    intent.putExtra("recipeAuthor", recipe.getAuthor());
+                    intent.putExtra("sectionsList", recipe.getSections());
                     mContext.startActivity(intent);
                 }
             });
