@@ -46,10 +46,4 @@ public class LmrFragment extends Fragment {
 
 
     }
-
-
-
-
-
-
 }
