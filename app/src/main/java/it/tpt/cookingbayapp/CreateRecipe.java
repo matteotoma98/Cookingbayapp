@@ -14,7 +14,6 @@ public class CreateRecipe extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_recipe);
         getSupportActionBar().setTitle("Crea nuova ricetta");
-        getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     }

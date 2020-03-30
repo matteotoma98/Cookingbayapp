@@ -6,11 +6,19 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-
         <item name="android:statusBarColor">@color/colorPrimary</item>
-
-
     </style>
 
-    <style name="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense" parent=""></style>
+    <style name="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense" parent="" />
+
+    <style name="NoActionMain" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:statusBarColor">@color/colorPrimary</item>
+    </style>
+    <style name="NoActionLogin" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:statusBarColor">@color/colorAccent</item>
+    </style>
 </resources>

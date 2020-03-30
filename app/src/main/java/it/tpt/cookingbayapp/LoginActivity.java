@@ -89,7 +89,8 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        getSupportActionBar().setTitle(getString(R.string.login));
+        //Action Bar rimossa nel theme, di conseguenza la seguente istruzione fa crashare il sistema
+        //getSupportActionBar().setTitle(getString(R.string.login));
     }
     private void writeUserToDb(String name, String surname, String email, String uid) {
         //SCRIVO SUL DB DOPO LA REGISTRAZIONE
