@@ -44,11 +44,8 @@ public class RecipeCardRecyclerViewAdapter extends RecyclerView.Adapter<RecipeCa
             holder.title.setText(recipe.getTitle());
             holder.user.setText(recipe.getAuthor());
 
-            Uri uri1 = Uri.parse(recipe.getProfilePicUrl());
-            Uri uri2 = Uri.parse(recipe.getPreviewUrl());
-            
-            Glide.with(holder.profilePic.getContext()).load(uri1).into(holder.profilePic);
-            Glide.with(holder.preview.getContext()).load(uri2).into(holder.preview);
+            Glide.with(holder.profilePic.getContext()).load(recipe.getProfilePicUrl()).into(holder.profilePic);
+            Glide.with(holder.preview.getContext()).load(recipe.getPreviewUrl()).into(holder.preview);
 
             //Rendere cliccabile la card e passare le informazioni all'activity ViewRecipeActivity
             holder.setRecipeClickListener(new RecipeClickListener() {
