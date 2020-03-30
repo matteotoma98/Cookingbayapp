@@ -2,6 +2,7 @@ package it.tpt.cookingbayapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+
+import com.bumptech.glide.Glide;
 
 import java.util.List;
 
@@ -22,6 +25,7 @@ public class RecipeCardRecyclerViewAdapter extends RecyclerView.Adapter<RecipeCa
     RecipeCardRecyclerViewAdapter(Context c, List<Recipe> recipeList) {
         mContext = c;
         this.recipeList = recipeList;
+
     }
 
     @NonNull
@@ -36,10 +40,15 @@ public class RecipeCardRecyclerViewAdapter extends RecyclerView.Adapter<RecipeCa
     public void onBindViewHolder(@NonNull RecipeCardViewHolder holder, int position) {
         if (recipeList != null && position < recipeList.size()) {
             final Recipe recipe = recipeList.get(position);
+
             holder.title.setText(recipe.getTitle());
             holder.user.setText(recipe.getAuthor());
-            //imageRequester.setImageFromUrl(holder.productImage, product.url);
-            holder.preview.setImageResource(R.drawable.maxresdefault);
+
+            Uri uri1 = Uri.parse(recipe.getProfilePicUrl());
+            Uri uri2 = Uri.parse(recipe.getPreviewUrl());
+            
+            Glide.with(holder.profilePic.getContext()).load(uri1).into(holder.profilePic);
+            Glide.with(holder.preview.getContext()).load(uri2).into(holder.preview);
 
             //Rendere cliccabile la card e passare le informazioni all'activity ViewRecipeActivity
             holder.setRecipeClickListener(new RecipeClickListener() {

@@ -16,11 +16,15 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import it.tpt.cookingbayapp.recipeObject.Recipe;
 import it.tpt.cookingbayapp.recipeObject.Section;
@@ -48,9 +52,13 @@ public class RdgFragment extends Fragment {
         slist.add(new Section("mmmh mmmg mmmh gnam gnam gnam nice", "someUrl2", 29));
 
         //Test per aggiungere una ricetta 'Recipe' nel database
-        Recipe test = new Recipe("Pasta al pesto", "25 min", "Luigi", slist );
+        Recipe test = new Recipe("Pasta al pesto", "url", "url", "25 min", "Luigi Qualcosa", slist );
         String id = "Pasta-al-pesto-id";
-        db.collection("Users").document("Luigi").collection("Recipes").document(id)
+        Map<String, Object> name = new HashMap<>();
+        name.put("name", "Luigi");
+        name.put("surname", "Qualcosa");
+        db.collection("Users").document("luigi@gmail.com").set(name);
+        db.collection("Users").document("luigi@gmail.com").collection("Recipes").document(id)
                 .set(test)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -73,7 +81,7 @@ public class RdgFragment extends Fragment {
         // Set up the RecyclerView
         recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
-        createRecipeList(); //Temporaneo
+        //createRecipeList(); //Temporaneo
         FirebaseFirestore db;
         db = FirebaseFirestore.getInstance();
 
@@ -84,7 +92,8 @@ public class RdgFragment extends Fragment {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             ArrayList<Recipe> recipeList = new ArrayList<>();
-                            for (QueryDocumentSnapshot document : task.getResult()) {
+                            String profilePicUrl;
+                            for (final QueryDocumentSnapshot document : task.getResult()) {
                                 Recipe recipe = document.toObject(Recipe.class);
                                 recipeList.add(recipe);
                             }
