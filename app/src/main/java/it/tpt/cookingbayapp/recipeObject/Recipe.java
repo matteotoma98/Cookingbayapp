@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 //Per le classi da utilizzare con FireStore serve sempre un costruttore senza argomenti disponibile
-public class Recipe {
+public class Recipe implements Serializable{
     private String title;
     private String previewUrl;
     private String profilePicUrl;
