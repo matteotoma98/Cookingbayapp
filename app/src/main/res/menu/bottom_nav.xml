@@ -4,7 +4,7 @@
     <item
         android:id="@+id/nav_home"
         android:icon="@drawable/ic_ric_giorno"
-        android:title="Ricette del giorno"/>
+        android:title="Feed"/>
     <item
         android:id="@+id/nav_favourites"
         android:icon="@drawable/ic_star_black_24dp"
@@ -15,11 +15,10 @@
         android:title="Cerca"/>
     <item
         android:id="@+id/nav_myrecipes"
-        android:icon="@drawable/ic_shopping_basket_black_24dp"
-        android:title="Le mie ricette"/>
+        android:icon="@drawable/ic_folder_shared_black_24dp"
+        android:title="Mie ricette"/>
     <item
         android:id="@+id/nav_profile"
         android:icon="@drawable/ic_assignment_ind_black_24dp"
         android:title="Profilo"/>
-
 </menu>
