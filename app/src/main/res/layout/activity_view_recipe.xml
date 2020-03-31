@@ -1,29 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    android:orientation="vertical"
-    tools:context=".ViewRecipeActivity">
+    tools:context="it.tpt.cookingbayapp.ViewRecipeActivity"
+    android:padding="10dp">
 
-    <TextView
-        android:id="@+id/recipeTitle"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Titolo"
-        android:textSize="30dp"/>
-    <TextView
-        android:id="@+id/recipeAuthor"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Autore"/>
-    <TextView
-        android:id="@+id/sectionText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TestoSezione"/>
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/previewPic"
+            android:layout_width="match_parent"
+            android:layout_height="194dp"
+            android:scaleType="centerCrop"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <de.hdodenhof.circleimageview.CircleImageView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/profilePic"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:scaleType="centerCrop"
+                android:contentDescription="profilePic"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/recipeTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Titolo"
+                    android:textSize="25sp" />
+                <TextView
+                    android:id="@+id/recipeAuthor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Autore"/>
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/view_recipe_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tipologia"/>
 
 
-</LinearLayout>
+        </LinearLayout>
+        <TextView
+            android:id="@+id/sectionText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TestoSezione"/>
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/white"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+
+
+
+        </androidx.core.widget.NestedScrollView>
+
+    </LinearLayout>
+
+</FrameLayout>
