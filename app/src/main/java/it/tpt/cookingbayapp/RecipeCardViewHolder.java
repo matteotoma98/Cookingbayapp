@@ -21,10 +21,10 @@ public class RecipeCardViewHolder extends RecyclerView.ViewHolder implements Vie
 
     public RecipeCardViewHolder(@NonNull View itemView) {
         super(itemView);
-        preview = itemView.findViewById(R.id.preview);
-        profilePic = itemView.findViewById(R.id.profile);
-        title = itemView.findViewById(R.id.title);
-        user = itemView.findViewById(R.id.user);
+        preview = itemView.findViewById(R.id.cardPreviewPic);
+        profilePic = itemView.findViewById(R.id.cardProfilePic);
+        title = itemView.findViewById(R.id.cardRecipeTitle);
+        user = itemView.findViewById(R.id.cardRecipeAuthor);
 
         itemView.setOnClickListener(this);
     }

@@ -19,8 +19,8 @@ public class ViewRecipeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_recipe);
 
-        recipeTitle = findViewById(R.id.recipeTitle);
-        recipeAuthor = findViewById(R.id.recipeAuthor);
+        recipeTitle = findViewById(R.id.viewRecipeTitle);
+        recipeAuthor = findViewById(R.id.viewRecipeAuthor);
         sectionText = findViewById(R.id.sectionText);
 
         Intent intent = getIntent();
