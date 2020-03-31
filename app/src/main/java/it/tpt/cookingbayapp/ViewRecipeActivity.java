@@ -1,7 +1,6 @@
 package it.tpt.cookingbayapp;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -12,13 +11,9 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
-import java.util.ArrayList;
-
 import de.hdodenhof.circleimageview.CircleImageView;
-import it.tpt.cookingbayapp.cardRecycler.RecipeCardRecyclerViewAdapter;
 import it.tpt.cookingbayapp.ingredientsRecycler.IngredientsRecyclerViewAdapter;
 import it.tpt.cookingbayapp.recipeObject.Recipe;
-import it.tpt.cookingbayapp.recipeObject.Section;
 
 public class ViewRecipeActivity extends AppCompatActivity {
 
