@@ -1,6 +1,9 @@
 package it.tpt.cookingbayapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +15,8 @@ import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import it.tpt.cookingbayapp.cardRecycler.RecipeCardRecyclerViewAdapter;
+import it.tpt.cookingbayapp.ingredientsRecycler.IngredientsRecyclerViewAdapter;
 import it.tpt.cookingbayapp.recipeObject.Recipe;
 import it.tpt.cookingbayapp.recipeObject.Section;
 
@@ -21,6 +26,7 @@ public class ViewRecipeActivity extends AppCompatActivity {
     TextView recipeTitle, recipeAuthor, sectionText;
     CircleImageView profilePic;
     ImageView previewPic;
+    RecyclerView recyclerView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +50,13 @@ public class ViewRecipeActivity extends AppCompatActivity {
         }
         else Glide.with(this).load(recipe.getProfilePicUrl()).into(profilePic);
         Glide.with(this).load(recipe.getPreviewUrl()).into(previewPic);
+
+        recyclerView = findViewById(R.id.ingRecycler_view);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        IngredientsRecyclerViewAdapter adapter = new IngredientsRecyclerViewAdapter(recipe.getIngredients());
+        recyclerView.setAdapter(adapter);
+
 
 
         getSupportActionBar().setTitle(recipe.getTitle());

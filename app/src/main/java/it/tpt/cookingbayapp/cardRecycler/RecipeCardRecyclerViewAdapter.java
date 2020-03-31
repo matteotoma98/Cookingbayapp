@@ -1,8 +1,7 @@
-package it.tpt.cookingbayapp;
+package it.tpt.cookingbayapp.cardRecycler;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +14,9 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 
+import it.tpt.cookingbayapp.R;
+import it.tpt.cookingbayapp.RecipeClickListener;
+import it.tpt.cookingbayapp.ViewRecipeActivity;
 import it.tpt.cookingbayapp.recipeObject.Recipe;
 
 public class RecipeCardRecyclerViewAdapter extends RecyclerView.Adapter<RecipeCardViewHolder> {
@@ -22,7 +24,7 @@ public class RecipeCardRecyclerViewAdapter extends RecyclerView.Adapter<RecipeCa
     private List<Recipe> recipeList;
     Context mContext;
 
-    RecipeCardRecyclerViewAdapter(Context c, List<Recipe> recipeList) {
+    public RecipeCardRecyclerViewAdapter(Context c, List<Recipe> recipeList) {
         mContext = c;
         this.recipeList = recipeList;
 

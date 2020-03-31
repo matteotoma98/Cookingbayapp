@@ -16,16 +16,18 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import it.tpt.cookingbayapp.cardRecycler.RecipeCardRecyclerViewAdapter;
+import it.tpt.cookingbayapp.recipeObject.Ingredient;
 import it.tpt.cookingbayapp.recipeObject.Recipe;
 import it.tpt.cookingbayapp.recipeObject.Section;
 
@@ -50,9 +52,12 @@ public class RdgFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
         ArrayList<Section> slist = new ArrayList<>();
         slist.add(new Section("mmmh mmmg mmmh gnam gnam gnam nice", "someUrl2", 29));
+        ArrayList<Ingredient> ing = new ArrayList<>();
+        ing.add(new Ingredient("Pasta","200 g"));
+        ing.add(new Ingredient("Pesto", "100 g"));
 
         //Test per aggiungere una ricetta 'Recipe' nel database
-        Recipe test = new Recipe("Pasta al pesto", "url", "url", "25 min", "Luigi Qualcosa", slist );
+        Recipe test = new Recipe("Pasta al pesto", "url", "url", "25 min", "Luigi Qualcosa", ing, slist );
         String id = "Pasta-al-pesto-id";
         Map<String, Object> name = new HashMap<>();
         name.put("name", "Luigi");
@@ -79,7 +84,7 @@ public class RdgFragment extends Fragment {
         // Inflate the layout for this fragment with the ProductGrid theme
         View view = inflater.inflate(R.layout.fragment_rdg, container, false);
         // Set up the RecyclerView
-        recyclerView = view.findViewById(R.id.recycler_view);
+        recyclerView = view.findViewById(R.id.cardRecycler_view);
         recyclerView.setHasFixedSize(true);
         //createRecipeList(); //Temporaneo
         FirebaseFirestore db;

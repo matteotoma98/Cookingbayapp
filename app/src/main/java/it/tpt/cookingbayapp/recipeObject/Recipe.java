@@ -2,6 +2,7 @@ package it.tpt.cookingbayapp.recipeObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 //Per le classi da utilizzare con FireStore serve sempre un costruttore senza argomenti disponibile
 public class Recipe implements Serializable{
@@ -10,17 +11,27 @@ public class Recipe implements Serializable{
     private String profilePicUrl;
     private String time;
     private String author;
+    private ArrayList<Ingredient> ingredients;
     private ArrayList<Section> sections;
 
     public Recipe(){ }
 
-    public Recipe(String title, String previewUrl, String profilePicUrl, String time, String author, ArrayList<Section> sections) {
+    public Recipe(String title, String previewUrl, String profilePicUrl, String time, String author, ArrayList<Ingredient> ingredients, ArrayList<Section> sections) {
         this.title = title;
         this.previewUrl = previewUrl;
         this.profilePicUrl = profilePicUrl;
         this.time = time;
         this.author = author;
+        this.ingredients = ingredients;
         this.sections = sections;
+    }
+
+    public ArrayList<Ingredient> getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(ArrayList<Ingredient> ingredients) {
+        this.ingredients = ingredients;
     }
 
     public String getProfilePicUrl() {

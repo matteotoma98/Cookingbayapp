@@ -1,4 +1,4 @@
-package it.tpt.cookingbayapp;
+package it.tpt.cookingbayapp.cardRecycler;
 
 import android.view.View;
 import android.widget.ImageView;
@@ -8,6 +8,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import it.tpt.cookingbayapp.R;
+import it.tpt.cookingbayapp.RecipeClickListener;
 
 public class RecipeCardViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 

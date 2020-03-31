@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="it.tpt.cookingbayapp.ViewRecipeActivity"
-    android:padding="10dp">
+    android:padding="10dp"
+    tools:context="it.tpt.cookingbayapp.ViewRecipeActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,80 +16,98 @@
             android:id="@+id/viewPreviewPic"
             android:layout_width="match_parent"
             android:layout_height="194dp"
-            android:scaleType="centerCrop"/>
+            android:scaleType="centerCrop" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="10dp">
-            <de.hdodenhof.circleimageview.CircleImageView
-                xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/viewProfilePic"
                 android:layout_width="55dp"
                 android:layout_height="55dp"
-                android:scaleType="centerCrop"
-                android:contentDescription="profilePic"/>
+                android:contentDescription="profilePic"
+                android:scaleType="centerCrop" />
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginLeft="10dp">
+                android:layout_marginLeft="10dp"
+                android:orientation="vertical">
+
                 <TextView
                     android:id="@+id/viewRecipeTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Titolo"
                     android:textSize="25sp" />
+
                 <TextView
                     android:id="@+id/viewRecipeAuthor"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Autore"/>
+                    android:text="Autore" />
             </LinearLayout>
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
+                android:layout_gravity="end"
                 android:layout_marginEnd="5dp"
-                android:src="@drawable/ic_restaurant_black_24dp"
-                android:layout_gravity="end" />
+                android:src="@drawable/ic_restaurant_black_24dp" />
+
             <TextView
                 android:id="@+id/viewRecipeType"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Tipologia"
                 android:textAppearance="?attr/textAppearanceBody2"
-                android:textColor="?android:attr/textColorSecondary"/>
+                android:textColor="?android:attr/textColorSecondary" />
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="5dp">
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
+                android:layout_gravity="end"
                 android:layout_marginEnd="5dp"
-                android:src="@drawable/ic_av_timer_black_24dp"
-                android:layout_gravity="end" />
+                android:src="@drawable/ic_av_timer_black_24dp" />
+
             <TextView
                 android:id="@+id/viewRecipeTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Tempo"
                 android:textAppearance="?attr/textAppearanceBody2"
-                android:textColor="?android:attr/textColorSecondary"/>
+                android:textColor="?android:attr/textColorSecondary" />
         </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/ingredients"
+            android:textSize="20sp" />
+
         <TextView
             android:id="@+id/sectionText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TestoSezione"/>
+            android:text="TestoSezione" />
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
@@ -97,7 +115,10 @@
             android:background="@android:color/white"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/ingRecycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
 
         </androidx.core.widget.NestedScrollView>
