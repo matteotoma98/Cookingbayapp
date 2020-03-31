@@ -15,8 +15,7 @@ public class RecipeCardViewHolder extends RecyclerView.ViewHolder implements Vie
 
     ImageView preview;
     CircleImageView profilePic;
-    TextView title;
-    TextView user;
+    TextView title, user, type, time;
 
     //Interface object (ClickListener)
     RecipeClickListener recipeClickListener;
@@ -27,6 +26,8 @@ public class RecipeCardViewHolder extends RecyclerView.ViewHolder implements Vie
         profilePic = itemView.findViewById(R.id.cardProfilePic);
         title = itemView.findViewById(R.id.cardRecipeTitle);
         user = itemView.findViewById(R.id.cardRecipeAuthor);
+        type = itemView.findViewById(R.id.cardRecipeType);
+        time = itemView.findViewById(R.id.cardRecipeTime);
 
         itemView.setOnClickListener(this);
     }

@@ -23,7 +23,7 @@ import it.tpt.cookingbayapp.recipeObject.Section;
 public class ViewRecipeActivity extends AppCompatActivity {
 
     //Section text è momentaneo
-    TextView recipeTitle, recipeAuthor, sectionText;
+    TextView recipeTitle, recipeAuthor, recipeType, recipeTime, sectionText;
     CircleImageView profilePic;
     ImageView previewPic;
     RecyclerView recyclerView;
@@ -34,6 +34,8 @@ public class ViewRecipeActivity extends AppCompatActivity {
 
         recipeTitle = findViewById(R.id.viewRecipeTitle);
         recipeAuthor = findViewById(R.id.viewRecipeAuthor);
+        recipeTime = findViewById(R.id.viewRecipeTime);
+        recipeType = findViewById(R.id.viewRecipeType);
         sectionText = findViewById(R.id.sectionText);
         previewPic = findViewById(R.id.viewPreviewPic);
         profilePic = findViewById(R.id.viewProfilePic);
@@ -43,6 +45,8 @@ public class ViewRecipeActivity extends AppCompatActivity {
 
         recipeTitle.setText(recipe.getTitle());
         recipeAuthor.setText(recipe.getAuthor());
+        recipeTime.setText(recipe.getTime());
+        recipeType.setText(recipe.getType());
         sectionText.setText(recipe.getSections().get(0).getText());
 
         if(recipe.getProfilePicUrl().toString().equals("missingprofile")){

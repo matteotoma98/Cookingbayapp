@@ -57,7 +57,7 @@ public class RdgFragment extends Fragment {
         ing.add(new Ingredient("Pesto", "100 g"));
 
         //Test per aggiungere una ricetta 'Recipe' nel database
-        Recipe test = new Recipe("Pasta al pesto", "url", "url", "25 min", "Luigi Qualcosa", ing, slist );
+        Recipe test = new Recipe("Pasta al pesto", "url", "url", "25 min", "Primo Piatto", "Luigi Qualcosa", ing, slist );
         String id = "Pasta-al-pesto-id";
         Map<String, Object> name = new HashMap<>();
         name.put("name", "Luigi");
