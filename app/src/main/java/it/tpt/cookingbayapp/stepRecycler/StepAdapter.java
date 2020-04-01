@@ -17,7 +17,7 @@ public class StepAdapter extends RecyclerView.Adapter<StepViewHolder> {
 
     private List<Step> steps;
 
-    public StepAdapter(List<Step> steps){
+    public StepAdapter(List<Step> steps) {
         this.steps = steps;
     }
 
@@ -28,8 +28,10 @@ public class StepAdapter extends RecyclerView.Adapter<StepViewHolder> {
         return new StepViewHolder(layoutView);
     }
 
-    public void addStep(Step step){
+    public void addStep(Step step) {
         steps.add(step);
+        notifyDataSetChanged();
+        //notifyItemInserted(getItemCount());
     }
 
     public void removeStep(int position) {
@@ -37,15 +39,19 @@ public class StepAdapter extends RecyclerView.Adapter<StepViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull StepViewHolder holder, int position) {
-        if (steps != null && position < steps.size()){
-            String steptext = "Step "+ steps.get(position).getStepnumber();
+    public void onBindViewHolder(@NonNull final StepViewHolder holder, int position) {
+        if (steps != null && position < steps.size()) {
+            String steptext = "Step " + (position+2);
             holder.stepnumber.setText(steptext);
 
             holder.setStepClickListener(new StepClickListener() {
                 @Override
                 public void onDeleteListener(int position) {
+                holder.descrizione.setText("");
                     steps.remove(position);
+                    notifyItemRemoved(position);
+                    notifyItemRangeChanged(position, getItemCount());
+                    //notifyDataSetChanged();
                 }
             });
         }

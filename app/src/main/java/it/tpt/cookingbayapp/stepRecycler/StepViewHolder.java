@@ -7,6 +7,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.textfield.TextInputEditText;
+
 import it.tpt.cookingbayapp.R;
 import it.tpt.cookingbayapp.StepClickListener;
 
@@ -14,6 +16,7 @@ public class StepViewHolder extends RecyclerView.ViewHolder implements View.OnCl
 
     TextView stepnumber;
     Button delete;
+    TextInputEditText descrizione;
 
     //Interface object
     StepClickListener stepClickListener;
@@ -23,11 +26,13 @@ public class StepViewHolder extends RecyclerView.ViewHolder implements View.OnCl
         stepnumber = itemView.findViewById(R.id.stepNumber);
         delete = itemView.findViewById(R.id.deletestep);
         delete.setOnClickListener(this);
+        descrizione = itemView.findViewById(R.id.steptext);
+
     }
 
     @Override
     public void onClick(View v) {
-        this.stepClickListener.onDeleteListener(getLayoutPosition());
+        this.stepClickListener.onDeleteListener(getAdapterPosition());
     }
 
     public void setStepClickListener(StepClickListener sc) {

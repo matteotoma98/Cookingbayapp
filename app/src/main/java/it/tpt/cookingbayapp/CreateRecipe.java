@@ -46,8 +46,9 @@ public class CreateRecipe extends AppCompatActivity {
         btnAddStep.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(CreateRecipe.this, "Premuto", Toast.LENGTH_LONG).show(); //per vedere quando viene premuto il bottone
+               // Toast.makeText(CreateRecipe.this, "Premuto", Toast.LENGTH_LONG).show(); //per vedere quando viene premuto il bottone
                 mAdapter.addStep(new Step(Integer.toString(mAdapter.getItemCount()+2)));
+
             }
         });
 
@@ -80,8 +81,9 @@ public class CreateRecipe extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.exitNoSave) {
-            Toast.makeText(this, "Elimina ricetta", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(this, LmrFragment.class));
+            Toast.makeText(this, "Ricetta non salvata", Toast.LENGTH_SHORT).show();
+            finish();
+          //  startActivity(new Intent(this, LmrFragment.class));
         } else if (id == R.id.exitSave) {
             Toast.makeText(this, "Salva ricetta", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(this, MainActivity.class));
