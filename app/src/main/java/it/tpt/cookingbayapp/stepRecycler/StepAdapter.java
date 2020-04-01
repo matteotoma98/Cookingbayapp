@@ -13,9 +13,10 @@ import it.tpt.cookingbayapp.R;
 import it.tpt.cookingbayapp.recipeObject.Ingredient;
 
 public class StepAdapter extends RecyclerView.Adapter<StepViewHolder> {
+
     private List<Step> steps;
 
-    public StepAdapter(List<Ingredient> ingredients){
+    public StepAdapter(List<Step> steps){
         this.steps = steps;
     }
 
@@ -24,6 +25,10 @@ public class StepAdapter extends RecyclerView.Adapter<StepViewHolder> {
     public StepViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.step_item, parent, false);
         return new StepViewHolder(layoutView);
+    }
+
+    public void addStep(Step step){
+        steps.add(step);
     }
 
     @Override
