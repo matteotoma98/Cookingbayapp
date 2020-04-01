@@ -34,7 +34,17 @@ public class RecipeCardRecyclerViewAdapter extends RecyclerView.Adapter<RecipeCa
     @Override
     public RecipeCardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.recipe_card, parent, false);
-        return new RecipeCardViewHolder(layoutView);
+        RecipeCardViewHolder holder = new RecipeCardViewHolder(layoutView);
+        //Rendere cliccabile la card e passare le informazioni all'activity ViewRecipeActivity
+        holder.setRecipeClickListener(new RecipeClickListener() {
+            @Override
+            public void onRecipeClickListener(View v, int position) {
+                Intent intent = new Intent(mContext, ViewRecipeActivity.class);
+                intent.putExtra("recipe", recipeList.get(position));
+                mContext.startActivity(intent);
+            }
+        });
+        return holder;
     }
 
     //Assegna le informazioni della ricetta dinamicamente alla card
@@ -53,15 +63,6 @@ public class RecipeCardRecyclerViewAdapter extends RecyclerView.Adapter<RecipeCa
             else Glide.with(holder.profilePic.getContext()).load(recipe.getProfilePicUrl()).into(holder.profilePic);
             Glide.with(holder.preview.getContext()).load(recipe.getPreviewUrl()).into(holder.preview);
 
-            //Rendere cliccabile la card e passare le informazioni all'activity ViewRecipeActivity
-            holder.setRecipeClickListener(new RecipeClickListener() {
-                @Override
-                public void onRecipeClickListener(View v, int position) {
-                    Intent intent = new Intent(mContext, ViewRecipeActivity.class);
-                    intent.putExtra("recipe", recipe);
-                    mContext.startActivity(intent);
-                }
-            });
         }
     }
 

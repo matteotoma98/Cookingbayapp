@@ -16,7 +16,7 @@ public class StepViewHolder extends RecyclerView.ViewHolder implements View.OnCl
 
     TextView stepnumber;
     Button delete;
-    TextInputEditText descrizione;
+    TextInputEditText steptext;
 
     //Interface object
     StepClickListener stepClickListener;
@@ -26,12 +26,13 @@ public class StepViewHolder extends RecyclerView.ViewHolder implements View.OnCl
         stepnumber = itemView.findViewById(R.id.stepNumber);
         delete = itemView.findViewById(R.id.deletestep);
         delete.setOnClickListener(this);
-        descrizione = itemView.findViewById(R.id.steptext);
+        steptext = itemView.findViewById(R.id.steptext);
 
     }
 
     @Override
     public void onClick(View v) {
+        steptext.setText("");
         this.stepClickListener.onDeleteListener(getAdapterPosition());
     }
 

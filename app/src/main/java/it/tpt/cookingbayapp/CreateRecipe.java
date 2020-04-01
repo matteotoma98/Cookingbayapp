@@ -16,7 +16,6 @@ import android.widget.Toast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import it.tpt.cookingbayapp.stepRecycler.Step;
 import it.tpt.cookingbayapp.stepRecycler.StepAdapter;
@@ -26,7 +25,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class CreateRecipe extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private StepAdapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +35,6 @@ public class CreateRecipe extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mRecyclerView = findViewById(R.id.step_recycler);
-        mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mAdapter = new StepAdapter(new ArrayList<Step>());
         mRecyclerView.setAdapter(mAdapter);
@@ -47,7 +44,7 @@ public class CreateRecipe extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                // Toast.makeText(CreateRecipe.this, "Premuto", Toast.LENGTH_LONG).show(); //per vedere quando viene premuto il bottone
-                mAdapter.addStep(new Step(Integer.toString(mAdapter.getItemCount()+2)));
+                mAdapter.addStep(new Step(Integer.toString(mAdapter.getItemCount()+2), "") );
 
             }
         });
