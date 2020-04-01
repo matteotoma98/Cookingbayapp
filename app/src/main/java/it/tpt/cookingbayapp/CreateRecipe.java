@@ -22,7 +22,7 @@ import it.tpt.cookingbayapp.stepRecycler.StepAdapter;
 
 public class CreateRecipe extends AppCompatActivity {
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private StepAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
     @Override
@@ -36,15 +36,15 @@ public class CreateRecipe extends AppCompatActivity {
         mRecyclerView = findViewById(R.id.step_recycler);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        final StepAdapter adapter = new StepAdapter(new ArrayList<Step>());
-        mRecyclerView.setAdapter(adapter);
+        mAdapter = new StepAdapter(new ArrayList<Step>());
+        mRecyclerView.setAdapter(mAdapter);
 
         Button btnAddStep = findViewById(R.id.addstep);
         btnAddStep.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(CreateRecipe.this, "Premuto", Toast.LENGTH_LONG).show(); //per vedere quando viene premuto il bottone
-                adapter.addStep(new Step());
+                mAdapter.addStep(new Step());
             }
         });
 
