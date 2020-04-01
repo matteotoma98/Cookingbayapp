@@ -20,6 +20,8 @@ import java.util.List;
 import it.tpt.cookingbayapp.stepRecycler.Step;
 import it.tpt.cookingbayapp.stepRecycler.StepAdapter;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class CreateRecipe extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private StepAdapter mAdapter;
@@ -48,6 +50,21 @@ public class CreateRecipe extends AppCompatActivity {
             }
         });
 
+        CircleImageView imgAnteprima = findViewById(R.id.imgAnteprima);
+        imgAnteprima.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(CreateRecipe.this, "Selettore img anteprima", Toast.LENGTH_LONG).show(); //per vedere quando viene premuto il bottone
+            }
+        });
+
+        CircleImageView imgStep = findViewById(R.id.imgStep);
+        imgStep.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //azioni di quando si preme
+            }
+        });
     }
 
     @Override
