@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import it.tpt.cookingbayapp.R;
+import it.tpt.cookingbayapp.StepClickListener;
 import it.tpt.cookingbayapp.recipeObject.Ingredient;
 
 public class StepAdapter extends RecyclerView.Adapter<StepViewHolder> {
@@ -31,11 +32,22 @@ public class StepAdapter extends RecyclerView.Adapter<StepViewHolder> {
         steps.add(step);
     }
 
+    public void removeStep(int position) {
+        steps.remove(position);
+    }
+
     @Override
     public void onBindViewHolder(@NonNull StepViewHolder holder, int position) {
         if (steps != null && position < steps.size()){
             String steptext = "Step "+ steps.get(position).getStepnumber();
             holder.stepnumber.setText(steptext);
+
+            holder.setStepClickListener(new StepClickListener() {
+                @Override
+                public void onDeleteListener(int position) {
+                    steps.remove(position);
+                }
+            });
         }
     }
 
