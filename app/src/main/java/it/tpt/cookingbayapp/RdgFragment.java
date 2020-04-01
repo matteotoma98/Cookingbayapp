@@ -20,8 +20,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -57,7 +60,10 @@ public class RdgFragment extends Fragment {
         ing.add(new Ingredient("Pesto", "100 g"));
 
         //Test per aggiungere una ricetta 'Recipe' nel database
-        Recipe test = new Recipe("Pasta al pesto", "url", "url", "25 min", "Primo Piatto", "Luigi Qualcosa", ing, slist );
+        Date date = Calendar.getInstance().getTime();
+        String url1 = "https://firebasestorage.googleapis.com/v0/b/cookingbay-127ce.appspot.com/o/luigi%40gmail.com%2FPasta%20al%20pesto%2Fpreview.jpg?alt=media&token=cd72cb79-1a95-48d4-8039-d64185df1337";
+        String url2 = "https://firebasestorage.googleapis.com/v0/b/cookingbay-127ce.appspot.com/o/luigi%40gmail.com%2FuserProfile.jpg?alt=media&token=629c64f0-1a1a-43be-93bc-2e32e8ac58c3";
+        Recipe test = new Recipe("Pasta al pesto", url1, url2, "25 min", "Primo Piatto", "Luigi Qualcosa", date, ing, slist );
         String id = "Pasta-al-pesto-id";
         Map<String, Object> name = new HashMap<>();
         name.put("name", "Luigi");
@@ -86,7 +92,7 @@ public class RdgFragment extends Fragment {
         // Set up the RecyclerView
         recyclerView = view.findViewById(R.id.cardRecycler_view);
         recyclerView.setHasFixedSize(true);
-        //createRecipeList(); //Temporaneo
+        createRecipeList(); //Temporaneo
         FirebaseFirestore db;
         db = FirebaseFirestore.getInstance();
 
