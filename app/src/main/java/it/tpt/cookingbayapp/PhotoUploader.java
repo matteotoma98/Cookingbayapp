@@ -23,12 +23,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -41,7 +43,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class PhotoUploader {
+public class PhotoUploader extends AppCompatActivity {
     public static final int LOGIN_REQUEST = 101;
     private FirebaseAuth mAuth;
 
@@ -60,19 +62,18 @@ public class PhotoUploader {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        proPic = findViewById(R.id.propic);
+        proPic = findViewById(R.id.imgAnteprima);
         proPic.setClipToOutline(true);
-        textNome = findViewById(R.id.text_nome);
+
 
         SharedPreferences preferences = getSharedPreferences("login", MODE_PRIVATE);
         if (preferences.getBoolean("firstrun", true)) {
-            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            Intent intent = new Intent(PhotoUploader.this, CreateRecipe.class);
             startActivityForResult(intent, LOGIN_REQUEST);
         } else {
             mAuth = FirebaseAuth.getInstance();
             FirebaseUser currentUser = mAuth.getCurrentUser();
 
-            textNome.setText(currentUser.getDisplayName());
             if (currentUser.getPhotoUrl() != null) {
                 Glide.with(this)
                         .load(currentUser.getPhotoUrl())
@@ -80,7 +81,7 @@ public class PhotoUploader {
                         .into(proPic);
             } else {
                 Glide.with(this)
-                        .load(getDrawable(R.drawable.placeholder_profile))
+                        .load(getDrawable(R.drawable.preview_dummy))
                         .centerCrop()
                         .into(proPic);
 
@@ -101,7 +102,7 @@ public class PhotoUploader {
                 }
             });
 
-            getSupportActionBar().setTitle(getString(R.string.benvenuto));
+
         }
     }
 
@@ -207,7 +208,7 @@ public class PhotoUploader {
         }
         allIntents.remove(mainIntent);
 
-        Intent chooserIntent = Intent.createChooser(mainIntent, getString(R.string.selsorgente));
+        Intent chooserIntent = Intent.createChooser(mainIntent, getString(R.string.sorgente));
 
         chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, allIntents.toArray(new Parcelable[allIntents.size()]));
 
@@ -242,8 +243,8 @@ public class PhotoUploader {
 }
 
 
-public class MainActivity extends AppCompatActivity {
-
+/*
+   //codice
     ImageView uploadPicIV;
     EditText uploadPicET;
 
@@ -364,6 +365,6 @@ public class MainActivity extends AppCompatActivity {
         return null;
     }
 
-}
+*/
 
 
