@@ -32,6 +32,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import it.tpt.cookingbayapp.recipeObject.Recipe;
 import it.tpt.cookingbayapp.stepRecycler.Step;
 import it.tpt.cookingbayapp.stepRecycler.StepAdapter;
 
