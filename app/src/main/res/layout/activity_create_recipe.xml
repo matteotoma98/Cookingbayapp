@@ -63,7 +63,7 @@
                 android:paddingTop="10dp">
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/imgStep"
+                    android:id="@+id/imgStep1"
                     android:layout_width="70dp"
                     android:layout_height="70dp"
                     android:src="@drawable/step_dummy" />
@@ -83,6 +83,7 @@
                         app:boxBackgroundColor="@android:color/white">
 
                         <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/steptext1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
                     </com.google.android.material.textfield.TextInputLayout>

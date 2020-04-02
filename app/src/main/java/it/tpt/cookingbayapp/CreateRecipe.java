@@ -25,6 +25,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class CreateRecipe extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private StepAdapter mAdapter;
+    private final static int IMAGE_REQUEST = 234;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +34,7 @@ public class CreateRecipe extends AppCompatActivity {
         setContentView(R.layout.activity_create_recipe);
         getSupportActionBar().setTitle("Crea nuova ricetta");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
         mRecyclerView = findViewById(R.id.step_recycler);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -54,19 +56,23 @@ public class CreateRecipe extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(CreateRecipe.this, "Selettore img anteprima", Toast.LENGTH_LONG).show(); //per vedere quando viene premuto il bottone
+                try {
+                    Intent objectIntent = new Intent();
+                    objectIntent.setType("image/*");
+
+                    objectIntent.setAction(Intent.ACTION_GET_CONTENT);
+                    startActivityForResult(objectIntent,IMAGE_REQUEST);
+
+                } catch (Exception e){
+                    Toast.makeText(CreateRecipe.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
-        CircleImageView imgStep = findViewById(R.id.imgStep);
-        imgStep.setOnClickListener(new View.OnClickListener() {
+        CircleImageView imgStep1 = findViewById(R.id.imgStep1);
+        imgStep1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
-
-
-
-
 
 
             }
