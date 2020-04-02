@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.Manifest;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -39,11 +38,6 @@ public class CreateRecipe extends AppCompatActivity {
     private final static int IMAGE_REQUEST = 234;
     CircleImageView imgPreview;
 
-    private ArrayList<String> permissionsToRequest;
-    private ArrayList<String> permissionsRejected = new ArrayList<>();
-    private ArrayList<String> permissions = new ArrayList<>();
-
-    private final static int ALL_PERMISSIONS_RESULT = 107;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,16 +68,7 @@ public class CreateRecipe extends AppCompatActivity {
         imgPreview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                permissions.add(Manifest.permission.CAMERA);
-                permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-                permissions.add(Manifest.permission.READ_EXTERNAL_STORAGE);
-                permissionsToRequest = findUnaskedPermissions(permissions);
-                if (permissionsToRequest.size() > 0) {
-                    requestPermissions(permissionsToRequest.toArray(new String[permissionsToRequest.size()]), ALL_PERMISSIONS_RESULT);
-                } else {
-                    startActivityForResult(getPickImageChooserIntent(), IMAGE_REQUEST);
-                }
-
+                //Toast.makeText(CreateRecipe.this, "Selettore img anteprima", Toast.LENGTH_LONG).show(); //per vedere quando viene premuto il bottone
                 try {
                     startActivityForResult(getPickImageChooserIntent(), IMAGE_REQUEST);
 
@@ -151,6 +136,7 @@ public class CreateRecipe extends AppCompatActivity {
 
     }
 
+
     private Uri getPickImageResultUri(Intent data) {
         boolean isCamera = true;
         if (data != null) {
@@ -213,32 +199,5 @@ public class CreateRecipe extends AppCompatActivity {
             outputFileUri = Uri.fromFile(new File(getImage.getPath(), "propic.png"));
         }
         return outputFileUri;
-    }
-    private ArrayList findUnaskedPermissions(ArrayList<String> wanted) {
-        ArrayList<String> result = new ArrayList<>();
-
-        for (String perm : wanted) {
-            if (!(checkSelfPermission(perm) == PackageManager.PERMISSION_GRANTED)) {
-                result.add(perm);
-            }
-        }
-
-        return result;
-    }
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode == ALL_PERMISSIONS_RESULT) {
-            for (String perm : permissionsToRequest) {
-                if (!(checkSelfPermission(perm) == PackageManager.PERMISSION_GRANTED)) {
-                    permissionsRejected.add(perm);
-                }
-            }
-            if (permissionsRejected.size() > 0) {
-                if (shouldShowRequestPermissionRationale(permissionsRejected.get(0))) {
-                    Toast.makeText(this, "Approva tutto", Toast.LENGTH_SHORT).show();
-                }
-            } else {
-                startActivityForResult(getPickImageChooserIntent(), IMAGE_REQUEST);
-            }
-        }
     }
 }
