@@ -68,7 +68,7 @@ public class CreateRecipe extends AppCompatActivity {
         imgPreview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(CreateRecipe.this, "Selettore img anteprima", Toast.LENGTH_LONG).show(); //per vedere quando viene premuto il bottone
+                //Toast.makeText(CreateRecipe.this, "Selettore img anteprima", Toast.LENGTH_LONG).show(); //per vedere quando viene premuto il bottone
                 try {
                     startActivityForResult(getPickImageChooserIntent(), IMAGE_REQUEST);
 
