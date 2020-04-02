@@ -135,19 +135,23 @@ public class CreateRecipe extends AppCompatActivity {
                 try {
                     bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), picUri);
                     previewUri = picUri;
+                    Glide.with(this)
+                            .load(previewUri)
+                            .apply(RequestOptions.skipMemoryCacheOf(true))
+                            .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
+                            .centerCrop()
+                            .into(imgPreview);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             } else {
                 bitmap = (Bitmap) intent.getExtras().get("data");
+                Glide.with(this)
+                        .load(bitmap)
+                        .centerCrop()
+                        .into(imgPreview);
             }
-
-            Glide.with(this)
-                    .load(previewUri)
-                    .apply(RequestOptions.skipMemoryCacheOf(true))
-                    .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
-                    .centerCrop()
-                    .into(imgPreview);
+            
         }
     }
 
