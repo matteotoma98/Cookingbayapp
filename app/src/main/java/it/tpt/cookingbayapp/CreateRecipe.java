@@ -45,6 +45,8 @@ public class CreateRecipe extends AppCompatActivity {
 
     private final static int ALL_PERMISSIONS_RESULT = 107;
 
+    private Uri previewUri;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -59,6 +61,10 @@ public class CreateRecipe extends AppCompatActivity {
         mAdapter = new StepAdapter(new ArrayList<Step>());
         mRecyclerView.setAdapter(mAdapter);
 
+        permissions.add(Manifest.permission.CAMERA);
+        permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        permissions.add(Manifest.permission.READ_EXTERNAL_STORAGE);
+        permissionsToRequest = findUnaskedPermissions(permissions);
 
         Button btnAddStep = findViewById(R.id.addstep);
         btnAddStep.setOnClickListener(new View.OnClickListener() {
@@ -74,10 +80,6 @@ public class CreateRecipe extends AppCompatActivity {
         imgPreview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                permissions.add(Manifest.permission.CAMERA);
-                permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-                permissions.add(Manifest.permission.READ_EXTERNAL_STORAGE);
-                permissionsToRequest = findUnaskedPermissions(permissions);
                 if (permissionsToRequest.size() > 0) {
                     requestPermissions(permissionsToRequest.toArray(new String[permissionsToRequest.size()]), ALL_PERMISSIONS_RESULT);
                 } else {
@@ -123,20 +125,16 @@ public class CreateRecipe extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         if (requestCode == IMAGE_REQUEST && resultCode == RESULT_OK) {
-            Bitmap bitmap = null;
+
             if (getPickImageResultUri(intent) != null) {
-                Uri picUri = getPickImageResultUri(intent);
-                try {
-                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), picUri);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                //Prendi l'uri assegnato alla cache
+                previewUri = getPickImageResultUri(intent);
             } else {
-                bitmap = (Bitmap) intent.getExtras().get("data");
+                previewUri = intent.getData();
             }
 
             Glide.with(this)
-                    .load(bitmap)
+                    .load(previewUri)
                     .centerCrop()
                     .into(imgPreview);
         }
