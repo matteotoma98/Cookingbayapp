@@ -4,8 +4,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -13,9 +20,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.bumptech.glide.Glide;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import it.tpt.cookingbayapp.stepRecycler.Step;
 import it.tpt.cookingbayapp.stepRecycler.StepAdapter;
@@ -26,6 +36,8 @@ public class CreateRecipe extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private StepAdapter mAdapter;
     private final static int IMAGE_REQUEST = 234;
+    CircleImageView imgPreview;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,31 +53,26 @@ public class CreateRecipe extends AppCompatActivity {
         mAdapter = new StepAdapter(new ArrayList<Step>());
         mRecyclerView.setAdapter(mAdapter);
 
+
         Button btnAddStep = findViewById(R.id.addstep);
         btnAddStep.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // Toast.makeText(CreateRecipe.this, "Premuto", Toast.LENGTH_LONG).show(); //per vedere quando viene premuto il bottone
-                mAdapter.addStep(new Step(Integer.toString(mAdapter.getItemCount()+2), "") );
+                // Toast.makeText(CreateRecipe.this, "Premuto", Toast.LENGTH_LONG).show(); //per vedere quando viene premuto il bottone
+                mAdapter.addStep(new Step(Integer.toString(mAdapter.getItemCount() + 2), ""));
 
             }
         });
 
-        CircleImageView imgAnteprima = findViewById(R.id.imgAnteprima);
-        imgAnteprima.setOnClickListener(new View.OnClickListener() {
+        imgPreview = findViewById(R.id.imgAnteprima);
+        imgPreview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 Toast.makeText(CreateRecipe.this, "Selettore img anteprima", Toast.LENGTH_LONG).show(); //per vedere quando viene premuto il bottone
                 try {
-                    Intent objectIntent = new Intent();
-                    objectIntent.setType("image/*");
+                    startActivityForResult(getPickImageChooserIntent(), IMAGE_REQUEST);
 
-                    objectIntent.setAction(Intent.ACTION_GET_CONTENT);
-                    startActivityForResult(objectIntent,IMAGE_REQUEST);
-
-                } catch (Exception e){
+                } catch (Exception e) {
                     Toast.makeText(CreateRecipe.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
@@ -80,9 +87,10 @@ public class CreateRecipe extends AppCompatActivity {
             }
         });
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu,menu);
+        getMenuInflater().inflate(R.menu.main_menu, menu);
         return super.onCreateOptionsMenu(menu);
    /*     MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
@@ -95,11 +103,101 @@ public class CreateRecipe extends AppCompatActivity {
         if (id == R.id.exitNoSave) {
             Toast.makeText(this, "Ricetta non salvata", Toast.LENGTH_SHORT).show();
             finish();
-          //  startActivity(new Intent(this, LmrFragment.class));
+            //  startActivity(new Intent(this, LmrFragment.class));
         } else if (id == R.id.exitSave) {
             Toast.makeText(this, "Salva ricetta", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(this, MainActivity.class));
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        if (requestCode == IMAGE_REQUEST && resultCode == RESULT_OK) {
+            Bitmap bitmap = null;
+            if (getPickImageResultUri(intent) != null) {
+                Uri picUri = getPickImageResultUri(intent);
+                try {
+                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), picUri);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                bitmap = (Bitmap) intent.getExtras().get("data");
+            }
+
+            Glide.with(this)
+                    .load(bitmap)
+                    .centerCrop()
+                    .into(imgPreview);
+        }
+
+
+
+    }
+
+
+    private Uri getPickImageResultUri(Intent data) {
+        boolean isCamera = true;
+        if (data != null) {
+            String action = data.getAction();
+            isCamera = action != null && action.equals(MediaStore.ACTION_IMAGE_CAPTURE);
+        }
+
+        return isCamera ? getCaptureImageOutputUri() : data.getData();
+
+    }
+
+    private Intent getPickImageChooserIntent() {
+
+        Uri outputFileUri = getCaptureImageOutputUri();
+
+        List<Intent> allIntents = new ArrayList<>();
+        PackageManager packageManager = getPackageManager();
+
+        Intent captureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        List<ResolveInfo> listCam = packageManager.queryIntentActivities(captureIntent, 0);
+        for (ResolveInfo res : listCam) {
+            Intent intent = new Intent(captureIntent);
+            intent.setComponent(new ComponentName(res.activityInfo.packageName, res.activityInfo.name));
+            intent.setPackage(res.activityInfo.packageName);
+            if (outputFileUri != null) {
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
+            }
+            allIntents.add(intent);
+        }
+
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        List<ResolveInfo> listGallery = packageManager.queryIntentActivities(galleryIntent, 0);
+        for (ResolveInfo res : listGallery) {
+            Intent intent = new Intent(galleryIntent);
+            intent.setComponent(new ComponentName(res.activityInfo.packageName, res.activityInfo.name));
+            intent.setPackage(res.activityInfo.packageName);
+            allIntents.add(intent);
+        }
+
+        Intent mainIntent = allIntents.get(allIntents.size() - 1);
+        for (Intent intent : allIntents) {
+            if (intent.getComponent().getClassName().equals("com.android.documentsui.DocumentsActivity")) {
+                mainIntent = intent;
+                break;
+            }
+        }
+        allIntents.remove(mainIntent);
+
+        Intent chooserIntent = Intent.createChooser(mainIntent, getString(R.string.sorgente));
+
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, allIntents.toArray(new Parcelable[allIntents.size()]));
+
+        return chooserIntent;
+    }
+
+    public Uri getCaptureImageOutputUri() { //restituisce l'uri dell immagine che da qualche parte verrà salvata all'interno della cartella di cache
+        Uri outputFileUri = null;
+        File getImage = getExternalCacheDir();
+        if (getImage != null) {
+            outputFileUri = Uri.fromFile(new File(getImage.getPath(), "propic.png"));
+        }
+        return outputFileUri;
     }
 }
