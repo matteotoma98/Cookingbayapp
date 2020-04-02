@@ -126,11 +126,11 @@ public class CreateRecipe extends AppCompatActivity {
         } else if (id == R.id.exitSave) {
 
             if(previewUri == null || TextUtils.isEmpty(title.getText()) || stepUri == null || TextUtils.isEmpty(steptext1.getText())){
-                Toast.makeText(this, R.string.minimum_info_required, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.minimum_info_required, Toast.LENGTH_LONG).show();
             } else {
-                
+
             }
-            Toast.makeText(this, "Salva ricetta", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "Salva ricetta", Toast.LENGTH_SHORT).show();
             //startActivity(new Intent(this, MainActivity.class));
         }
         return super.onOptionsItemSelected(item);
