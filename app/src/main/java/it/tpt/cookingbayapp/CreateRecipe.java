@@ -15,6 +15,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -25,9 +26,9 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,16 +40,18 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class CreateRecipe extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private StepAdapter mAdapter;
-    private final static int IMAGE_REQUEST = 234;
-    CircleImageView imgPreview;
+    CircleImageView imgPreview, imgStep1;
+    TextInputEditText title, steptext1;
 
     private ArrayList<String> permissionsToRequest;
     private ArrayList<String> permissionsRejected = new ArrayList<>();
     private ArrayList<String> permissions = new ArrayList<>();
 
     private final static int ALL_PERMISSIONS_RESULT = 107;
+    private final static int IMAGE_REQUEST = 234;
 
     private Uri previewUri;
+    private Uri stepUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +82,8 @@ public class CreateRecipe extends AppCompatActivity {
             }
         });
 
+        title = findViewById(R.id.createRecipeTitle);
+        steptext1 = findViewById(R.id.steptext1);
         imgPreview = findViewById(R.id.imgAnteprima);
         imgPreview.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,7 +97,7 @@ public class CreateRecipe extends AppCompatActivity {
             }
         });
 
-        CircleImageView imgStep1 = findViewById(R.id.imgStep1);
+        imgStep1 = findViewById(R.id.imgStep1);
         imgStep1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -119,8 +124,14 @@ public class CreateRecipe extends AppCompatActivity {
             finish();
             //  startActivity(new Intent(this, LmrFragment.class));
         } else if (id == R.id.exitSave) {
+
+            if(previewUri == null || TextUtils.isEmpty(title.getText()) || stepUri == null || TextUtils.isEmpty(steptext1.getText())){
+                Toast.makeText(this, R.string.minimum_info_required, Toast.LENGTH_SHORT).show();
+            } else {
+                
+            }
             Toast.makeText(this, "Salva ricetta", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(this, MainActivity.class));
+            //startActivity(new Intent(this, MainActivity.class));
         }
         return super.onOptionsItemSelected(item);
     }
@@ -128,30 +139,22 @@ public class CreateRecipe extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         if (requestCode == IMAGE_REQUEST && resultCode == RESULT_OK) {
-            Bitmap bitmap = null;
             if (getPickImageResultUri(intent) != null) {
                 //Prendi l'uri assegnato alla cache
-                Uri picUri = getPickImageResultUri(intent);
-                try {
-                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), picUri);
-                    previewUri = picUri;
-                    Glide.with(this)
-                            .load(previewUri)
-                            .apply(RequestOptions.skipMemoryCacheOf(true))
-                            .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
-                            .centerCrop()
-                            .into(imgPreview);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                previewUri = getPickImageResultUri(intent);
+                Glide.with(this)
+                        .load(previewUri)
+                        .apply(RequestOptions.skipMemoryCacheOf(true))
+                        .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
+                        .centerCrop()
+                        .into(imgPreview);
             } else {
-                bitmap = (Bitmap) intent.getExtras().get("data");
+                Bitmap bitmap = (Bitmap) intent.getExtras().get("data");
                 Glide.with(this)
                         .load(bitmap)
                         .centerCrop()
                         .into(imgPreview);
             }
-            
         }
     }
 

@@ -29,6 +29,7 @@
             app:counterMaxLength="69">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/createRecipeTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLength="69"/>
