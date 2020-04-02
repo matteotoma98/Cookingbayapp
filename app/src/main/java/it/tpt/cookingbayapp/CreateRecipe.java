@@ -61,7 +61,14 @@ public class CreateRecipe extends AppCompatActivity {
         imgStep.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //azioni di quando si preme
+
+
+
+
+
+
+
+
             }
         });
     }
