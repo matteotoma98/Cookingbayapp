@@ -84,12 +84,6 @@ public class CreateRecipe extends AppCompatActivity {
                     startActivityForResult(getPickImageChooserIntent(), IMAGE_REQUEST);
                 }
 
-                try {
-                    startActivityForResult(getPickImageChooserIntent(), IMAGE_REQUEST);
-
-                } catch (Exception e) {
-                    Toast.makeText(CreateRecipe.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                }
             }
         });
 
@@ -146,9 +140,6 @@ public class CreateRecipe extends AppCompatActivity {
                     .centerCrop()
                     .into(imgPreview);
         }
-
-
-
     }
 
     private Uri getPickImageResultUri(Intent data) {
@@ -225,6 +216,7 @@ public class CreateRecipe extends AppCompatActivity {
 
         return result;
     }
+
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if (requestCode == ALL_PERMISSIONS_RESULT) {
             for (String perm : permissionsToRequest) {
