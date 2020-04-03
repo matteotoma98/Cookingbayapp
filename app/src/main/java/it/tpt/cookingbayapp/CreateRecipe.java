@@ -170,8 +170,8 @@ public class CreateRecipe extends AppCompatActivity {
         if (requestCode == STEP_REQUEST && resultCode == RESULT_OK) {
             List<Step> templist = mAdapter.getSteps();
             int position = mAdapter.getCurrentPicPosition();
-            if (ImagePickActivity.getPickImageResultUri(this, intent, "step" + position + 2) != null) {
-                templist.get(position).setStepUri(ImagePickActivity.getPickImageResultUri(this, intent, "step" + position + 2));
+            if (ImagePickActivity.getPickImageResultUri(this, intent, "step" + position ) != null) {
+                templist.get(position).setStepUri(ImagePickActivity.getPickImageResultUri(this, intent, "step" + position ));
                 mAdapter.notifyItemChanged(position);
             }
         }

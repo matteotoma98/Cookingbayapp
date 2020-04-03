@@ -53,7 +53,7 @@ public class StepAdapter extends RecyclerView.Adapter<StepViewHolder> {
             @Override
             public void onItemClickListener(int position) {
                 setCurrentPicPosition(position);
-                ((Activity) mContext).startActivityForResult(ImagePickActivity.getPickImageChooserIntent(mContext, ("step" + position + 2)), STEP_REQUEST);
+                ((Activity) mContext).startActivityForResult(ImagePickActivity.getPickImageChooserIntent(mContext, ("step" + position )), STEP_REQUEST);
             }
         });
 

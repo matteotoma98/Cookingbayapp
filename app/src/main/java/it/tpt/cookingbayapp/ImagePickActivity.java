@@ -63,7 +63,7 @@ public class ImagePickActivity {
         Uri outputFileUri = null;
         File getImage = context.getExternalCacheDir();
         if (getImage != null) {
-            outputFileUri = Uri.fromFile(new File(getImage.getPath(), fileName + ".png"));
+            outputFileUri = Uri.fromFile(new File(getImage.getPath(), fileName));
         }
         return outputFileUri;
     }
