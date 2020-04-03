@@ -15,9 +15,9 @@ import java.util.List;
 
 public class ImagePickActivity {
 
-    public static Intent getPickImageChooserIntent(Context context) {
+    public static Intent getPickImageChooserIntent(Context context, String fileName) {
 
-        Uri outputFileUri = getCaptureImageOutputUri(context);
+        Uri outputFileUri = getCaptureImageOutputUri(context, fileName);
 
         List<Intent> allIntents = new ArrayList<>();
         PackageManager packageManager = context.getPackageManager();
@@ -59,24 +59,24 @@ public class ImagePickActivity {
         return chooserIntent;
     }
 
-    public static Uri getCaptureImageOutputUri(Context context) { //restituisce l'uri dell immagine che da qualche parte verrà salvata all'interno della cartella di cache
+    public static Uri getCaptureImageOutputUri(Context context, String fileName) { //restituisce l'uri dell immagine che da qualche parte verrà salvata all'interno della cartella di cache
         Uri outputFileUri = null;
         File getImage = context.getExternalCacheDir();
         if (getImage != null) {
-            outputFileUri = Uri.fromFile(new File(getImage.getPath(), "propic.png"));
+            outputFileUri = Uri.fromFile(new File(getImage.getPath(), fileName + ".png"));
         }
         return outputFileUri;
     }
 
 
-    public static Uri getPickImageResultUri(Context context, Intent data) {
+    public static Uri getPickImageResultUri(Context context, Intent data, String fileName) {
         boolean isCamera = true;
         if (data != null) {
             String action = data.getAction();
             isCamera = action != null && action.equals(MediaStore.ACTION_IMAGE_CAPTURE);
         }
 
-        return isCamera ? getCaptureImageOutputUri(context) : data.getData();
+        return isCamera ? getCaptureImageOutputUri(context, fileName) : data.getData();
 
     }
 
