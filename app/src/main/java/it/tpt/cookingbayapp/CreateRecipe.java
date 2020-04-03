@@ -10,14 +10,12 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
-import android.graphics.ImageDecoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -27,6 +25,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -51,6 +51,7 @@ public class CreateRecipe extends AppCompatActivity {
     private final static int ALL_PERMISSIONS_RESULT = 107;
     private final static int IMAGE_REQUEST = 234;
 
+    private Recipe mRecipe;
     private Uri previewUri;
     private Uri stepUri;
 
@@ -73,6 +74,12 @@ public class CreateRecipe extends AppCompatActivity {
         permissions.add(Manifest.permission.READ_EXTERNAL_STORAGE);
         permissionsToRequest = findUnaskedPermissions(permissions);
 
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        mRecipe = new Recipe();
+        mRecipe.setAuthorName(currentUser.getDisplayName());
+        mRecipe.setAuthorId(currentUser.getUid());
+
         Button btnAddStep = findViewById(R.id.addstep);
         btnAddStep.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,7 +99,7 @@ public class CreateRecipe extends AppCompatActivity {
                 if (permissionsToRequest.size() > 0) {
                     requestPermissions(permissionsToRequest.toArray(new String[permissionsToRequest.size()]), ALL_PERMISSIONS_RESULT);
                 } else {
-                    startActivityForResult(getPickImageChooserIntent(), IMAGE_REQUEST);
+                    startActivityForResult(ImagePickActivity.getPickImageChooserIntent(CreateRecipe.this), IMAGE_REQUEST);
                 }
 
             }
@@ -141,9 +148,9 @@ public class CreateRecipe extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         if (requestCode == IMAGE_REQUEST && resultCode == RESULT_OK) {
-            if (getPickImageResultUri(intent) != null) {
+            if (ImagePickActivity.getPickImageResultUri(this, intent) != null) {
                 //Prendi l'uri assegnato alla cache
-                previewUri = getPickImageResultUri(intent);
+                previewUri = ImagePickActivity.getPickImageResultUri(this, intent);
                 Glide.with(this)
                         .load(previewUri)
                         .apply(RequestOptions.skipMemoryCacheOf(true))
@@ -158,70 +165,6 @@ public class CreateRecipe extends AppCompatActivity {
                         .into(imgPreview);
             }
         }
-    }
-
-    private Uri getPickImageResultUri(Intent data) {
-        boolean isCamera = true;
-        if (data != null) {
-            String action = data.getAction();
-            isCamera = action != null && action.equals(MediaStore.ACTION_IMAGE_CAPTURE);
-        }
-
-        return isCamera ? getCaptureImageOutputUri() : data.getData();
-
-    }
-
-    private Intent getPickImageChooserIntent() {
-
-        Uri outputFileUri = getCaptureImageOutputUri();
-
-        List<Intent> allIntents = new ArrayList<>();
-        PackageManager packageManager = getPackageManager();
-
-        Intent captureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        List<ResolveInfo> listCam = packageManager.queryIntentActivities(captureIntent, 0);
-        for (ResolveInfo res : listCam) {
-            Intent intent = new Intent(captureIntent);
-            intent.setComponent(new ComponentName(res.activityInfo.packageName, res.activityInfo.name));
-            intent.setPackage(res.activityInfo.packageName);
-            if (outputFileUri != null) {
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
-            }
-            allIntents.add(intent);
-        }
-
-        Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        List<ResolveInfo> listGallery = packageManager.queryIntentActivities(galleryIntent, 0);
-        for (ResolveInfo res : listGallery) {
-            Intent intent = new Intent(galleryIntent);
-            intent.setComponent(new ComponentName(res.activityInfo.packageName, res.activityInfo.name));
-            intent.setPackage(res.activityInfo.packageName);
-            allIntents.add(intent);
-        }
-
-        Intent mainIntent = allIntents.get(allIntents.size() - 1);
-        for (Intent intent : allIntents) {
-            if (intent.getComponent().getClassName().equals("com.android.documentsui.DocumentsActivity")) {
-                mainIntent = intent;
-                break;
-            }
-        }
-        allIntents.remove(mainIntent);
-
-        Intent chooserIntent = Intent.createChooser(mainIntent, getString(R.string.sorgente));
-
-        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, allIntents.toArray(new Parcelable[allIntents.size()]));
-
-        return chooserIntent;
-    }
-
-    public Uri getCaptureImageOutputUri() { //restituisce l'uri dell immagine che da qualche parte verrà salvata all'interno della cartella di cache
-        Uri outputFileUri = null;
-        File getImage = getExternalCacheDir();
-        if (getImage != null) {
-            outputFileUri = Uri.fromFile(new File(getImage.getPath(), "propic.png"));
-        }
-        return outputFileUri;
     }
 
     private ArrayList findUnaskedPermissions(ArrayList<String> wanted) {
@@ -248,7 +191,7 @@ public class CreateRecipe extends AppCompatActivity {
                     Toast.makeText(this, "Approva tutto", Toast.LENGTH_SHORT).show();
                 }
             } else {
-                startActivityForResult(getPickImageChooserIntent(), IMAGE_REQUEST);
+                startActivityForResult(ImagePickActivity.getPickImageChooserIntent(this), IMAGE_REQUEST);
             }
         }
     }

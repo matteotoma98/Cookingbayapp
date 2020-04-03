@@ -54,7 +54,7 @@ public class RecipeCardRecyclerViewAdapter extends RecyclerView.Adapter<RecipeCa
             final Recipe recipe = recipeList.get(position);
 
             holder.title.setText(recipe.getTitle());
-            holder.user.setText(recipe.getAuthor());
+            holder.user.setText(recipe.getAuthorName());
             holder.type.setText(recipe.getType());
             holder.time.setText(recipe.getTime());
             if(recipe.getProfilePicUrl().toString().equals("missingprofile")){

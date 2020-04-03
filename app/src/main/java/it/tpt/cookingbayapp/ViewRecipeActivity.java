@@ -39,7 +39,7 @@ public class ViewRecipeActivity extends AppCompatActivity {
         Recipe recipe = (Recipe) intent.getSerializableExtra("recipe");
 
         recipeTitle.setText(recipe.getTitle());
-        recipeAuthor.setText(recipe.getAuthor());
+        recipeAuthor.setText(recipe.getAuthorName());
         recipeTime.setText(recipe.getTime());
         recipeType.setText(recipe.getType());
         sectionText.setText(recipe.getSections().get(0).getText());

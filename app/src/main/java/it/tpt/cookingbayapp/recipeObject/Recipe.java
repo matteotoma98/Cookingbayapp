@@ -2,7 +2,6 @@ package it.tpt.cookingbayapp.recipeObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 
 
 public class Recipe implements Serializable{
@@ -11,22 +10,32 @@ public class Recipe implements Serializable{
     private String profilePicUrl;
     private String time;
     private String type;
-    private String author;
+    private String authorId;
+    private String authorName;
     private ArrayList<Ingredient> ingredients;
     private ArrayList<Section> sections;
 
     //Per le classi da utilizzare con FireStore serve sempre un costruttore senza argomenti disponibile
     public Recipe(){ }
 
-    public Recipe(String title, String previewUrl, String profilePicUrl, String time, String type, String author, ArrayList<Ingredient> ingredients, ArrayList<Section> sections) {
+    public Recipe(String title, String previewUrl, String profilePicUrl, String time, String type, String authorId, String authorName, ArrayList<Ingredient> ingredients, ArrayList<Section> sections) {
         this.title = title;
         this.previewUrl = previewUrl;
         this.profilePicUrl = profilePicUrl;
         this.time = time;
         this.type = type;
-        this.author = author;
+        this.authorId = authorId;
+        this.authorName = authorName;
         this.ingredients = ingredients;
         this.sections = sections;
+    }
+
+    public String getAuthorId() {
+        return authorId;
+    }
+
+    public void setAuthorId(String authorId) {
+        this.authorId = authorId;
     }
 
     public String getType() {
@@ -77,12 +86,12 @@ public class Recipe implements Serializable{
         this.time = time;
     }
 
-    public String getAuthor() {
-        return author;
+    public String getAuthorName() {
+        return authorName;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
+    public void setAuthorName(String authorName) {
+        this.authorName = authorName;
     }
 
     public ArrayList<Section> getSections() {
