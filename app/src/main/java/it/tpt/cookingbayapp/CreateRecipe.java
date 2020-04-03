@@ -12,6 +12,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -84,7 +85,7 @@ public class CreateRecipe extends AppCompatActivity {
             public void onClick(View v) {
                 // Toast.makeText(CreateRecipe.this, "Premuto", Toast.LENGTH_LONG).show(); //per vedere quando viene premuto il bottone
                 mAdapter.addStep(new Step(Integer.toString(mAdapter.getItemCount() + 2), "", Uri.parse("")));
-
+                Log.v("MSGTEST", mAdapter.getSteps().get(mAdapter.getItemCount()-1).getStepUri().toString());
             }
         });
 
