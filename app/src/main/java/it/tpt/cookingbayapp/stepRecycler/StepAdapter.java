@@ -51,7 +51,7 @@ public class StepAdapter extends RecyclerView.Adapter<StepViewHolder> {
         holder.setPicAddClickListener(new StepClickListener() {
             @Override
             public void onItemClickListener(int position) {
-                ((Activity) mContext).startActivityForResult(ImagePickActivity.getPickImageChooserIntent(mContext, ("step" + String.valueOf(position +2)))
+                ((Activity) mContext).startActivityForResult(ImagePickActivity.getPickImageChooserIntent(mContext, ("step" + String.valueOf(position + 2)))
                         .putExtra("imgposition", position), STEP_REQUEST);
             }
         });
@@ -80,7 +80,7 @@ public class StepAdapter extends RecyclerView.Adapter<StepViewHolder> {
     public void addStep(Step step) {
         steps.add(step);
         //notifyDataSetChanged();
-        notifyItemInserted(steps.size() - 1 );
+        notifyItemInserted(steps.size() - 1);
     }
 
     public void removeStep(int position) {
@@ -90,15 +90,17 @@ public class StepAdapter extends RecyclerView.Adapter<StepViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull StepViewHolder holder, int position) {
         if (steps != null && position < steps.size()) {
-            String steptext = "Step " + (position+2);
+            String steptext = "Step " + (position + 2);
             holder.stepnumber.setText(steptext);
             holder.steptext.setText(steps.get(position).getText());
-            Glide.with(mContext)
-                    .load(steps.get(position).getStepUri())
-                    .apply(RequestOptions.skipMemoryCacheOf(true))
-                    .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
-                    .centerCrop()
-                    .into(holder.imgStep);
+            if (steps.get(position).getStepUri() != null) {
+                Glide.with(mContext)
+                        .load(steps.get(position).getStepUri())
+                        .apply(RequestOptions.skipMemoryCacheOf(true))
+                        .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
+                        .centerCrop()
+                        .into(holder.imgStep);
+            }
         }
     }
 

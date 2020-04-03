@@ -171,6 +171,7 @@ public class CreateRecipe extends AppCompatActivity {
             int position = intent.getIntExtra("imgposition", 0);
             if (ImagePickActivity.getPickImageResultUri(this, intent, "step" + String.valueOf(position+2)) != null) {
                 templist.get(position).setStepUri(ImagePickActivity.getPickImageResultUri(this, intent, "step" + String.valueOf(position+2)));
+                mAdapter.notifyItemChanged(position);
             }
         }
     }
