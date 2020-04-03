@@ -102,6 +102,14 @@ public class StepAdapter extends RecyclerView.Adapter<StepViewHolder> {
                         .centerCrop()
                         .into(holder.imgStep);
             }
+            else {
+                Glide.with(mContext)
+                        .load(R.drawable.step_dummy)
+                        .apply(RequestOptions.skipMemoryCacheOf(true))
+                        .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
+                        .centerCrop()
+                        .into(holder.imgStep);
+            }
         }
     }
 
