@@ -26,6 +26,7 @@ public class StepAdapter extends RecyclerView.Adapter<StepViewHolder> {
     private List<Step> steps;
     private Context mContext;
     private final static int STEP_REQUEST = 236;
+    private int currentPicPosition;
 
     public StepAdapter(List<Step> steps, Context context) {
         this.steps = steps;
@@ -51,8 +52,8 @@ public class StepAdapter extends RecyclerView.Adapter<StepViewHolder> {
         holder.setPicAddClickListener(new StepClickListener() {
             @Override
             public void onItemClickListener(int position) {
-                ((Activity) mContext).startActivityForResult(ImagePickActivity.getPickImageChooserIntent(mContext, ("step" + String.valueOf(position + 2)))
-                        .putExtra("imgposition", position), STEP_REQUEST);
+                setCurrentPicPosition(position);
+                ((Activity) mContext).startActivityForResult(ImagePickActivity.getPickImageChooserIntent(mContext, ("step" + position + 2)), STEP_REQUEST);
             }
         });
 
@@ -93,7 +94,7 @@ public class StepAdapter extends RecyclerView.Adapter<StepViewHolder> {
             String steptext = "Step " + (position + 2);
             holder.stepnumber.setText(steptext);
             holder.steptext.setText(steps.get(position).getText());
-            if (steps.get(position).getStepUri() != null) {
+            if (!steps.get(position).getStepUri().toString().equals("")) {
                 Glide.with(mContext)
                         .load(steps.get(position).getStepUri())
                         .apply(RequestOptions.skipMemoryCacheOf(true))
@@ -106,6 +107,14 @@ public class StepAdapter extends RecyclerView.Adapter<StepViewHolder> {
 
     public List<Step> getSteps() {
         return steps;
+    }
+
+    public int getCurrentPicPosition() {
+        return currentPicPosition;
+    }
+
+    public void setCurrentPicPosition(int currentPicPosition) {
+        this.currentPicPosition = currentPicPosition;
     }
 
     @Override

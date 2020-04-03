@@ -149,6 +149,7 @@ public class CreateRecipe extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         if (requestCode == PREVIEW_REQUEST && resultCode == RESULT_OK) {
+
             if (ImagePickActivity.getPickImageResultUri(this, intent, "preview") != null) {
                 //Prendi l'uri assegnato alla cache
                 previewUri = ImagePickActivity.getPickImageResultUri(this, intent, "preview");
@@ -168,9 +169,9 @@ public class CreateRecipe extends AppCompatActivity {
         }
         if (requestCode == STEP_REQUEST && resultCode == RESULT_OK) {
             List<Step> templist = mAdapter.getSteps();
-            int position = intent.getIntExtra("imgposition", 0);
-            if (ImagePickActivity.getPickImageResultUri(this, intent, "step" + String.valueOf(position+2)) != null) {
-                templist.get(position).setStepUri(ImagePickActivity.getPickImageResultUri(this, intent, "step" + String.valueOf(position+2)));
+            int position = mAdapter.getCurrentPicPosition();
+            if (ImagePickActivity.getPickImageResultUri(this, intent, "step" + position + 2) != null) {
+                templist.get(position).setStepUri(ImagePickActivity.getPickImageResultUri(this, intent, "step" + position + 2));
                 mAdapter.notifyItemChanged(position);
             }
         }
