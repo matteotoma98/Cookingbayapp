@@ -1,5 +1,6 @@
 package it.tpt.cookingbayapp;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,6 +13,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,9 +23,13 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +37,7 @@ import java.util.List;
 import it.tpt.cookingbayapp.ingredientsRecycler.IngredientsRecyclerViewAdapter;
 import it.tpt.cookingbayapp.recipeObject.Ingredient;
 import it.tpt.cookingbayapp.recipeObject.Recipe;
+import it.tpt.cookingbayapp.recipeObject.Section;
 import it.tpt.cookingbayapp.stepRecycler.Step;
 import it.tpt.cookingbayapp.stepRecycler.StepAdapter;
 
@@ -41,6 +48,7 @@ public class CreateRecipe extends AppCompatActivity {
     private StepAdapter mAdapter;
     CircleImageView imgPreview, imgStep1;
     TextInputEditText title, steptext1;
+    boolean isUploading;
 
     //Questi due oggetti step servono per comodità, solo il metodo setUrl() e getUrl()
     Step main;
@@ -63,6 +71,7 @@ public class CreateRecipe extends AppCompatActivity {
     private Uri stepUri;
 
     FirebaseUser currentUser;
+    FirebaseFirestore db;
     String folder;
 
     @Override
@@ -73,6 +82,7 @@ public class CreateRecipe extends AppCompatActivity {
         getSupportActionBar().setTitle("Crea nuova ricetta");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        isUploading = false;
         main = new Step("0", "", previewUri);
         firstStep = new Step("1", "", stepUri);
 
@@ -86,11 +96,13 @@ public class CreateRecipe extends AppCompatActivity {
         permissions.add(Manifest.permission.READ_EXTERNAL_STORAGE);
         permissionsToRequest = findUnaskedPermissions(permissions);
 
+        db = FirebaseFirestore.getInstance();
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
         mRecipe = new Recipe();
         mRecipe.setAuthorName(currentUser.getDisplayName());
-        mRecipe.setAuthorId(folder);
+        mRecipe.setAuthorId(currentUser.getUid());
+        mRecipe.setProfilePicUrl("missingprofile");
 
         iRecyclerView = findViewById(R.id.ingDisplay_recycler);
        // iRecyclerView.setHasFixedSize(true);
@@ -175,13 +187,55 @@ public class CreateRecipe extends AppCompatActivity {
             if(previewUri == null || TextUtils.isEmpty(title.getText()) || stepUri == null || TextUtils.isEmpty(steptext1.getText())){
                 Toast.makeText(this, R.string.minimum_info_required, Toast.LENGTH_LONG).show();
             } else {
-                folder = currentUser.getUid() + "/" + title.getText();
-                ImagePickActivity.uploadToStorage(this, previewUri, folder, "preview", main);
-                ImagePickActivity.uploadToStorage(this, stepUri, folder, "firstStep", firstStep);
-                for(int i=0; i < mAdapter.getItemCount(); i++) {
-                    ImagePickActivity.uploadToStorage(this, mAdapter.getSteps().get(i).getStepUri(), folder, "step" + i, mAdapter.getSteps().get(i));
+                if(isUploading == false) {
+                    folder = currentUser.getUid() + "/" + title.getText();
+                    ImagePickActivity.uploadToStorage(this, previewUri, folder, "preview", main);
+                    ImagePickActivity.uploadToStorage(this, stepUri, folder, "firstStep", firstStep);
+                    for (int i = 0; i < mAdapter.getItemCount(); i++) {
+                        ImagePickActivity.uploadToStorage(this, mAdapter.getSteps().get(i).getStepUri(), folder, "step" + i, mAdapter.getSteps().get(i));
+                    }
+                    isUploading = true;
                 }
-                
+                boolean finishedUploading = false;
+                if(!main.getUrl().equals("") && !firstStep.getUrl().equals("") ){
+                    finishedUploading = true;
+                    for (int i = 0; i < mAdapter.getItemCount(); i++) {
+                        if(mAdapter.getSteps().get(i).getUrl().equals("")) {
+                            finishedUploading=false;
+                            break;
+                        }
+                    }
+                }
+                if(finishedUploading){
+                    //Authorid e AuthorName in onCreate()
+                    mRecipe.setTitle(title.getText().toString());
+                    mRecipe.setType("secondo piatto");
+                    mRecipe.setPreviewUrl(main.getUrl());
+                    mRecipe.setIngredients(iAdapter.getIngredients());
+                    mRecipe.setTime("40 min");
+                    ArrayList<Section> sections = new ArrayList<>();
+                    sections.add(new Section(steptext1.getText().toString(), firstStep.getUrl(), 0));
+                    List<Step> templist = mAdapter.getSteps();
+                    for(int i = 0; i < mAdapter.getItemCount(); i++){
+                        sections.add(new Section(templist.get(i).getText(), templist.get(i).getUrl(), 0));
+                    }
+                    mRecipe.setSections(sections);
+                    db.collection("Recipes")
+                            .add(mRecipe)
+                            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                @Override
+                                public void onSuccess(DocumentReference documentReference) {
+                                    Log.d("Firestore up", "DocumentSnapshot written with ID: " + documentReference.getId());
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.w("Firestore up", "Error adding document", e);
+                                }
+                            });
+                }
+                else Toast.makeText(this, R.string.uploading, Toast.LENGTH_LONG).show();
             }
             //Toast.makeText(this, "Salva ricetta", Toast.LENGTH_SHORT).show();
             //startActivity(new Intent(this, MainActivity.class));

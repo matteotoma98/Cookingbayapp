@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 import it.tpt.cookingbayapp.R;
@@ -14,9 +16,9 @@ import it.tpt.cookingbayapp.recipeObject.Ingredient;
 
 public class IngredientsRecyclerViewAdapter extends RecyclerView.Adapter<IngredientViewHolder> {
 
-    private List<Ingredient> ingredients;
+    private ArrayList<Ingredient> ingredients;
 
-    public IngredientsRecyclerViewAdapter(List<Ingredient> ingredients){
+    public IngredientsRecyclerViewAdapter(ArrayList<Ingredient> ingredients){
         this.ingredients = ingredients;
     }
 
@@ -45,6 +47,10 @@ public class IngredientsRecyclerViewAdapter extends RecyclerView.Adapter<Ingredi
         ingredients.remove(ingredients.size()-1);
         notifyDataSetChanged();
         //notifyItemRemoved(ingredients.size());
+    }
+
+    public ArrayList<Ingredient> getIngredients() {
+        return ingredients;
     }
 
     @Override
