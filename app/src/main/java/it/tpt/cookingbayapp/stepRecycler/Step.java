@@ -7,6 +7,7 @@ import java.io.Serializable;
 public class Step implements Serializable {
     private String stepnumber;
     private String text;
+    private String url;
     private Uri stepUri;
 
     public Step(){
@@ -17,6 +18,15 @@ public class Step implements Serializable {
         this.stepnumber = stepnumber;
         this.text = text;
         this.stepUri = stepUri;
+        this.url = "";
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public String getText() {

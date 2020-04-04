@@ -43,6 +43,10 @@ public class CreateRecipe extends AppCompatActivity {
     CircleImageView imgPreview, imgStep1;
     TextInputEditText title, steptext1;
 
+    //Questi due oggetti step servono per comodità, solo il metodo setUrl() e getUrl()
+    Step main;
+    Step firstStep;
+
     private RecyclerView iRecyclerView;
     private IngredientsRecyclerViewAdapter iAdapter;
 
@@ -59,6 +63,9 @@ public class CreateRecipe extends AppCompatActivity {
     private Uri previewUri;
     private Uri stepUri;
 
+    FirebaseUser currentUser;
+    String userId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -67,6 +74,8 @@ public class CreateRecipe extends AppCompatActivity {
         getSupportActionBar().setTitle("Crea nuova ricetta");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        main = new Step("0", "", previewUri);
+        firstStep = new Step("1", "", stepUri);
 
         mRecyclerView = findViewById(R.id.step_recycler);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -79,10 +88,11 @@ public class CreateRecipe extends AppCompatActivity {
         permissionsToRequest = findUnaskedPermissions(permissions);
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
+        currentUser = mAuth.getCurrentUser();
+        userId = currentUser.getUid();
         mRecipe = new Recipe();
         mRecipe.setAuthorName(currentUser.getDisplayName());
-        mRecipe.setAuthorId(currentUser.getUid());
+        mRecipe.setAuthorId(userId);
 
         iRecyclerView = findViewById(R.id.ingDisplay_recycler);
        // iRecyclerView.setHasFixedSize(true);
@@ -140,7 +150,7 @@ public class CreateRecipe extends AppCompatActivity {
                 if (permissionsToRequest.size() > 0) {
                     requestPermissions(permissionsToRequest.toArray(new String[permissionsToRequest.size()]), ALL_PERMISSIONS_RESULT);
                 } else {
-                    startActivityForResult(ImagePickActivity.getPickImageChooserIntent(CreateRecipe.this, "step1"), PREVIEW_REQUEST);
+                    startActivityForResult(ImagePickActivity.getPickImageChooserIntent(CreateRecipe.this, "firstStep"), STEP1_REQUEST);
                 }
             }
         });
@@ -164,7 +174,6 @@ public class CreateRecipe extends AppCompatActivity {
             finish();
             //  startActivity(new Intent(this, LmrFragment.class));
         } else if (id == R.id.exitSave) {
-
             if(previewUri == null || TextUtils.isEmpty(title.getText()) || stepUri == null || TextUtils.isEmpty(steptext1.getText())){
                 Toast.makeText(this, R.string.minimum_info_required, Toast.LENGTH_LONG).show();
             } else {
@@ -179,7 +188,6 @@ public class CreateRecipe extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         if (requestCode == PREVIEW_REQUEST && resultCode == RESULT_OK) {
-
             if (ImagePickActivity.getPickImageResultUri(this, intent, "preview") != null) {
                 //Prendi l'uri assegnato alla cache
                 previewUri = ImagePickActivity.getPickImageResultUri(this, intent, "preview");
@@ -189,6 +197,7 @@ public class CreateRecipe extends AppCompatActivity {
                         .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
                         .centerCrop()
                         .into(imgPreview);
+                ImagePickActivity.uploadToStorage(this, previewUri, userId, "preview", main);
             } else {
                 Bitmap bitmap = (Bitmap) intent.getExtras().get("data");
                 Glide.with(this)
@@ -197,12 +206,32 @@ public class CreateRecipe extends AppCompatActivity {
                         .into(imgPreview);
             }
         }
+        if (requestCode == STEP1_REQUEST && resultCode == RESULT_OK) {
+            if (ImagePickActivity.getPickImageResultUri(this, intent, "firstStep") != null) {
+                //Prendi l'uri assegnato alla cache
+                stepUri = ImagePickActivity.getPickImageResultUri(this, intent, "firsStep");
+                Glide.with(this)
+                        .load(stepUri)
+                        .apply(RequestOptions.skipMemoryCacheOf(true))
+                        .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
+                        .centerCrop()
+                        .into(imgStep1);
+                ImagePickActivity.uploadToStorage(this, stepUri, userId, "firstStep", firstStep);
+            } else {
+                Bitmap bitmap = (Bitmap) intent.getExtras().get("data");
+                Glide.with(this)
+                        .load(bitmap)
+                        .centerCrop()
+                        .into(imgStep1);
+            }
+        }
         if (requestCode == STEP_REQUEST && resultCode == RESULT_OK) {
             List<Step> templist = mAdapter.getSteps();
             int position = mAdapter.getCurrentPicPosition();
             if (ImagePickActivity.getPickImageResultUri(this, intent, "step" + position ) != null) {
                 templist.get(position).setStepUri(ImagePickActivity.getPickImageResultUri(this, intent, "step" + position ));
                 mAdapter.notifyItemChanged(position);
+                ImagePickActivity.uploadToStorage(this, templist.get(position).getStepUri(), userId, "step" + position, templist.get(position));
             }
         }
     }

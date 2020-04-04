@@ -1,6 +1,7 @@
 package it.tpt.cookingbayapp;
 
 import android.content.ComponentName;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -8,10 +9,23 @@ import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Parcelable;
 import android.provider.MediaStore;
+import android.webkit.MimeTypeMap;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import it.tpt.cookingbayapp.stepRecycler.Step;
 
 public class ImagePickActivity {
 
@@ -59,6 +73,7 @@ public class ImagePickActivity {
         return chooserIntent;
     }
 
+
     public static Uri getCaptureImageOutputUri(Context context, String fileName) { //restituisce l'uri dell immagine che da qualche parte verrà salvata all'interno della cartella di cache
         Uri outputFileUri = null;
         File getImage = context.getExternalCacheDir();
@@ -78,6 +93,56 @@ public class ImagePickActivity {
 
         return isCamera ? getCaptureImageOutputUri(context, fileName) : data.getData();
 
+    }
+
+
+    public static void uploadToStorage(final Context context, Uri imageLocationPath, String folder, String fileName, final Step step) {
+        try {
+            if (imageLocationPath != null) {
+                final String nameOfimage = fileName + "." + getExtension(context, imageLocationPath);
+
+                StorageReference objectStorageReference;
+                objectStorageReference = FirebaseStorage.getInstance().getReference("images/" + folder); // Create folder to Firebase Storage
+                final StorageReference imageRef = objectStorageReference.child(nameOfimage);
+
+                UploadTask objectUploadTask = imageRef.putFile(imageLocationPath);
+
+                objectUploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                    @Override
+                    public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                        if (!task.isSuccessful()) {
+                            throw task.getException();
+                        }
+                        return imageRef.getDownloadUrl();
+                    }
+                }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Uri> task) {
+                        if (task.isSuccessful()) {
+                            step.setUrl(task.getResult().toString());
+                        } else if (!task.isSuccessful()) {
+                            Toast.makeText(context, task.getException().toString(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static String getExtension(Context context, Uri uri) {
+        try {
+            ContentResolver objectContentResolver = context.getContentResolver();
+            MimeTypeMap objectMimeTypeMap = MimeTypeMap.getSingleton();
+
+            return objectMimeTypeMap.getExtensionFromMimeType(objectContentResolver.getType(uri));
+
+        } catch (Exception e) {
+            Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+        return null;
     }
 
 }
