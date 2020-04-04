@@ -13,7 +13,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import it.tpt.cookingbayapp.R;
 import it.tpt.cookingbayapp.StepClickListener;
 
-public class StepViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+public class StepViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
     TextView stepnumber;
     Button delete;

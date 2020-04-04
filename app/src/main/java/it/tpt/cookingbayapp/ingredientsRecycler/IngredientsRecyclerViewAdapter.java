@@ -35,6 +35,18 @@ public class IngredientsRecyclerViewAdapter extends RecyclerView.Adapter<Ingredi
         }
     }
 
+    public void addIngredient(Ingredient ing) {
+        ingredients.add(ing);
+        //notifyDataSetChanged();
+        notifyItemInserted(ingredients.size() - 1);
+    }
+
+    public void delIngredient (){
+        ingredients.remove(ingredients.size()-1);
+        notifyDataSetChanged();
+        //notifyItemRemoved(ingredients.size());
+    }
+
     @Override
     public int getItemCount() {
         return ingredients.size();

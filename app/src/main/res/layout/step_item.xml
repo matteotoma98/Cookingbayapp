@@ -28,7 +28,8 @@
                 android:id="@+id/imgStepN"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
-                android:src="@drawable/step_dummy" />
+                android:src="@drawable/step_dummy"
+                />
 
             <LinearLayout
                 android:layout_width="match_parent"

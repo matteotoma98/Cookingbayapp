@@ -29,6 +29,8 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.ArrayList;
 import java.util.List;
 
+import it.tpt.cookingbayapp.ingredientsRecycler.IngredientsRecyclerViewAdapter;
+import it.tpt.cookingbayapp.recipeObject.Ingredient;
 import it.tpt.cookingbayapp.recipeObject.Recipe;
 import it.tpt.cookingbayapp.stepRecycler.Step;
 import it.tpt.cookingbayapp.stepRecycler.StepAdapter;
@@ -40,6 +42,9 @@ public class CreateRecipe extends AppCompatActivity {
     private StepAdapter mAdapter;
     CircleImageView imgPreview, imgStep1;
     TextInputEditText title, steptext1;
+
+    private RecyclerView iRecyclerView;
+    private IngredientsRecyclerViewAdapter iAdapter;
 
     private ArrayList<String> permissionsToRequest;
     private ArrayList<String> permissionsRejected = new ArrayList<>();
@@ -79,6 +84,12 @@ public class CreateRecipe extends AppCompatActivity {
         mRecipe.setAuthorName(currentUser.getDisplayName());
         mRecipe.setAuthorId(currentUser.getUid());
 
+        iRecyclerView = findViewById(R.id.ingDisplay_recycler);
+       // iRecyclerView.setHasFixedSize(true);
+        iRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        iAdapter = new IngredientsRecyclerViewAdapter(new ArrayList<Ingredient>());
+        iRecyclerView.setAdapter(iAdapter);
+
         Button btnAddStep = findViewById(R.id.addstep);
         btnAddStep.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,6 +98,25 @@ public class CreateRecipe extends AppCompatActivity {
                 mAdapter.addStep(new Step(Integer.toString(mAdapter.getItemCount() + 2), "", Uri.parse("")));
             }
         });
+
+        Button btnAddIng = findViewById(R.id.addingredient);
+        btnAddIng.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                iAdapter.addIngredient(new Ingredient("nome","500g"));
+                //metodo per aggiungere ingrediente alla recycler view
+            }
+        });
+
+        Button btnDelIng= findViewById(R.id.deleteIngredient);
+        btnDelIng.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                iAdapter.delIngredient();
+                //metodo per eliminare
+            }
+        });
+
 
         title = findViewById(R.id.createRecipeTitle);
         steptext1 = findViewById(R.id.steptext1);
