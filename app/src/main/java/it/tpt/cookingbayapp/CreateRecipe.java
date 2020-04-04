@@ -234,6 +234,8 @@ public class CreateRecipe extends AppCompatActivity {
                                     Log.w("Firestore up", "Error adding document", e);
                                 }
                             });
+                    Toast.makeText(this, R.string.donesharing, Toast.LENGTH_LONG).show();
+                    finish();
                 }
                 else Toast.makeText(this, R.string.uploading, Toast.LENGTH_LONG).show();
             }

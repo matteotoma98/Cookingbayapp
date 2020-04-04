@@ -18,4 +18,5 @@
     <string name="sorgente">Seleziona la sorgente</string>
     <string name="minimum_info_required">Perfavore, inserisci le informazioni principali e la descrizione del primo step!</string>
     <string name="uploading">Attendi l\'upload delle immagini, poi ripremi il bottone per salvare</string>
+    <string name="donesharing">Ricetta Condivisa!</string>
 </resources>
