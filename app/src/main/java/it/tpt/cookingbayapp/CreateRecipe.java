@@ -12,7 +12,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -64,7 +63,7 @@ public class CreateRecipe extends AppCompatActivity {
     private Uri stepUri;
 
     FirebaseUser currentUser;
-    String userId;
+    String folder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,10 +88,9 @@ public class CreateRecipe extends AppCompatActivity {
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
-        userId = currentUser.getUid();
         mRecipe = new Recipe();
         mRecipe.setAuthorName(currentUser.getDisplayName());
-        mRecipe.setAuthorId(userId);
+        mRecipe.setAuthorId(folder);
 
         iRecyclerView = findViewById(R.id.ingDisplay_recycler);
        // iRecyclerView.setHasFixedSize(true);
@@ -177,7 +175,13 @@ public class CreateRecipe extends AppCompatActivity {
             if(previewUri == null || TextUtils.isEmpty(title.getText()) || stepUri == null || TextUtils.isEmpty(steptext1.getText())){
                 Toast.makeText(this, R.string.minimum_info_required, Toast.LENGTH_LONG).show();
             } else {
-
+                folder = currentUser.getUid() + "/" + title.getText();
+                ImagePickActivity.uploadToStorage(this, previewUri, folder, "preview", main);
+                ImagePickActivity.uploadToStorage(this, stepUri, folder, "firstStep", firstStep);
+                for(int i=0; i < mAdapter.getItemCount(); i++) {
+                    ImagePickActivity.uploadToStorage(this, mAdapter.getSteps().get(i).getStepUri(), folder, "step" + i, mAdapter.getSteps().get(i));
+                }
+                
             }
             //Toast.makeText(this, "Salva ricetta", Toast.LENGTH_SHORT).show();
             //startActivity(new Intent(this, MainActivity.class));
@@ -197,7 +201,6 @@ public class CreateRecipe extends AppCompatActivity {
                         .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
                         .centerCrop()
                         .into(imgPreview);
-                ImagePickActivity.uploadToStorage(this, previewUri, userId, "preview", main);
             } else {
                 Bitmap bitmap = (Bitmap) intent.getExtras().get("data");
                 Glide.with(this)
@@ -216,7 +219,6 @@ public class CreateRecipe extends AppCompatActivity {
                         .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
                         .centerCrop()
                         .into(imgStep1);
-                ImagePickActivity.uploadToStorage(this, stepUri, userId, "firstStep", firstStep);
             } else {
                 Bitmap bitmap = (Bitmap) intent.getExtras().get("data");
                 Glide.with(this)
@@ -231,7 +233,6 @@ public class CreateRecipe extends AppCompatActivity {
             if (ImagePickActivity.getPickImageResultUri(this, intent, "step" + position ) != null) {
                 templist.get(position).setStepUri(ImagePickActivity.getPickImageResultUri(this, intent, "step" + position ));
                 mAdapter.notifyItemChanged(position);
-                ImagePickActivity.uploadToStorage(this, templist.get(position).getStepUri(), userId, "step" + position, templist.get(position));
             }
         }
     }
