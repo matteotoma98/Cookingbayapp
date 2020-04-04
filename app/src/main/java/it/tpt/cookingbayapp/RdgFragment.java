@@ -103,7 +103,6 @@ public class RdgFragment extends Fragment {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             ArrayList<Recipe> recipeList = new ArrayList<>();
-                            String profilePicUrl;
                             for (final QueryDocumentSnapshot document : task.getResult()) {
                                 Recipe recipe = document.toObject(Recipe.class);
                                 recipeList.add(recipe);
