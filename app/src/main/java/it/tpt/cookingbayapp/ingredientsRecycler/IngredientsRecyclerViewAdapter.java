@@ -3,6 +3,7 @@ package it.tpt.cookingbayapp.ingredientsRecycler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -44,9 +45,9 @@ public class IngredientsRecyclerViewAdapter extends RecyclerView.Adapter<Ingredi
     }
 
     public void delIngredient (){
-        ingredients.remove(ingredients.size()-1);
-        notifyDataSetChanged();
-        //notifyItemRemoved(ingredients.size());
+        if (getItemCount()!=0){
+            ingredients.remove(ingredients.size()-1);
+            notifyItemRemoved(ingredients.size());}
     }
 
     public ArrayList<Ingredient> getIngredients() {
