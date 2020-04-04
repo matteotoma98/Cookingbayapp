@@ -9,6 +9,7 @@ public class Step implements Serializable {
     private String text;
     private String url;
     private Uri stepUri;
+    private boolean hasPicture;
 
     public Step(){
 
@@ -19,6 +20,15 @@ public class Step implements Serializable {
         this.text = text;
         this.stepUri = stepUri;
         this.url = "";
+        this.hasPicture = false;
+    }
+
+    public boolean getHasPicture() {
+        return hasPicture;
+    }
+
+    public void setHasPicture(boolean hasPicture) {
+        this.hasPicture = hasPicture;
     }
 
     public String getUrl() {

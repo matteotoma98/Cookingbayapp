@@ -197,10 +197,11 @@ public class CreateRecipe extends AppCompatActivity {
                     isUploading = true;
                 }
                 boolean finishedUploading = false;
-                if(!main.getUrl().equals("") && !firstStep.getUrl().equals("") ){
+                if(!main.getUrl().equals("")){
                     finishedUploading = true;
+                    if(firstStep.getHasPicture() && firstStep.getUrl().equals("")) finishedUploading=false;
                     for (int i = 0; i < mAdapter.getItemCount(); i++) {
-                        if(mAdapter.getSteps().get(i).getUrl().equals("")) {
+                        if(mAdapter.getSteps().get(i).getHasPicture() && mAdapter.getSteps().get(i).getUrl().equals("")) {
                             finishedUploading=false;
                             break;
                         }
@@ -248,6 +249,7 @@ public class CreateRecipe extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         if (requestCode == PREVIEW_REQUEST && resultCode == RESULT_OK) {
+            isUploading = false;
             if (ImagePickActivity.getPickImageResultUri(this, intent, "preview") != null) {
                 //Prendi l'uri assegnato alla cache
                 previewUri = ImagePickActivity.getPickImageResultUri(this, intent, "preview");
@@ -266,6 +268,8 @@ public class CreateRecipe extends AppCompatActivity {
             }
         }
         if (requestCode == STEP1_REQUEST && resultCode == RESULT_OK) {
+            isUploading = false;
+            firstStep.setHasPicture(true);
             if (ImagePickActivity.getPickImageResultUri(this, intent, "firstStep") != null) {
                 //Prendi l'uri assegnato alla cache
                 stepUri = ImagePickActivity.getPickImageResultUri(this, intent, "firsStep");
@@ -284,8 +288,10 @@ public class CreateRecipe extends AppCompatActivity {
             }
         }
         if (requestCode == STEP_REQUEST && resultCode == RESULT_OK) {
+            isUploading = false;
             List<Step> templist = mAdapter.getSteps();
             int position = mAdapter.getCurrentPicPosition();
+            templist.get(position).setHasPicture(true);
             if (ImagePickActivity.getPickImageResultUri(this, intent, "step" + position ) != null) {
                 templist.get(position).setStepUri(ImagePickActivity.getPickImageResultUri(this, intent, "step" + position ));
                 mAdapter.notifyItemChanged(position);
