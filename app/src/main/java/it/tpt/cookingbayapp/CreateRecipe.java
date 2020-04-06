@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -46,7 +47,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class CreateRecipe extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private StepAdapter mAdapter;
-    CircleImageView imgPreview, imgStep1;
+    ImageView imgPreview, imgStep1;
     TextInputEditText title, steptext1, ingName, ingQuantity;
     boolean isUploading;
 
@@ -130,7 +131,7 @@ public class CreateRecipe extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(TextUtils.isEmpty(ingName.getText()) || TextUtils.isEmpty(ingQuantity.getText())){
-                    Toast.makeText(CreateRecipe.this, "Premuto", Toast.LENGTH_LONG).show();
+                    Toast.makeText(CreateRecipe.this, R.string.ing_required, Toast.LENGTH_LONG).show();
                 }
                 else iAdapter.addIngredient(new Ingredient(ingName.getText().toString(),ingQuantity.getText().toString()));
                 //metodo per aggiungere ingrediente alla recycler view

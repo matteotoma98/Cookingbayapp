@@ -46,7 +46,7 @@ public class IngredientsRecyclerViewAdapter extends RecyclerView.Adapter<Ingredi
     public void delIngredient() {
         if (getItemCount() != 0) {
             ingredients.remove(ingredients.size() - 1);
-            notifyItemRemoved(ingredients.size() - 1);
+            notifyItemRemoved(ingredients.size());
         }
     }
 

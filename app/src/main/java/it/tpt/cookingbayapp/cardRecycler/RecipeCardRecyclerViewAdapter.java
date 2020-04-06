@@ -46,7 +46,7 @@ public class RecipeCardRecyclerViewAdapter extends RecyclerView.Adapter<RecipeCa
 
             @Override
             public void onDeleteClickListener(View v, int position) {
-                
+
             }
 
             @Override
