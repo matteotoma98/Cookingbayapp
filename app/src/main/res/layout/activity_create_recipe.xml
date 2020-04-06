@@ -89,7 +89,6 @@
                     android:id="@+id/recipeType"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:inputType="number"
                     android:padding="18.5dp" />
 
             </com.google.android.material.textfield.TextInputLayout>
