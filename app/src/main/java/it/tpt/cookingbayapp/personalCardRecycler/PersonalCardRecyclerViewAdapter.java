@@ -68,13 +68,9 @@ public class PersonalCardRecyclerViewAdapter extends RecyclerView.Adapter<Person
             final Recipe recipe = recipeList.get(position);
 
             holder.title.setText(recipe.getTitle());
-            holder.user.setText(recipe.getAuthorName());
             holder.type.setText(recipe.getType());
             holder.time.setText(recipe.getTime());
-            if (recipe.getProfilePicUrl().equals("missingprofile")) {
-                holder.profilePic.setImageResource(R.drawable.missingprofile);
-            } else
-                Glide.with(holder.profilePic.getContext()).load(recipe.getProfilePicUrl()).into(holder.profilePic);
+            
             Glide.with(holder.preview.getContext()).load(recipe.getPreviewUrl()).into(holder.preview);
 
         }
