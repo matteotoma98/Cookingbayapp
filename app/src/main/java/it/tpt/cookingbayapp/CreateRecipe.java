@@ -120,12 +120,15 @@ public class CreateRecipe extends AppCompatActivity {
             steptext1.setText(temp1.getText());
             stepHours1.setText(String.valueOf(hours1));
             stepMinutes1.setText(String.valueOf(minutes1));
-            Glide.with(this)
-                    .load(temp1.getImageUrl())
-                    .apply(RequestOptions.skipMemoryCacheOf(true))
-                    .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
-                    .centerCrop()
-                    .into(imgStep1);
+            //test
+            if (!temp1.getImageUrl().equals("")) {
+                Glide.with(this)
+                        .load(temp1.getImageUrl())
+                        .apply(RequestOptions.skipMemoryCacheOf(true))
+                        .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
+                        .centerCrop()
+                        .into(imgStep1);
+            }
             for (int i = 1; i < sections.size(); i++) {
                 Section temp = sections.get(i);
                 int hours = temp.getTimer() / 3600;
@@ -162,7 +165,6 @@ public class CreateRecipe extends AppCompatActivity {
         permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
         permissions.add(Manifest.permission.READ_EXTERNAL_STORAGE);
         permissionsToRequest = findUnaskedPermissions(permissions);
-
 
 
         Button btnAddStep = findViewById(R.id.addstep);
