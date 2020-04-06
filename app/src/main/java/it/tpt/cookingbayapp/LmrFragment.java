@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,7 +25,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
-import it.tpt.cookingbayapp.cardRecycler.RecipeCardRecyclerViewAdapter;
+import it.tpt.cookingbayapp.personalCardRecycler.PersonalCardRecyclerViewAdapter;
 import it.tpt.cookingbayapp.recipeObject.Recipe;
 
 public class LmrFragment extends Fragment {
@@ -66,7 +65,7 @@ public class LmrFragment extends Fragment {
                                 recipeList.add(recipe);
                             }
                             recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1, GridLayoutManager.VERTICAL, false));
-                            RecipeCardRecyclerViewAdapter adapter = new RecipeCardRecyclerViewAdapter(getActivity(), recipeList);
+                            PersonalCardRecyclerViewAdapter adapter = new PersonalCardRecyclerViewAdapter(getActivity(), recipeList);
                             recyclerView.setAdapter(adapter);
                             Log.i("Finish", "Recipes downloaded");
                         } else {

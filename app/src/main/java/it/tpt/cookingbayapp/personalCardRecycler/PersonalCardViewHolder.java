@@ -1,6 +1,7 @@
 package it.tpt.cookingbayapp.personalCardRecycler;
 
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,6 +17,7 @@ public class PersonalCardViewHolder extends RecyclerView.ViewHolder implements V
     ImageView preview;
     CircleImageView profilePic;
     TextView title, user, type, time;
+    Button delete, edit;
 
     //Interface object (ClickListener)
     RecipeClickListener recipeClickListener;
@@ -26,6 +28,11 @@ public class PersonalCardViewHolder extends RecyclerView.ViewHolder implements V
         title = itemView.findViewById(R.id.myCardRecipeTitle);
         type = itemView.findViewById(R.id.myCardRecipeType);
         time = itemView.findViewById(R.id.myCardRecipeTime);
+        delete = itemView.findViewById(R.id.deleterecipe);
+        edit = itemView.findViewById(R.id.modifyrecipe);
+
+        delete.setOnClickListener(this);
+        edit.setOnClickListener(this);
 
         itemView.setOnClickListener(this);
     }
@@ -33,7 +40,17 @@ public class PersonalCardViewHolder extends RecyclerView.ViewHolder implements V
 
     @Override
     public void onClick(View v) {
-        this.recipeClickListener.onRecipeClickListener(v, getLayoutPosition());
+        switch (v.getId()){
+            case R.id.deleterecipe:
+                this.recipeClickListener.onDeleteClickListener(v, getAdapterPosition());
+                break;
+            case R.id.modifyrecipe:
+                this.recipeClickListener.onEditClickListener(v, getAdapterPosition());
+                break;
+            case R.id.my_card:
+                this.recipeClickListener.onRecipeClickListener(v, getLayoutPosition());
+                break;
+        }
     }
 
     public void setRecipeClickListener(RecipeClickListener rc) {
