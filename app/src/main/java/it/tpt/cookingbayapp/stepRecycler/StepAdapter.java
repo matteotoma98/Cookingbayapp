@@ -2,6 +2,7 @@ package it.tpt.cookingbayapp.stepRecycler;
 
 import android.app.Activity;
 import android.content.Context;
+import android.net.Uri;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -74,12 +75,44 @@ public class StepAdapter extends RecyclerView.Adapter<StepViewHolder> {
 
             }
         });
+        holder.stepHours.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                steps.get(holder.getAdapterPosition()).setHours(Integer.parseInt(holder.stepHours.getText().toString()));
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        holder.stepMinutes.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                steps.get(holder.getAdapterPosition()).setMinutes(Integer.parseInt(holder.stepMinutes.getText().toString()));
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         return holder;
     }
 
-    public void addStep(Step step) {
-        steps.add(step);
+    public void addStep() {
+        steps.add(new Step( "", Uri.parse("")));
         notifyItemInserted(steps.size() - 1);
     }
 
@@ -93,6 +126,8 @@ public class StepAdapter extends RecyclerView.Adapter<StepViewHolder> {
             String steptext = "Step " + (position + 2);
             holder.stepnumber.setText(steptext);
             holder.steptext.setText(steps.get(position).getText());
+            holder.stepHours.setText(steps.get(position).getHours());
+            holder.stepMinutes.setText(steps.get(position).getMinutes());
             if (!steps.get(position).getStepUri().toString().equals("")) {
                 Glide.with(mContext)
                         .load(steps.get(position).getStepUri())

@@ -17,7 +17,7 @@ public class StepViewHolder extends RecyclerView.ViewHolder implements View.OnCl
 
     TextView stepnumber;
     Button delete;
-    TextInputEditText steptext;
+    TextInputEditText steptext, stepHours, stepMinutes;
     CircleImageView imgStep;
 
     //Interface object
@@ -30,6 +30,8 @@ public class StepViewHolder extends RecyclerView.ViewHolder implements View.OnCl
         delete = itemView.findViewById(R.id.deletestep);
         delete.setOnClickListener(this);
         steptext = itemView.findViewById(R.id.steptext);
+        stepHours = itemView.findViewById(R.id.stepHours);
+        stepMinutes = itemView.findViewById(R.id.stepMinutes);
         imgStep = itemView.findViewById(R.id.imgStepN);
         imgStep.setOnClickListener(this);
 

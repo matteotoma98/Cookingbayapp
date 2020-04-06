@@ -48,7 +48,7 @@ public class CreateRecipe extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private StepAdapter mAdapter;
     ImageView imgPreview, imgStep1;
-    TextInputEditText title, steptext1, ingName, ingQuantity;
+    TextInputEditText title, steptext1, ingName, ingQuantity, stepHours1, stepMinutes1;
     boolean isUploading;
 
     //Questi due oggetti step servono per comodità, solo il metodo setUrl() e getUrl() vengono utilizzati
@@ -85,13 +85,15 @@ public class CreateRecipe extends AppCompatActivity {
 
         title = findViewById(R.id.createRecipeTitle);
         steptext1 = findViewById(R.id.steptext1);
+        stepHours1 = findViewById(R.id.stepHours1);
+        stepMinutes1 = findViewById(R.id.stepMinutes1);
         imgPreview = findViewById(R.id.imgAnteprima);
         ingName = findViewById(R.id.txtIngredient);
         ingQuantity = findViewById(R.id.txtQuantity);
 
         isUploading = false;
-        main = new Step("0", "", previewUri);
-        firstStep = new Step("1", "", stepUri);
+        main = new Step( "", previewUri);
+        firstStep = new Step( "", stepUri);
 
         mRecyclerView = findViewById(R.id.step_recycler);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -122,7 +124,7 @@ public class CreateRecipe extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Toast.makeText(CreateRecipe.this, "Premuto", Toast.LENGTH_LONG).show(); //per vedere quando viene premuto il bottone
-                mAdapter.addStep(new Step(Integer.toString(mAdapter.getItemCount() + 2), "", Uri.parse("")));
+                mAdapter.addStep();
             }
         });
 
@@ -222,10 +224,13 @@ public class CreateRecipe extends AppCompatActivity {
                     mRecipe.setIngredients(iAdapter.getIngredients());
                     mRecipe.setTime("40 min");
                     ArrayList<Section> sections = new ArrayList<>();
-                    sections.add(new Section(steptext1.getText().toString(), firstStep.getUrl(), 0));
+                    //Timer primo step
+                    int timer1 = Integer.parseInt(stepHours1.getText().toString())*3600 + Integer.parseInt(stepMinutes1.getText().toString())*60;
+                    sections.add(new Section(steptext1.getText().toString(), firstStep.getUrl(), timer1));
                     List<Step> templist = mAdapter.getSteps();
                     for(int i = 0; i < mAdapter.getItemCount(); i++){
-                        sections.add(new Section(templist.get(i).getText(), templist.get(i).getUrl(), 0));
+                        int time = templist.get(i).getHours()*3600 + templist.get(i).getMinutes()*60;
+                        sections.add(new Section(templist.get(i).getText(), templist.get(i).getUrl(), time));
                     }
                     mRecipe.setSections(sections);
                     db.collection("Recipes")

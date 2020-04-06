@@ -5,9 +5,11 @@ import android.net.Uri;
 import java.io.Serializable;
 
 public class Step implements Serializable {
-    private String stepnumber;
+
     private String text;
     private String url;
+    private int hours;
+    private int minutes;
     private Uri stepUri;
     private boolean hasPicture;
 
@@ -15,12 +17,27 @@ public class Step implements Serializable {
 
     }
 
-    public Step(String stepnumber, String text, Uri stepUri) {
-        this.stepnumber = stepnumber;
+    public Step(String text, Uri stepUri) {
         this.text = text;
         this.stepUri = stepUri;
         this.url = "";
         this.hasPicture = false;
+    }
+
+    public int getHours() {
+        return hours;
+    }
+
+    public void setHours(int hours) {
+        this.hours = hours;
+    }
+
+    public int getMinutes() {
+        return minutes;
+    }
+
+    public void setMinutes(int minutes) {
+        this.minutes = minutes;
     }
 
     public boolean getHasPicture() {
@@ -55,11 +72,4 @@ public class Step implements Serializable {
         this.stepUri = stepUri;
     }
 
-    public String getStepnumber() {
-        return stepnumber;
-    }
-
-    public void setStepnumber(String stepnumber) {
-        this.stepnumber = stepnumber;
-    }
 }
