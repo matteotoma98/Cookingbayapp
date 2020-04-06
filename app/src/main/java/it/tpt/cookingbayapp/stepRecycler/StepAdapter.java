@@ -54,7 +54,7 @@ public class StepAdapter extends RecyclerView.Adapter<StepViewHolder> {
             @Override
             public void onItemClickListener(int position) {
                 setCurrentPicPosition(position);
-                ((Activity) mContext).startActivityForResult(ImagePickActivity.getPickImageChooserIntent(mContext, ("step" + position )), STEP_REQUEST);
+                ((Activity) mContext).startActivityForResult(ImagePickActivity.getPickImageChooserIntent(mContext, ("step" + position)), STEP_REQUEST);
             }
         });
 
@@ -112,7 +112,7 @@ public class StepAdapter extends RecyclerView.Adapter<StepViewHolder> {
     }
 
     public void addStep() {
-        steps.add(new Step( "", Uri.parse("")));
+        steps.add(new Step("", Uri.parse("")));
         notifyItemInserted(steps.size() - 1);
     }
 
@@ -135,9 +135,15 @@ public class StepAdapter extends RecyclerView.Adapter<StepViewHolder> {
                         .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
                         .centerCrop()
                         .into(holder.imgStep);
-            }
-            else {
-                Glide.with(mContext)
+            } else {
+                if (!steps.get(position).getUrl().equals("")) {
+                    Glide.with(mContext)
+                            .load(steps.get(position).getUrl())
+                            .apply(RequestOptions.skipMemoryCacheOf(true))
+                            .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
+                            .centerCrop()
+                            .into(holder.imgStep);
+                } else Glide.with(mContext)
                         .load(R.drawable.step_dummy)
                         .apply(RequestOptions.skipMemoryCacheOf(true))
                         .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
