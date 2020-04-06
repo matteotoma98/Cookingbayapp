@@ -18,6 +18,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.List;
 
+import it.tpt.cookingbayapp.CreateRecipe;
 import it.tpt.cookingbayapp.R;
 import it.tpt.cookingbayapp.RecipeClickListener;
 import it.tpt.cookingbayapp.ViewRecipeActivity;
@@ -77,7 +78,11 @@ public class PersonalCardRecyclerViewAdapter extends RecyclerView.Adapter<Person
 
             @Override
             public void onEditClickListener(View v, int position) {
-
+                Intent intent = new Intent(mContext, CreateRecipe.class);
+                intent.putExtra("edit", true);
+                intent.putExtra("recipeToEdit", recipeList.get(position));
+                intent.putExtra("recipeId", recipeIds.get(position));
+                mContext.startActivity(intent);
             }
         });
         return holder;

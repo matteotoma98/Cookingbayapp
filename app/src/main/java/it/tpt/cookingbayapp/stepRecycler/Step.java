@@ -26,6 +26,15 @@ public class Step implements Serializable {
         this.hasPicture = false;
     }
 
+    public Step(String text, String url, String hours, String minutes) {
+        this.text = text;
+        this.url = url;
+        this.hours = hours;
+        this.stepUri = Uri.parse("");
+        this.minutes = minutes;
+        this.hasPicture = true;
+    }
+
     public String getHours() {
         return hours;
     }
