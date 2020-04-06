@@ -1,11 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Profilo"
-        android:textSize="30sp"
-        android:layout_centerInParent="true"/>
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:orientation="horizontal">
+
+        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/cardProfilePic"
+            android:layout_width="180dp"
+            android:layout_height="180dp"
+            android:contentDescription="profilePic"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/missingprofile" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingLeft="8dp"
+            >
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="91dp"
+                android:paddingTop="20dp"
+                android:text="NOME UTENTE"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                android:textSize="30sp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/modifyrecipe"
+                    style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:text="Modifica"
+                    android:textColor="@color/colorAccent"
+                    app:icon="@drawable/ic_mode_edit_black_24dp"
+                    app:iconTint="@color/colorAccent" />
+
+                <Button
+                    android:id="@+id/deleterecipe"
+                    style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Elimina"
+                    android:textColor="@color/colorAccent"
+                    app:icon="@drawable/ic_delete_forever_black_24dp"
+                    app:iconTint="@color/colorAccent" />
+            </LinearLayout>
+
+   </LinearLayout>
+    </LinearLayout>
+
+
+
 </RelativeLayout>
