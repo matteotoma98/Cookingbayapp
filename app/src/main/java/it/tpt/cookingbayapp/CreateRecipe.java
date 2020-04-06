@@ -47,10 +47,10 @@ public class CreateRecipe extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private StepAdapter mAdapter;
     CircleImageView imgPreview, imgStep1;
-    TextInputEditText title, steptext1;
+    TextInputEditText title, steptext1, ingName, ingQuantity;
     boolean isUploading;
 
-    //Questi due oggetti step servono per comodità, solo il metodo setUrl() e getUrl()
+    //Questi due oggetti step servono per comodità, solo il metodo setUrl() e getUrl() vengono utilizzati
     Step main;
     Step firstStep;
 
@@ -81,6 +81,12 @@ public class CreateRecipe extends AppCompatActivity {
         setContentView(R.layout.activity_create_recipe);
         getSupportActionBar().setTitle("Crea nuova ricetta");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        title = findViewById(R.id.createRecipeTitle);
+        steptext1 = findViewById(R.id.steptext1);
+        imgPreview = findViewById(R.id.imgAnteprima);
+        ingName = findViewById(R.id.txtIngredient);
+        ingQuantity = findViewById(R.id.txtQuantity);
 
         isUploading = false;
         main = new Step("0", "", previewUri);
@@ -123,7 +129,10 @@ public class CreateRecipe extends AppCompatActivity {
         btnAddIng.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                iAdapter.addIngredient(new Ingredient("nome","500g"));
+                if(TextUtils.isEmpty(ingName.getText()) || TextUtils.isEmpty(ingQuantity.getText())){
+                    Toast.makeText(CreateRecipe.this, "Premuto", Toast.LENGTH_LONG).show();
+                }
+                else iAdapter.addIngredient(new Ingredient(ingName.getText().toString(),ingQuantity.getText().toString()));
                 //metodo per aggiungere ingrediente alla recycler view
             }
         });
@@ -137,10 +146,6 @@ public class CreateRecipe extends AppCompatActivity {
             }
         });
 
-
-        title = findViewById(R.id.createRecipeTitle);
-        steptext1 = findViewById(R.id.steptext1);
-        imgPreview = findViewById(R.id.imgAnteprima);
         imgPreview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -184,7 +189,7 @@ public class CreateRecipe extends AppCompatActivity {
             finish();
             //  startActivity(new Intent(this, LmrFragment.class));
         } else if (id == R.id.exitSave) {
-            if(previewUri == null || TextUtils.isEmpty(title.getText()) || TextUtils.isEmpty(steptext1.getText())){
+            if(previewUri == null || TextUtils.isEmpty(title.getText()) || TextUtils.isEmpty(steptext1.getText()) || iAdapter.getItemCount()==0){
                 Toast.makeText(this, R.string.minimum_info_required, Toast.LENGTH_LONG).show();
             } else {
                 if(isUploading == false) {

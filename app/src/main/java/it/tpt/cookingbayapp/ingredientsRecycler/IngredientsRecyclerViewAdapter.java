@@ -19,7 +19,7 @@ public class IngredientsRecyclerViewAdapter extends RecyclerView.Adapter<Ingredi
 
     private ArrayList<Ingredient> ingredients;
 
-    public IngredientsRecyclerViewAdapter(ArrayList<Ingredient> ingredients){
+    public IngredientsRecyclerViewAdapter(ArrayList<Ingredient> ingredients) {
         this.ingredients = ingredients;
     }
 
@@ -32,7 +32,7 @@ public class IngredientsRecyclerViewAdapter extends RecyclerView.Adapter<Ingredi
 
     @Override
     public void onBindViewHolder(@NonNull IngredientViewHolder holder, int position) {
-        if (ingredients != null && position < ingredients.size()){
+        if (ingredients != null && position < ingredients.size()) {
             holder.ingredient.setText(ingredients.get(position).getName());
             holder.quantity.setText(ingredients.get(position).getQuantity());
         }
@@ -40,14 +40,14 @@ public class IngredientsRecyclerViewAdapter extends RecyclerView.Adapter<Ingredi
 
     public void addIngredient(Ingredient ing) {
         ingredients.add(ing);
-        //notifyDataSetChanged();
         notifyItemInserted(ingredients.size() - 1);
     }
 
-    public void delIngredient (){
-        if (getItemCount()!=0){
-            ingredients.remove(ingredients.size()-1);
-            notifyItemRemoved(ingredients.size());}
+    public void delIngredient() {
+        if (getItemCount() != 0) {
+            ingredients.remove(ingredients.size() - 1);
+            notifyItemRemoved(ingredients.size() - 1);
+        }
     }
 
     public ArrayList<Ingredient> getIngredients() {
