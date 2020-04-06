@@ -16,8 +16,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".ViewRecipeActivity" />
         <activity
-            android:name=".CreateRecipe"
-            android:parentActivityName=".MainActivity"/>
+            android:name=".CreateRecipe"/>
         <activity android:name=".LoginActivity"
             android:theme="@style/NoActionLogin"/>
         <activity android:name=".MainActivity">

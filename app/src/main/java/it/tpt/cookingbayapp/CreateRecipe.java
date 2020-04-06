@@ -108,7 +108,7 @@ public class CreateRecipe extends AppCompatActivity {
         if (intent.getBooleanExtra("edit", false)) {
             getSupportActionBar().setTitle("Modifica ricetta");
 
-            Recipe editRecipe = (Recipe) intent.getSerializableExtra("recipe");
+            Recipe editRecipe = (Recipe) intent.getSerializableExtra("recipeToEdit");
             title.setText(editRecipe.getTitle());
             totalTime.setText(editRecipe.getTime());
 
@@ -118,14 +118,16 @@ public class CreateRecipe extends AppCompatActivity {
             int hours1 = temp1.getTimer() / 3600;
             int minutes1 = (temp1.getTimer() % 3600) / 60;
             steptext1.setText(temp1.getText());
-            stepHours1.setText(hours1);
-            stepMinutes1.setText(minutes1);
-            Glide.with(this)
-                    .load(temp1.getImageUrl())
-                    .apply(RequestOptions.skipMemoryCacheOf(true))
-                    .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
-                    .centerCrop()
-                    .into(imgStep1);
+            stepHours1.setText(String.valueOf(hours1));
+            stepMinutes1.setText(String.valueOf(minutes1));
+            if (!temp1.getImageUrl().equals("")) {
+                Glide.with(this)
+                        .load(temp1.getImageUrl())
+                        .apply(RequestOptions.skipMemoryCacheOf(true))
+                        .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
+                        .centerCrop()
+                        .into(imgStep1);
+            }
             for (int i = 1; i < sections.size(); i++) {
                 Section temp = sections.get(i);
                 int hours = temp.getTimer() / 3600;
@@ -162,7 +164,6 @@ public class CreateRecipe extends AppCompatActivity {
         permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
         permissions.add(Manifest.permission.READ_EXTERNAL_STORAGE);
         permissionsToRequest = findUnaskedPermissions(permissions);
-
 
 
         Button btnAddStep = findViewById(R.id.addstep);
