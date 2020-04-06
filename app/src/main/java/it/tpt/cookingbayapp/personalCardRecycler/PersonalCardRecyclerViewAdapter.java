@@ -2,6 +2,7 @@ package it.tpt.cookingbayapp.personalCardRecycler;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.List;
 
@@ -22,12 +26,13 @@ import it.tpt.cookingbayapp.recipeObject.Recipe;
 public class PersonalCardRecyclerViewAdapter extends RecyclerView.Adapter<PersonalCardViewHolder> {
 
     private List<Recipe> recipeList;
+    private List<String> recipeIds;
     Context mContext;
 
-    public PersonalCardRecyclerViewAdapter(Context c, List<Recipe> recipeList) {
+    public PersonalCardRecyclerViewAdapter(Context c, List<Recipe> recipeList, List<String> recipeIds) {
         mContext = c;
         this.recipeList = recipeList;
-
+        this.recipeIds = recipeIds;
     }
 
     @NonNull
@@ -46,8 +51,25 @@ public class PersonalCardRecyclerViewAdapter extends RecyclerView.Adapter<Person
 
             @Override
             public void onDeleteClickListener(View v, int position) {
-                Toast.makeText(mContext, recipeList.get(position).getTitle() , Toast.LENGTH_LONG).show();
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                db.collection("Recipes").document(recipeIds.get(position))
+                        .delete()
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Toast.makeText(mContext, "Ricetta eliminata" , Toast.LENGTH_LONG).show();
+                                Log.d("DELETEDOC", "DocumentSnapshot successfully deleted!");
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(mContext, "Errore nell'eliminazione!" , Toast.LENGTH_LONG).show();
+                                Log.w("DELETEDOC", "Error deleting document", e);
+                            }
+                        });
                 recipeList.remove(position);
+                recipeIds.remove(position);
                 notifyItemRemoved(position);
                 notifyItemRangeChanged(position, getItemCount());
 
@@ -70,7 +92,7 @@ public class PersonalCardRecyclerViewAdapter extends RecyclerView.Adapter<Person
             holder.title.setText(recipe.getTitle());
             holder.type.setText(recipe.getType());
             holder.time.setText(recipe.getTime());
-            
+
             Glide.with(holder.preview.getContext()).load(recipe.getPreviewUrl()).into(holder.preview);
 
         }

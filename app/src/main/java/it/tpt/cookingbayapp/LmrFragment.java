@@ -60,12 +60,14 @@ public class LmrFragment extends Fragment {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             ArrayList<Recipe> recipeList = new ArrayList<>();
+                            ArrayList<String> recipeIds = new ArrayList<>();
                             for (final QueryDocumentSnapshot document : task.getResult()) {
                                 Recipe recipe = document.toObject(Recipe.class);
+                                recipeIds.add(document.getId());
                                 recipeList.add(recipe);
                             }
                             recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1, GridLayoutManager.VERTICAL, false));
-                            PersonalCardRecyclerViewAdapter adapter = new PersonalCardRecyclerViewAdapter(getActivity(), recipeList);
+                            PersonalCardRecyclerViewAdapter adapter = new PersonalCardRecyclerViewAdapter(getActivity(), recipeList, recipeIds);
                             recyclerView.setAdapter(adapter);
                             Log.i("Finish", "Recipes downloaded");
                         } else {
