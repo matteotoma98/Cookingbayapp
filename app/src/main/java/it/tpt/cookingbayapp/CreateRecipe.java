@@ -130,7 +130,7 @@ public class CreateRecipe extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(TextUtils.isEmpty(ingName.getText()) || TextUtils.isEmpty(ingQuantity.getText())){
-                    Toast.makeText(CreateRecipe.this, "Premuto", Toast.LENGTH_LONG).show();
+                    Toast.makeText(CreateRecipe.this, R.string.ing_required, Toast.LENGTH_LONG).show();
                 }
                 else iAdapter.addIngredient(new Ingredient(ingName.getText().toString(),ingQuantity.getText().toString()));
                 //metodo per aggiungere ingrediente alla recycler view

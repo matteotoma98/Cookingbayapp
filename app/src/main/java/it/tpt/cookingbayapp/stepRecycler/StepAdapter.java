@@ -80,7 +80,6 @@ public class StepAdapter extends RecyclerView.Adapter<StepViewHolder> {
 
     public void addStep(Step step) {
         steps.add(step);
-        //notifyDataSetChanged();
         notifyItemInserted(steps.size() - 1);
     }
 
