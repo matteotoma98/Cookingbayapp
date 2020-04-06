@@ -8,8 +8,8 @@ public class Step implements Serializable {
 
     private String text;
     private String url;
-    private int hours;
-    private int minutes;
+    private String hours;
+    private String minutes;
     private Uri stepUri;
     private boolean hasPicture;
 
@@ -21,22 +21,24 @@ public class Step implements Serializable {
         this.text = text;
         this.stepUri = stepUri;
         this.url = "";
+        this.hours = "";
+        this.minutes = "";
         this.hasPicture = false;
     }
 
-    public int getHours() {
+    public String getHours() {
         return hours;
     }
 
-    public void setHours(int hours) {
+    public void setHours(String hours) {
         this.hours = hours;
     }
 
-    public int getMinutes() {
+    public String getMinutes() {
         return minutes;
     }
 
-    public void setMinutes(int minutes) {
+    public void setMinutes(String minutes) {
         this.minutes = minutes;
     }
 

@@ -83,7 +83,7 @@ public class StepAdapter extends RecyclerView.Adapter<StepViewHolder> {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                steps.get(holder.getAdapterPosition()).setHours(Integer.parseInt(holder.stepHours.getText().toString()));
+                steps.get(holder.getAdapterPosition()).setHours(holder.stepHours.getText().toString());
             }
 
             @Override
@@ -99,7 +99,7 @@ public class StepAdapter extends RecyclerView.Adapter<StepViewHolder> {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                steps.get(holder.getAdapterPosition()).setMinutes(Integer.parseInt(holder.stepMinutes.getText().toString()));
+                steps.get(holder.getAdapterPosition()).setMinutes(holder.stepMinutes.getText().toString());
             }
 
             @Override

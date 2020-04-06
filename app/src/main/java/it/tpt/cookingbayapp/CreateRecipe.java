@@ -225,11 +225,16 @@ public class CreateRecipe extends AppCompatActivity {
                     mRecipe.setTime("40 min");
                     ArrayList<Section> sections = new ArrayList<>();
                     //Timer primo step
-                    int timer1 = Integer.parseInt(stepHours1.getText().toString())*3600 + Integer.parseInt(stepMinutes1.getText().toString())*60;
+                    int hours1 = (TextUtils.isEmpty(stepHours1.getText())) ? 0 : Integer.parseInt(stepHours1.getText().toString());
+                    int minutes1 = (TextUtils.isEmpty(stepMinutes1.getText())) ? 0 : Integer.parseInt(stepMinutes1.getText().toString());
+                    int timer1 = hours1*3600 + minutes1*60;
+
                     sections.add(new Section(steptext1.getText().toString(), firstStep.getUrl(), timer1));
                     List<Step> templist = mAdapter.getSteps();
                     for(int i = 0; i < mAdapter.getItemCount(); i++){
-                        int time = templist.get(i).getHours()*3600 + templist.get(i).getMinutes()*60;
+                        int hours = (TextUtils.isEmpty(templist.get(i).getHours())) ? 0 : Integer.parseInt(templist.get(i).getHours());
+                        int minutes = (TextUtils.isEmpty(templist.get(i).getMinutes())) ? 0 : Integer.parseInt(templist.get(i).getMinutes());
+                        int time = hours*3600 + minutes*60;
                         sections.add(new Section(templist.get(i).getText(), templist.get(i).getUrl(), time));
                     }
                     mRecipe.setSections(sections);
