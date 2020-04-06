@@ -23,9 +23,7 @@ public class PersonalCardViewHolder extends RecyclerView.ViewHolder implements V
     public PersonalCardViewHolder(@NonNull View itemView) {
         super(itemView);
         preview = itemView.findViewById(R.id.myCardPreviewPic);
-        profilePic = itemView.findViewById(R.id.myCardProfilePic);
         title = itemView.findViewById(R.id.myCardRecipeTitle);
-        user = itemView.findViewById(R.id.myCardRecipeAuthor);
         type = itemView.findViewById(R.id.myCardRecipeType);
         time = itemView.findViewById(R.id.myCardRecipeTime);
 
