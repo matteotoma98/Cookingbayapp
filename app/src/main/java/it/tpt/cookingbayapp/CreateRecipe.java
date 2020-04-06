@@ -120,6 +120,7 @@ public class CreateRecipe extends AppCompatActivity {
             steptext1.setText(temp1.getText());
             stepHours1.setText(String.valueOf(hours1));
             stepMinutes1.setText(String.valueOf(minutes1));
+            //test
             if (!temp1.getImageUrl().equals("")) {
                 Glide.with(this)
                         .load(temp1.getImageUrl())
