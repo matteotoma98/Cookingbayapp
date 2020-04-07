@@ -309,6 +309,9 @@ public class CreateRecipe extends AppCompatActivity {
                                         Log.w("TAG", "Error writing document", e);
                                     }
                                 });
+                        Toast.makeText(this, R.string.doneediting, Toast.LENGTH_LONG).show();
+                        setResult(RESULT_OK);
+                        finish();
                     } else {
                         //Aggiunge una nuova ricetta
                         db.collection("Recipes")
