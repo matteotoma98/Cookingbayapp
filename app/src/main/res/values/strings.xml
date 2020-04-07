@@ -5,7 +5,7 @@
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="login">Accedi</string>
-    <string name="signup">Reigstrati</string>
+    <string name="signup">Registrati</string>
     <string name="required">Inserire tutte le informazioni!</string>
     <string name="errorSignup">Errore</string>
     <string name="salvasp">Salva senza pubblicare</string>
