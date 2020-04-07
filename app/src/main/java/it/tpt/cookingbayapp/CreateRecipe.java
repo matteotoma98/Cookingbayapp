@@ -48,6 +48,7 @@ public class CreateRecipe extends AppCompatActivity {
     ImageView imgPreview, imgStep1;
     TextInputEditText title, totalTime, steptext1, ingName, ingQuantity, stepHours1, stepMinutes1;
     boolean isUploading;
+    boolean isEditing; //Controlla se l'activity è stata avviata da mofica piuttosto che crea ricetta
 
     //Questi due oggetti step servono per comodità, solo il metodo setUrl() e getUrl() vengono utilizzati
     Step main;
@@ -90,6 +91,7 @@ public class CreateRecipe extends AppCompatActivity {
         ingQuantity = findViewById(R.id.txtQuantity);
 
         isUploading = false;
+        isEditing = getIntent().getBooleanExtra("edit", false);
         main = new Step("", previewUri);
         firstStep = new Step("", stepUri);
 
@@ -107,6 +109,7 @@ public class CreateRecipe extends AppCompatActivity {
             getSupportActionBar().setTitle("Modifica ricetta");
 
             Recipe editRecipe = (Recipe) intent.getSerializableExtra("recipeToEdit");
+            main.setUrl(editRecipe.getPreviewUrl());
             title.setText(editRecipe.getTitle());
             totalTime.setText(editRecipe.getTime());
 
@@ -118,6 +121,7 @@ public class CreateRecipe extends AppCompatActivity {
             steptext1.setText(temp1.getText());
             stepHours1.setText(String.valueOf(hours1));
             stepMinutes1.setText(String.valueOf(minutes1));
+            firstStep.setUrl(temp1.getImageUrl());
             //test
             if (!temp1.getImageUrl().equals("")) {
                 Glide.with(this)
@@ -237,7 +241,7 @@ public class CreateRecipe extends AppCompatActivity {
             finish();
             //  startActivity(new Intent(this, LmrFragment.class));
         } else if (id == R.id.exitSave) {
-            if ((previewUri == null && getIntent().getBooleanExtra("edit", false))
+            if ((previewUri == null && !isEditing)
                     || TextUtils.isEmpty(title.getText())
                     || TextUtils.isEmpty(steptext1.getText())
                     || iAdapter.getItemCount() == 0) {
@@ -245,8 +249,10 @@ public class CreateRecipe extends AppCompatActivity {
             } else {
                 if (isUploading == false) {
                     folder = currentUser.getUid() + "/" + title.getText();
-                    if (previewUri != null) ImagePickActivity.uploadToStorage(this, previewUri, folder, "preview", main);
-                    if (stepUri != null) ImagePickActivity.uploadToStorage(this, stepUri, folder, "firstStep", firstStep);
+                    if (previewUri != null)
+                        ImagePickActivity.uploadToStorage(this, previewUri, folder, "preview", main);
+                    if (stepUri != null)
+                        ImagePickActivity.uploadToStorage(this, stepUri, folder, "firstStep", firstStep);
                     for (int i = 0; i < mAdapter.getItemCount(); i++) {
                         if (mAdapter.getSteps().get(i).getHasPicture())
                             ImagePickActivity.uploadToStorage(this, mAdapter.getSteps().get(i).getStepUri(), folder, "step" + i, mAdapter.getSteps().get(i));
@@ -287,7 +293,8 @@ public class CreateRecipe extends AppCompatActivity {
                         sections.add(new Section(templist.get(i).getText(), templist.get(i).getUrl(), time));
                     }
                     mRecipe.setSections(sections);
-                    if(getIntent().getBooleanExtra("edit", false)) {
+                    if (isEditing) {
+                        //aggiorna la ricetta esistente
                         db.collection("Recipes").document(getIntent().getStringExtra("recipeId"))
                                 .set(mRecipe)
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -302,26 +309,26 @@ public class CreateRecipe extends AppCompatActivity {
                                         Log.w("TAG", "Error writing document", e);
                                     }
                                 });
+                    } else {
+                        //Aggiunge una nuova ricetta
+                        db.collection("Recipes")
+                                .add(mRecipe)
+                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                    @Override
+                                    public void onSuccess(DocumentReference documentReference) {
+                                        Log.d("Firestore up", "DocumentSnapshot written with ID: " + documentReference.getId());
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w("Firestore up", "Error adding document", e);
+                                    }
+                                });
+                        Toast.makeText(this, R.string.donesharing, Toast.LENGTH_LONG).show();
+                        setResult(RESULT_OK);
+                        finish();
                     }
-                    else{
-                            db.collection("Recipes")
-                                    .add(mRecipe)
-                                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                        @Override
-                                        public void onSuccess(DocumentReference documentReference) {
-                                            Log.d("Firestore up", "DocumentSnapshot written with ID: " + documentReference.getId());
-                                        }
-                                    })
-                                    .addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            Log.w("Firestore up", "Error adding document", e);
-                                        }
-                                    });
-                            Toast.makeText(this, R.string.donesharing, Toast.LENGTH_LONG).show();
-                            setResult(RESULT_OK);
-                            finish();
-                        }
                 } else Toast.makeText(this, R.string.uploading, Toast.LENGTH_LONG).show();
             }
             //Toast.makeText(this, "Salva ricetta", Toast.LENGTH_SHORT).show();
