@@ -257,16 +257,19 @@ public class CreateRecipe extends AppCompatActivity {
             } else {
                 if (isUploading == false) {
                     folder = currentUser.getUid() + "/" + title.getText();
-                    main.setUrl("");
-                    firstStep.setUrl("");
-                    if (previewUri != null)
+                    if (previewUri != null) {
+                        main.setUrl("");
                         ImagePickActivity.uploadToStorage(this, previewUri, folder, "preview", main);
-                    if (stepUri != null)
+                    }
+                    if (stepUri != null) {
+                        firstStep.setUrl("");
                         ImagePickActivity.uploadToStorage(this, stepUri, folder, "firstStep", firstStep);
+                    }
                     for (int i = 0; i < mAdapter.getItemCount(); i++) {
-                        mAdapter.getSteps().get(i).setUrl("");
-                        if (mAdapter.getSteps().get(i).getHasPicture())
+                        if (mAdapter.getSteps().get(i).getHasPicture()) {
+                            mAdapter.getSteps().get(i).setUrl("");
                             ImagePickActivity.uploadToStorage(this, mAdapter.getSteps().get(i).getStepUri(), folder, "step" + i, mAdapter.getSteps().get(i));
+                        }
                     }
                     isUploading = true;
                 }

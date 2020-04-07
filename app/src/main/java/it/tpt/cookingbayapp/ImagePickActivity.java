@@ -120,9 +120,7 @@ public class ImagePickActivity {
                     @Override
                     public void onComplete(@NonNull Task<Uri> task) {
                         if (task.isSuccessful()) {
-                            Log.i("url", step.getUrl());
                             step.setUrl(task.getResult().toString());
-                            Log.i("url2", step.getUrl());
                         } else if (!task.isSuccessful()) {
                             Toast.makeText(context, task.getException().toString(), Toast.LENGTH_SHORT).show();
                         }
