@@ -93,11 +93,11 @@ public class PersonalCardRecyclerViewAdapter extends RecyclerView.Adapter<Person
                             @Override
                             public void onSuccess(ListResult listResult) {
                                 for (StorageReference prefix : listResult.getPrefixes()) {
-                                    prefix.delete();
+                                    //Prefixes sono le cartelle
                                 }
 
                                 for (StorageReference item : listResult.getItems()) {
-                                    // All the items under listRef.
+                                    item.delete();
                                 }
                             }
                         })
