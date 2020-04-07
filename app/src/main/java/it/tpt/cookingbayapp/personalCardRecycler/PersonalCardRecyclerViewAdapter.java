@@ -18,6 +18,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
@@ -78,14 +79,34 @@ public class PersonalCardRecyclerViewAdapter extends RecyclerView.Adapter<Person
                 FirebaseAuth mAuth = FirebaseAuth.getInstance();
                 FirebaseUser currentUser = mAuth.getCurrentUser();
                 String deletePath = "images/" + currentUser.getUid() + "/" + recipeList.get(position).getTitle();
+                Log.i("path", deletePath);
                 recipeList.remove(position);
                 recipeIds.remove(position);
                 notifyItemRemoved(position);
                 notifyItemRangeChanged(position, getItemCount());
 
                 FirebaseStorage storage = FirebaseStorage.getInstance();
-                StorageReference desertRef = storage.getReference().child(deletePath);
-                desertRef.delete();
+                StorageReference listRef = storage.getReference().child(deletePath);
+
+                listRef.listAll()
+                        .addOnSuccessListener(new OnSuccessListener<ListResult>() {
+                            @Override
+                            public void onSuccess(ListResult listResult) {
+                                for (StorageReference prefix : listResult.getPrefixes()) {
+                                    prefix.delete();
+                                }
+
+                                for (StorageReference item : listResult.getItems()) {
+                                    // All the items under listRef.
+                                }
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                // Uh-oh, an error occurred!
+                            }
+                        });
             }
 
             @Override
