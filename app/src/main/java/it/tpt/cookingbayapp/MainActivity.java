@@ -74,6 +74,9 @@ public class MainActivity  extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
+        for (Fragment fragment : getSupportFragmentManager().getFragments()) {
+            fragment.onActivityResult(requestCode, resultCode, intent);
+        }
         if(requestCode == LOGIN_REQUEST) {
             if(resultCode == RESULT_OK) {
                 String name = intent.getExtras().getString("name");

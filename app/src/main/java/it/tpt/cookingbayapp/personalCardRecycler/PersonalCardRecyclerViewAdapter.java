@@ -1,5 +1,6 @@
 package it.tpt.cookingbayapp.personalCardRecycler;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -33,6 +34,7 @@ public class PersonalCardRecyclerViewAdapter extends RecyclerView.Adapter<Person
 
     private List<Recipe> recipeList;
     private List<String> recipeIds;
+    final static int CREATE_REQUEST = 129;
     Context mContext;
 
     public PersonalCardRecyclerViewAdapter(Context c, List<Recipe> recipeList, List<String> recipeIds) {
@@ -115,7 +117,7 @@ public class PersonalCardRecyclerViewAdapter extends RecyclerView.Adapter<Person
                 intent.putExtra("edit", true);
                 intent.putExtra("recipeToEdit", recipeList.get(position));
                 intent.putExtra("recipeId", recipeIds.get(position));
-                mContext.startActivity(intent);
+                ((Activity) mContext).startActivityForResult(intent, CREATE_REQUEST);
             }
         });
         return holder;
