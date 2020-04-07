@@ -32,7 +32,7 @@ public class Step implements Serializable {
         this.hours = hours;
         this.stepUri = Uri.parse("");
         this.minutes = minutes;
-        this.hasPicture = true;
+        this.hasPicture = false;
     }
 
     public String getHours() {

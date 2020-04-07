@@ -237,13 +237,16 @@ public class CreateRecipe extends AppCompatActivity {
             finish();
             //  startActivity(new Intent(this, LmrFragment.class));
         } else if (id == R.id.exitSave) {
-            if (previewUri == null || TextUtils.isEmpty(title.getText()) || TextUtils.isEmpty(steptext1.getText()) || iAdapter.getItemCount() == 0) {
+            if ((previewUri == null && getIntent().getBooleanExtra("edit", false))
+                    || TextUtils.isEmpty(title.getText())
+                    || TextUtils.isEmpty(steptext1.getText())
+                    || iAdapter.getItemCount() == 0) {
                 Toast.makeText(this, R.string.minimum_info_required, Toast.LENGTH_LONG).show();
             } else {
                 if (isUploading == false) {
                     folder = currentUser.getUid() + "/" + title.getText();
-                    ImagePickActivity.uploadToStorage(this, previewUri, folder, "preview", main);
-                    ImagePickActivity.uploadToStorage(this, stepUri, folder, "firstStep", firstStep);
+                    if (previewUri != null) ImagePickActivity.uploadToStorage(this, previewUri, folder, "preview", main);
+                    if (stepUri != null) ImagePickActivity.uploadToStorage(this, stepUri, folder, "firstStep", firstStep);
                     for (int i = 0; i < mAdapter.getItemCount(); i++) {
                         if (mAdapter.getSteps().get(i).getHasPicture())
                             ImagePickActivity.uploadToStorage(this, mAdapter.getSteps().get(i).getStepUri(), folder, "step" + i, mAdapter.getSteps().get(i));
