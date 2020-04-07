@@ -285,7 +285,7 @@ public class CreateRecipe extends AppCompatActivity {
                     mRecipe.setType("secondo piatto");
                     mRecipe.setPreviewUrl(main.getUrl());
                     mRecipe.setIngredients(iAdapter.getIngredients());
-                    mRecipe.setTime(totalTime.getText().toString() + "min");
+                    mRecipe.setTime(totalTime.getText().toString());
                     ArrayList<Section> sections = new ArrayList<>();
                     //Timer primo step
                     int hours1 = (TextUtils.isEmpty(stepHours1.getText())) ? 0 : Integer.parseInt(stepHours1.getText().toString());
