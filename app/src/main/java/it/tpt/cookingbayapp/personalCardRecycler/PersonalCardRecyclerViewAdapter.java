@@ -42,6 +42,7 @@ public class PersonalCardRecyclerViewAdapter extends RecyclerView.Adapter<Person
         View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.my_recipe_card, parent, false);
         PersonalCardViewHolder holder = new PersonalCardViewHolder(layoutView);
         //Visualizza la ricetta normalmente
+
         holder.setRecipeClickListener(new RecipeClickListener() {
             @Override
             public void onRecipeClickListener(View v, int position) {
