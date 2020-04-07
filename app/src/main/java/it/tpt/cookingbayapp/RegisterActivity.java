@@ -9,8 +9,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import it.tpt.cookingbayapp.R;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
@@ -23,7 +21,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LoginActivity extends AppCompatActivity {
+public class RegisterActivity extends AppCompatActivity {
 
     private TextInputEditText textName,textSurname,textEmail, textPassword;
     private Button btnRegistra;
@@ -32,7 +30,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_register);
 
         //Istanza database firebase
         mAuth = FirebaseAuth.getInstance();
@@ -78,12 +76,12 @@ public class LoginActivity extends AppCompatActivity {
                                     }
                                 });
                             }
-                            else Toast.makeText(LoginActivity.this, getString(R.string.errorSignup), Toast.LENGTH_LONG).show();
+                            else Toast.makeText(RegisterActivity.this, getString(R.string.errorSignup), Toast.LENGTH_LONG).show();
                         }
                     });
 
                 } catch(Exception e) {
-                    Toast.makeText(LoginActivity.this, getString(R.string.required), Toast.LENGTH_LONG).show();
+                    Toast.makeText(RegisterActivity.this, getString(R.string.required), Toast.LENGTH_LONG).show();
                 }
 
             }
