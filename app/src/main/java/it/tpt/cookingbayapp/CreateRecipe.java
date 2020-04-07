@@ -287,23 +287,41 @@ public class CreateRecipe extends AppCompatActivity {
                         sections.add(new Section(templist.get(i).getText(), templist.get(i).getUrl(), time));
                     }
                     mRecipe.setSections(sections);
-                    db.collection("Recipes")
-                            .add(mRecipe)
-                            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                @Override
-                                public void onSuccess(DocumentReference documentReference) {
-                                    Log.d("Firestore up", "DocumentSnapshot written with ID: " + documentReference.getId());
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Log.w("Firestore up", "Error adding document", e);
-                                }
-                            });
-                    Toast.makeText(this, R.string.donesharing, Toast.LENGTH_LONG).show();
-                    setResult(RESULT_OK);
-                    finish();
+                    if(getIntent().getBooleanExtra("edit", false)) {
+                        db.collection("Recipes").document(getIntent().getStringExtra("recipeId"))
+                                .set(mRecipe)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Log.d("TAG", "DocumentSnapshot successfully written!");
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w("TAG", "Error writing document", e);
+                                    }
+                                });
+                    }
+                    else{
+                            db.collection("Recipes")
+                                    .add(mRecipe)
+                                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                        @Override
+                                        public void onSuccess(DocumentReference documentReference) {
+                                            Log.d("Firestore up", "DocumentSnapshot written with ID: " + documentReference.getId());
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.w("Firestore up", "Error adding document", e);
+                                        }
+                                    });
+                            Toast.makeText(this, R.string.donesharing, Toast.LENGTH_LONG).show();
+                            setResult(RESULT_OK);
+                            finish();
+                        }
                 } else Toast.makeText(this, R.string.uploading, Toast.LENGTH_LONG).show();
             }
             //Toast.makeText(this, "Salva ricetta", Toast.LENGTH_SHORT).show();
