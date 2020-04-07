@@ -14,7 +14,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
 
@@ -70,11 +74,18 @@ public class PersonalCardRecyclerViewAdapter extends RecyclerView.Adapter<Person
                                 Log.w("DELETEDOC", "Error deleting document", e);
                             }
                         });
+
+                FirebaseAuth mAuth = FirebaseAuth.getInstance();
+                FirebaseUser currentUser = mAuth.getCurrentUser();
+                String deletePath = "images/" + currentUser.getUid() + recipeList.get(position).getTitle();
                 recipeList.remove(position);
                 recipeIds.remove(position);
                 notifyItemRemoved(position);
                 notifyItemRangeChanged(position, getItemCount());
 
+                FirebaseStorage storage = FirebaseStorage.getInstance();
+                StorageReference desertRef = storage.getReference().child(deletePath);
+                desertRef.delete();
             }
 
             @Override
