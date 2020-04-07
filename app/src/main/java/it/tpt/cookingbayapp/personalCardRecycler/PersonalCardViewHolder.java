@@ -15,7 +15,6 @@ import it.tpt.cookingbayapp.RecipeClickListener;
 public class PersonalCardViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
     ImageView preview;
-    CircleImageView profilePic;
     TextView title, user, type, time;
     Button delete, edit;
 

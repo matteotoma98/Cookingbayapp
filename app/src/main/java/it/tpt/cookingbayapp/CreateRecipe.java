@@ -42,8 +42,6 @@ import it.tpt.cookingbayapp.recipeObject.Section;
 import it.tpt.cookingbayapp.stepRecycler.Step;
 import it.tpt.cookingbayapp.stepRecycler.StepAdapter;
 
-import de.hdodenhof.circleimageview.CircleImageView;
-
 public class CreateRecipe extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private StepAdapter mAdapter;
@@ -301,6 +299,7 @@ public class CreateRecipe extends AppCompatActivity {
                                 }
                             });
                     Toast.makeText(this, R.string.donesharing, Toast.LENGTH_LONG).show();
+                    setResult(RESULT_OK);
                     finish();
                 } else Toast.makeText(this, R.string.uploading, Toast.LENGTH_LONG).show();
             }

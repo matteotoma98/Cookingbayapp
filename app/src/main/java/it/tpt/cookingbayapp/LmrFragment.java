@@ -30,10 +30,14 @@ import it.tpt.cookingbayapp.recipeObject.Recipe;
 
 public class LmrFragment extends Fragment {
 
+    String uid;
     private FloatingActionButton btnCrea;
     private RecyclerView recyclerView;
+    PersonalCardRecyclerViewAdapter adapter;
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
+    FirebaseFirestore db;
+    final static int CREATE_REQUEST = 129;
 
     public LmrFragment() {
 
@@ -42,16 +46,22 @@ public class LmrFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_lmr,container,false);
+        View view = inflater.inflate(R.layout.fragment_lmr, container, false);
+
         recyclerView = view.findViewById(R.id.myCardRecycler_view);
         recyclerView.setHasFixedSize(true);
 
-        FirebaseFirestore db;
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
-        String uid = currentUser.getUid();
+        uid = currentUser.getUid();
 
+        downloadRecipes();
+
+        return view;
+    }
+
+    void downloadRecipes() {
         db.collection("Recipes")
                 .whereEqualTo("authorId", uid)
                 .get()
@@ -67,7 +77,7 @@ public class LmrFragment extends Fragment {
                                 recipeList.add(recipe);
                             }
                             recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1, GridLayoutManager.VERTICAL, false));
-                            PersonalCardRecyclerViewAdapter adapter = new PersonalCardRecyclerViewAdapter(getActivity(), recipeList, recipeIds);
+                            adapter = new PersonalCardRecyclerViewAdapter(getActivity(), recipeList, recipeIds);
                             recyclerView.setAdapter(adapter);
                             Log.i("Finish", "Recipes downloaded");
                         } else {
@@ -75,18 +85,17 @@ public class LmrFragment extends Fragment {
                         }
                     }
                 });
-        return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        btnCrea = (FloatingActionButton)getView().findViewById(R.id.floating_action_button);
+        btnCrea = (FloatingActionButton) getView().findViewById(R.id.floating_action_button);
         btnCrea.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i= new Intent(getActivity(),CreateRecipe.class);
-                startActivity(i);
+                Intent i = new Intent(getActivity(), CreateRecipe.class);
+                startActivityForResult(i, CREATE_REQUEST);
             }
         });
     }
@@ -95,4 +104,14 @@ public class LmrFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CREATE_REQUEST && resultCode == getActivity().RESULT_OK) {
+            downloadRecipes();
+            Log.i("Redownload", "Downloaded again");
+        }
+    }
+
 }
