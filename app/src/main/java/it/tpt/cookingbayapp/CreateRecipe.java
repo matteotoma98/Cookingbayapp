@@ -380,7 +380,7 @@ public class CreateRecipe extends AppCompatActivity {
             firstStep.setHasPicture(true);
             if (ImagePickActivity.getPickImageResultUri(this, intent, "firstStep") != null) {
                 //Prendi l'uri assegnato alla cache
-                stepUri = ImagePickActivity.getPickImageResultUri(this, intent, "firsStep");
+                stepUri = ImagePickActivity.getPickImageResultUri(this, intent, "firstStep");
                 Glide.with(this)
                         .load(stepUri)
                         .apply(RequestOptions.skipMemoryCacheOf(true))
