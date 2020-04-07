@@ -27,6 +27,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -47,6 +48,7 @@ public class CreateRecipe extends AppCompatActivity {
     private StepAdapter mAdapter;
     ImageView imgPreview, imgStep1;
     TextInputEditText title, totalTime, steptext1, ingName, ingQuantity, stepHours1, stepMinutes1;
+    TextInputLayout titleLayout;
     boolean isUploading;
     boolean isEditing; //Controlla se l'activity è stata avviata da mofica piuttosto che crea ricetta
 
@@ -81,6 +83,7 @@ public class CreateRecipe extends AppCompatActivity {
         setContentView(R.layout.activity_create_recipe);
 
         title = findViewById(R.id.createRecipeTitle);
+        titleLayout = findViewById(R.id.createRecipeTitleLayout);
         totalTime = findViewById(R.id.recipeTime);
         steptext1 = findViewById(R.id.steptext1);
         stepHours1 = findViewById(R.id.stepHours1);
@@ -93,7 +96,7 @@ public class CreateRecipe extends AppCompatActivity {
         isUploading = false;
         isEditing = getIntent().getBooleanExtra("edit", false);
         title.setEnabled(!isEditing);
-        if(isEditing) title.setHint(R.string.titlenoteditable);
+        if(isEditing) titleLayout.setHint(getString(R.string.titlenoteditable));
         main = new Step("", previewUri);
         firstStep = new Step("", stepUri);
 
