@@ -92,6 +92,8 @@ public class CreateRecipe extends AppCompatActivity {
 
         isUploading = false;
         isEditing = getIntent().getBooleanExtra("edit", false);
+        title.setEnabled(!isEditing);
+        if(isEditing) title.setHint(R.string.titlenoteditable);
         main = new Step("", previewUri);
         firstStep = new Step("", stepUri);
 
@@ -184,8 +186,11 @@ public class CreateRecipe extends AppCompatActivity {
             public void onClick(View v) {
                 if (TextUtils.isEmpty(ingName.getText()) || TextUtils.isEmpty(ingQuantity.getText())) {
                     Toast.makeText(CreateRecipe.this, R.string.ing_required, Toast.LENGTH_LONG).show();
-                } else
+                } else {
                     iAdapter.addIngredient(new Ingredient(ingName.getText().toString(), ingQuantity.getText().toString()));
+                    ingName.setText("");
+                    ingQuantity.setText("");
+                }
                 //metodo per aggiungere ingrediente alla recycler view
             }
         });

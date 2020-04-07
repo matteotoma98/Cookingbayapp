@@ -21,4 +21,5 @@
     <string name="donesharing">Ricetta Condivisa!</string>
     <string name="doneediting">Ricetta modificata!</string>
     <string name="ing_required">Perfavore inserisci il nome e la quantità dell\'ingrediente</string>
+    <string name="titlenoteditable">Il titolo non può essere modificato!</string>
 </resources>
