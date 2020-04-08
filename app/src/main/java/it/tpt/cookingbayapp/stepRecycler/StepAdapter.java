@@ -28,10 +28,16 @@ public class StepAdapter extends RecyclerView.Adapter<StepViewHolder> {
     private Context mContext;
     private final static int STEP_REQUEST = 236;
     private int currentPicPosition;
+    private boolean disabled;
 
     public StepAdapter(List<Step> steps, Context context) {
         this.steps = steps;
         mContext = context;
+        disabled = false;
+    }
+
+    public void setDisabled(boolean disabled) {
+        this.disabled = disabled;
     }
 
     @NonNull
@@ -123,8 +129,8 @@ public class StepAdapter extends RecyclerView.Adapter<StepViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull StepViewHolder holder, int position) {
         if (steps != null && position < steps.size()) {
-            String steptext = "Step " + (position + 2);
-            holder.stepnumber.setText(steptext);
+            String stepn = "Step " + (position + 2);
+            holder.stepnumber.setText(stepn);
             holder.steptext.setText(steps.get(position).getText());
             holder.stepHours.setText(steps.get(position).getHours());
             holder.stepMinutes.setText(steps.get(position).getMinutes());
@@ -150,6 +156,14 @@ public class StepAdapter extends RecyclerView.Adapter<StepViewHolder> {
                         .centerCrop()
                         .into(holder.imgStep);
             }
+            if(disabled) {
+                holder.stepMinutes.setEnabled(false);
+                holder.stepHours.setEnabled(false);
+                holder.steptext.setEnabled(false);
+                holder.imgStep.setEnabled(false);
+                holder.delete.setEnabled(false);
+            }
+
         }
     }
 

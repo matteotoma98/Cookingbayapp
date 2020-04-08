@@ -28,6 +28,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -51,6 +52,7 @@ public class CreateRecipe extends AppCompatActivity {
     ImageView imgPreview, imgStep1;
     TextInputEditText title, totalTime, steptext1, ingName, ingQuantity, stepHours1, stepMinutes1;
     TextInputLayout titleLayout;
+    Button btnAddStep, btnAddIng, btnDelIng;
     boolean isUploading;
     boolean isEditing; //Controlla se l'activity è stata avviata da modifica piuttosto che crea ricetta
 
@@ -116,7 +118,6 @@ public class CreateRecipe extends AppCompatActivity {
         isUploading = false;
         isEditing = getIntent().getBooleanExtra("edit", false);
         title.setEnabled(!isEditing);
-        if (isEditing) titleLayout.setHint(getString(R.string.titlenoteditable));
         main = new Step("", previewUri);
         firstStep = new Step("", stepUri);
 
@@ -130,8 +131,9 @@ public class CreateRecipe extends AppCompatActivity {
         iRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         Intent intent = getIntent();
-        if (intent.getBooleanExtra("edit", false)) {
+        if (isEditing) {
             getSupportActionBar().setTitle("Modifica ricetta");
+            titleLayout.setHint(getString(R.string.titlenoteditable));
 
             Recipe editRecipe = (Recipe) intent.getSerializableExtra("recipeToEdit");
             main.setUrl(editRecipe.getPreviewUrl());
@@ -194,7 +196,7 @@ public class CreateRecipe extends AppCompatActivity {
         permissionsToRequest = findUnaskedPermissions(permissions);
 
 
-        Button btnAddStep = findViewById(R.id.addstep);
+        btnAddStep = findViewById(R.id.addstep);
         btnAddStep.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -203,7 +205,7 @@ public class CreateRecipe extends AppCompatActivity {
             }
         });
 
-        Button btnAddIng = findViewById(R.id.addingredient);
+        btnAddIng = findViewById(R.id.addingredient);
         btnAddIng.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -218,7 +220,7 @@ public class CreateRecipe extends AppCompatActivity {
             }
         });
 
-        Button btnDelIng = findViewById(R.id.deleteIngredient);
+        btnDelIng = findViewById(R.id.deleteIngredient);
         btnDelIng.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -288,87 +290,102 @@ public class CreateRecipe extends AppCompatActivity {
                     }
                     View view = findViewById(R.id.createRecipeLinearLayout1);
                     isUploading = true;
+                    disableEditing();
                     Snackbar snackbar =
-                    Snackbar.make(view, R.string.uploading, Snackbar.LENGTH_INDEFINITE)
-                            .setAction("CONDIVIDI", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    boolean finishedUploading = false;
-                                    if (!main.getUrl().equals("")) {
-                                        finishedUploading = true;
-                                        if (firstStep.getHasPicture() && firstStep.getUrl().equals(""))
-                                            finishedUploading = false;
-                                        for (int i = 0; i < mAdapter.getItemCount(); i++) {
-                                            if (mAdapter.getSteps().get(i).getHasPicture() && mAdapter.getSteps().get(i).getUrl().equals("")) {
-                                                finishedUploading = false;
-                                                break;
+                            Snackbar.make(view, R.string.uploading, Snackbar.LENGTH_INDEFINITE)
+                                    .setAction("CONDIVIDI", new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) { }
+                                    });
+                    snackbar.addCallback(new BaseTransientBottomBar.BaseCallback<Snackbar>() {
+                        @Override
+                        public void onShown(Snackbar transientBottomBar) {
+                            super.onShown(transientBottomBar);
+
+                            transientBottomBar.getView().findViewById(R.id.snackbar_action).
+                                    setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            boolean finishedUploading = false;
+                                            if (!main.getUrl().equals("")) {
+                                                finishedUploading = true;
+                                                if (firstStep.getHasPicture() && firstStep.getUrl().equals(""))
+                                                    finishedUploading = false;
+                                                for (int i = 0; i < mAdapter.getItemCount(); i++) {
+                                                    if (mAdapter.getSteps().get(i).getHasPicture() && mAdapter.getSteps().get(i).getUrl().equals("")) {
+                                                        finishedUploading = false;
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                            if (finishedUploading) {
+                                                //Authorid e AuthorName in onCreate()
+                                                mRecipe.setTitle(title.getText().toString().trim());
+                                                mRecipe.setType("secondo piatto");
+                                                mRecipe.setPreviewUrl(main.getUrl());
+                                                mRecipe.setIngredients(iAdapter.getIngredients());
+                                                mRecipe.setTime(totalTime.getText().toString());
+                                                ArrayList<Section> sections = new ArrayList<>();
+                                                //Timer primo step
+                                                int hours1 = (TextUtils.isEmpty(stepHours1.getText())) ? 0 : Integer.parseInt(stepHours1.getText().toString());
+                                                int minutes1 = (TextUtils.isEmpty(stepMinutes1.getText())) ? 0 : Integer.parseInt(stepMinutes1.getText().toString());
+                                                int timer1 = hours1 * 3600 + minutes1 * 60;
+
+                                                sections.add(new Section(steptext1.getText().toString().trim(), firstStep.getUrl(), timer1));
+                                                List<Step> templist = mAdapter.getSteps();
+                                                for (int i = 0; i < mAdapter.getItemCount(); i++) {
+                                                    int hours = (TextUtils.isEmpty(templist.get(i).getHours())) ? 0 : Integer.parseInt(templist.get(i).getHours());
+                                                    int minutes = (TextUtils.isEmpty(templist.get(i).getMinutes())) ? 0 : Integer.parseInt(templist.get(i).getMinutes());
+                                                    int time = hours * 3600 + minutes * 60;
+                                                    sections.add(new Section(templist.get(i).getText().trim(), templist.get(i).getUrl(), time));
+                                                }
+                                                mRecipe.setSections(sections);
+                                                if (isEditing) {
+                                                    //aggiorna la ricetta esistente
+                                                    db.collection("Recipes").document(getIntent().getStringExtra("recipeId"))
+                                                            .set(mRecipe)
+                                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                @Override
+                                                                public void onSuccess(Void aVoid) {
+                                                                    Log.d("TAG", "DocumentSnapshot successfully written!");
+                                                                }
+                                                            })
+                                                            .addOnFailureListener(new OnFailureListener() {
+                                                                @Override
+                                                                public void onFailure(@NonNull Exception e) {
+                                                                    Log.w("TAG", "Error writing document", e);
+                                                                }
+                                                            });
+                                                    Toast.makeText(CreateRecipe.this, R.string.doneediting, Toast.LENGTH_LONG).show();
+                                                    setResult(RESULT_OK);
+                                                    finish();
+                                                } else {
+                                                    //Aggiunge una nuova ricetta
+                                                    db.collection("Recipes")
+                                                            .add(mRecipe)
+                                                            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                                                @Override
+                                                                public void onSuccess(DocumentReference documentReference) {
+                                                                    Log.d("Firestore up", "DocumentSnapshot written with ID: " + documentReference.getId());
+                                                                }
+                                                            })
+                                                            .addOnFailureListener(new OnFailureListener() {
+                                                                @Override
+                                                                public void onFailure(@NonNull Exception e) {
+                                                                    Log.w("Firestore up", "Error adding document", e);
+                                                                }
+                                                            });
+                                                    Toast.makeText(CreateRecipe.this, R.string.donesharing, Toast.LENGTH_LONG).show();
+                                                    setResult(RESULT_OK);
+                                                    finish();
+                                                }
                                             }
                                         }
-                                    }
-                                    if (finishedUploading) {
-                                        //Authorid e AuthorName in onCreate()
-                                        mRecipe.setTitle(title.getText().toString().trim());
-                                        mRecipe.setType("secondo piatto");
-                                        mRecipe.setPreviewUrl(main.getUrl());
-                                        mRecipe.setIngredients(iAdapter.getIngredients());
-                                        mRecipe.setTime(totalTime.getText().toString());
-                                        ArrayList<Section> sections = new ArrayList<>();
-                                        //Timer primo step
-                                        int hours1 = (TextUtils.isEmpty(stepHours1.getText())) ? 0 : Integer.parseInt(stepHours1.getText().toString());
-                                        int minutes1 = (TextUtils.isEmpty(stepMinutes1.getText())) ? 0 : Integer.parseInt(stepMinutes1.getText().toString());
-                                        int timer1 = hours1 * 3600 + minutes1 * 60;
-
-                                        sections.add(new Section(steptext1.getText().toString().trim(), firstStep.getUrl(), timer1));
-                                        List<Step> templist = mAdapter.getSteps();
-                                        for (int i = 0; i < mAdapter.getItemCount(); i++) {
-                                            int hours = (TextUtils.isEmpty(templist.get(i).getHours())) ? 0 : Integer.parseInt(templist.get(i).getHours());
-                                            int minutes = (TextUtils.isEmpty(templist.get(i).getMinutes())) ? 0 : Integer.parseInt(templist.get(i).getMinutes());
-                                            int time = hours * 3600 + minutes * 60;
-                                            sections.add(new Section(templist.get(i).getText().trim(), templist.get(i).getUrl(), time));
-                                        }
-                                        mRecipe.setSections(sections);
-                                        if (isEditing) {
-                                            //aggiorna la ricetta esistente
-                                            db.collection("Recipes").document(getIntent().getStringExtra("recipeId"))
-                                                    .set(mRecipe)
-                                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                        @Override
-                                                        public void onSuccess(Void aVoid) {
-                                                            Log.d("TAG", "DocumentSnapshot successfully written!");
-                                                        }
-                                                    })
-                                                    .addOnFailureListener(new OnFailureListener() {
-                                                        @Override
-                                                        public void onFailure(@NonNull Exception e) {
-                                                            Log.w("TAG", "Error writing document", e);
-                                                        }
-                                                    });
-                                            Toast.makeText(CreateRecipe.this, R.string.doneediting, Toast.LENGTH_LONG).show();
-                                            setResult(RESULT_OK);
-                                            finish();
-                                        } else {
-                                            //Aggiunge una nuova ricetta
-                                            db.collection("Recipes")
-                                                    .add(mRecipe)
-                                                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                                        @Override
-                                                        public void onSuccess(DocumentReference documentReference) {
-                                                            Log.d("Firestore up", "DocumentSnapshot written with ID: " + documentReference.getId());
-                                                        }
-                                                    })
-                                                    .addOnFailureListener(new OnFailureListener() {
-                                                        @Override
-                                                        public void onFailure(@NonNull Exception e) {
-                                                            Log.w("Firestore up", "Error adding document", e);
-                                                        }
-                                                    });
-                                            Toast.makeText(CreateRecipe.this, R.string.donesharing, Toast.LENGTH_LONG).show();
-                                            setResult(RESULT_OK);
-                                            finish();
-                                        }
-                                    }
-                                }
-                            });
+                                        // your code here
+                                    });
+                        }
+                    });
+                    snackbar.setActionTextColor(getResources().getColor(R.color.colorAccent, getTheme()));
                     snackbar.show();
                 }
             }
@@ -429,6 +446,24 @@ public class CreateRecipe extends AppCompatActivity {
         }
     }
 
+    //Disabilita l'editing dopo l'upload
+    private void disableEditing() {
+        imgPreview.setEnabled(false);
+        title.setEnabled(false);
+        imgStep1.setEnabled(false);
+        steptext1.setEnabled(false);
+        totalTime.setEnabled(false);
+        stepHours1.setEnabled(false);
+        stepMinutes1.setEnabled(false);
+        ingName.setEnabled(false);
+        ingQuantity.setEnabled(false);
+        btnAddIng.setEnabled(false);
+        btnAddStep.setEnabled(false);
+        btnDelIng.setEnabled(false);
+        mAdapter.setDisabled(true);
+        mAdapter.notifyDataSetChanged();
+    }
+
     //Funzione per controllare che l'utente abbia inserito tutti le informazioni generali
     private boolean checkInfo() {
         boolean preview = (previewUri == null && !isEditing);
@@ -460,7 +495,8 @@ public class CreateRecipe extends AppCompatActivity {
         return result;
     }
 
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                           int[] grantResults) {
         if (requestCode == ALL_PERMISSIONS_RESULT) {
             for (String perm : permissionsToRequest) {
                 if (!(checkSelfPermission(perm) == PackageManager.PERMISSION_GRANTED)) {
