@@ -17,6 +17,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -77,11 +79,27 @@ public class CreateRecipe extends AppCompatActivity {
     FirebaseFirestore db;
     String folder;
 
+    private TextInputLayout ddTipo;
+    private AutoCompleteTextView actwTipo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_recipe);
+
+        ddTipo = findViewById(R.id.dropdownTipo);
+        actwTipo = findViewById(R.id.actw);
+        String[] ddItems = new String[]{
+                "Primo Piatto",
+                "Secondo Piatto",
+                "Dessert",
+                "Antipasto",
+                "Contorno",
+        };
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(CreateRecipe.this,R.layout.dropdown_item,ddItems);
+
+        actwTipo.setAdapter(adapter);
 
         title = findViewById(R.id.createRecipeTitle);
         titleLayout = findViewById(R.id.createRecipeTitleLayout);

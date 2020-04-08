@@ -87,7 +87,7 @@
 
 
                 <AutoCompleteTextView
-                    android:id="@+id/recipeType"
+                    android:id="@+id/actw"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:padding="18.5dp" />
