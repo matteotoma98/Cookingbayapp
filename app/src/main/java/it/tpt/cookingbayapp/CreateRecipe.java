@@ -268,7 +268,7 @@ public class CreateRecipe extends AppCompatActivity {
         } else if (id == R.id.exitSave) {
             if (checkInfo()) {
                 View view = findViewById(R.id.createRecipeLinearLayout1);
-                Snackbar.make(view, R.string.minimum_info_required, Snackbar.LENGTH_LONG);
+                Snackbar.make(view, R.string.minimum_info_required, Snackbar.LENGTH_LONG).show();
             } else {
                 if (isUploading == false) {
                     folder = currentUser.getUid() + "/" + title.getText();
@@ -288,6 +288,7 @@ public class CreateRecipe extends AppCompatActivity {
                     }
                     View view = findViewById(R.id.createRecipeLinearLayout1);
                     isUploading = true;
+                    Snackbar snackbar =
                     Snackbar.make(view, R.string.uploading, Snackbar.LENGTH_INDEFINITE)
                             .setAction("CONDIVIDI", new View.OnClickListener() {
                                 @Override
@@ -368,6 +369,7 @@ public class CreateRecipe extends AppCompatActivity {
                                     }
                                 }
                             });
+                    snackbar.show();
                 }
             }
         }
