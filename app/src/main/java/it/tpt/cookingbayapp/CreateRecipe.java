@@ -267,7 +267,7 @@ public class CreateRecipe extends AppCompatActivity {
             //  startActivity(new Intent(this, LmrFragment.class));
         } else if (id == R.id.exitSave) {
             if (checkInfo()) {
-                View view = findViewById(R.id.createRecipeNestedScrollView);
+                View view = findViewById(R.id.createRecipeLinearLayout1);
                 Snackbar.make(view, R.string.minimum_info_required, Snackbar.LENGTH_LONG);
             } else {
                 if (isUploading == false) {
@@ -286,7 +286,7 @@ public class CreateRecipe extends AppCompatActivity {
                             ImagePickActivity.uploadToStorage(this, mAdapter.getSteps().get(i).getStepUri(), folder, "step" + i, mAdapter.getSteps().get(i));
                         }
                     }
-                    View view = findViewById(R.id.createRecipeNestedScrollView);
+                    View view = findViewById(R.id.createRecipeLinearLayout1);
                     isUploading = true;
                     Snackbar.make(view, R.string.uploading, Snackbar.LENGTH_INDEFINITE)
                             .setAction("CONDIVIDI", new View.OnClickListener() {
