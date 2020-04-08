@@ -44,13 +44,12 @@ import it.tpt.cookingbayapp.stepRecycler.Step;
 import it.tpt.cookingbayapp.stepRecycler.StepAdapter;
 
 public class CreateRecipe extends AppCompatActivity {
-    private RecyclerView mRecyclerView;
-    private StepAdapter mAdapter;
+
     ImageView imgPreview, imgStep1;
     TextInputEditText title, totalTime, steptext1, ingName, ingQuantity, stepHours1, stepMinutes1;
     TextInputLayout titleLayout;
     boolean isUploading;
-    boolean isEditing; //Controlla se l'activity è stata avviata da mofica piuttosto che crea ricetta
+    boolean isEditing; //Controlla se l'activity è stata avviata da modifica piuttosto che crea ricetta
 
     //Questi due oggetti step servono per comodità, solo il metodo setUrl() e getUrl() vengono utilizzati
     Step main;
@@ -58,6 +57,8 @@ public class CreateRecipe extends AppCompatActivity {
 
     private RecyclerView iRecyclerView;
     private IngredientsRecyclerViewAdapter iAdapter;
+    private RecyclerView mRecyclerView;
+    private StepAdapter mAdapter;
 
     private ArrayList<String> permissionsToRequest;
     private ArrayList<String> permissionsRejected = new ArrayList<>();
@@ -235,9 +236,6 @@ public class CreateRecipe extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
         return super.onCreateOptionsMenu(menu);
-   /*     MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main_menu, menu);
-        return true; */
     }
 
 
@@ -249,10 +247,7 @@ public class CreateRecipe extends AppCompatActivity {
             finish();
             //  startActivity(new Intent(this, LmrFragment.class));
         } else if (id == R.id.exitSave) {
-            if ((previewUri == null && !isEditing)
-                    || TextUtils.isEmpty(title.getText())
-                    || TextUtils.isEmpty(steptext1.getText())
-                    || iAdapter.getItemCount() == 0) {
+            if (checkInfo()) {
                 Toast.makeText(this, R.string.minimum_info_required, Toast.LENGTH_LONG).show();
             } else {
                 if (isUploading == false) {
@@ -405,6 +400,25 @@ public class CreateRecipe extends AppCompatActivity {
                 mAdapter.notifyItemChanged(position);
             }
         }
+    }
+
+    //Funzione per controllare che l'utente abbia inserito tutti le informazioni generali
+    private boolean checkInfo() {
+        boolean preview = (previewUri == null && !isEditing);
+
+        boolean t = TextUtils.isEmpty(title.getText());
+        String trimmed;
+        if(!t) {
+            trimmed = title.getText().toString().trim(); //Controlla che l'utente non abbia inserito solo spazi
+            t = t || trimmed.equals("");
+        }
+        boolean s = TextUtils.isEmpty(steptext1.getText());
+        if(!s) {
+            trimmed = steptext1.getText().toString().trim(); //Controlla che l'utente non abbia inserito solo spazi
+            s = s || trimmed.equals("");
+        }
+
+        return preview || t || s || TextUtils.isEmpty(totalTime.getText()) || iAdapter.getItemCount() == 0;
     }
 
     private ArrayList findUnaskedPermissions(ArrayList<String> wanted) {
