@@ -39,8 +39,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-        //Istanza database firebase
         mAuth = FirebaseAuth.getInstance();
         textEmail = findViewById(R.id.textEmail);
         textPassword = findViewById(R.id.textPassword);
@@ -51,10 +49,17 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 try {
                     mAuth.signInWithEmailAndPassword(textEmail.getText().toString(), textPassword.getText().toString())
-                            .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
+                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (task.isSuccessful()) {
+                                        final FirebaseUser user = mAuth.getCurrentUser();
+                                        mAuth.getUid();
+                                        Intent intent = new Intent();
+                                        intent.putExtra("email", textEmail.getText());
+                                        intent.putExtra("password", textPassword.getText());
+                                        setResult(RESULT_OK, intent);
+                                        finish();
                                         // Sign in success, update UI with the signed-in user's information
                                         Log.d("loginsuccess", "signInWithEmail:success");
                                     } else {
@@ -68,12 +73,9 @@ public class LoginActivity extends AppCompatActivity {
                                 }
                             });
 
-                    Intent intent = new Intent();
-                    intent.putExtra("email", textEmail.getText());
-                    intent.putExtra("password", textPassword.getText());
-                    setResult(RESULT_OK, intent);
-                    finish();
+
                 } catch (Exception e) {
+
                     Toast.makeText(LoginActivity.this, getString(R.string.required), Toast.LENGTH_LONG).show();
                 }
             }
