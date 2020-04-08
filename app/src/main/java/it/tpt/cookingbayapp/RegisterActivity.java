@@ -55,9 +55,9 @@ public class RegisterActivity extends AppCompatActivity {
 
                 try {
                     //Il final serve per renderli visibili nella classe interna OnCompleteListener
-                    final String name = textName.getText().toString();
-                    final String surname = textSurname.getText().toString();
-                    final String email = textEmail.getText().toString();
+                    final String name = textName.getText().toString().trim();
+                    final String surname = textSurname.getText().toString().trim();
+                    final String email = textEmail.getText().toString().trim();
                     final String password = textPassword.getText().toString();
 
                     //Creazione dell'utente
@@ -75,11 +75,7 @@ public class RegisterActivity extends AppCompatActivity {
                                     public void onComplete(@NonNull Task<Void> task) {
                                         writeUserToDb(name, surname, email, user.getUid());
                                         Intent intent = new Intent();
-                                        intent.putExtra("name", textName.getText().toString());
-                                        intent.putExtra("surname", textSurname.getText().toString());
-                                        intent.putExtra("email", textEmail.getText().toString());
-                                        intent.putExtra("password", textPassword.getText().toString());
-
+                                        intent.putExtra("name", user.getDisplayName());
                                         setResult(RESULT_OK, intent);
                                         finish();
                                     }

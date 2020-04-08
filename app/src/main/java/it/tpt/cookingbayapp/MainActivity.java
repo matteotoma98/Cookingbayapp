@@ -80,9 +80,8 @@ public class MainActivity  extends AppCompatActivity {
         if(requestCode == LOGIN_REQUEST) {
             if(resultCode == RESULT_OK) {
                 String name = intent.getExtras().getString("name");
-                String surname = intent.getExtras().getString("surname");
 
-                getSupportActionBar().setTitle(name + " " + surname); //dà il nome e il cognome in alto nella action bar
+                getSupportActionBar().setTitle(name); //dà il nome e il cognome in alto nella action bar
 
                 SharedPreferences preferences = getSharedPreferences("login", MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();

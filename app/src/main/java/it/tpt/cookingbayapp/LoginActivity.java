@@ -47,35 +47,33 @@ public class LoginActivity extends AppCompatActivity {
         btnAccedi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                try {
+                    mAuth.signInWithEmailAndPassword(textEmail.getText().toString(), textPassword.getText().toString())
+                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if (task.isSuccessful()) {
+                                        FirebaseUser user = mAuth.getCurrentUser();
+                                        mAuth.getUid();
+                                        Intent intent = new Intent();
+                                        intent.putExtra("name", user.getDisplayName());
+                                        setResult(RESULT_OK, intent);
+                                        finish();
+                                        // Sign in success, update UI with the signed-in user's information
+                                        Log.d("loginsuccess", "signInWithEmail:success");
+                                    } else {
+                                        // If sign in fails, display a message to the user.
+                                        Log.w("loginfailure", "signInWithEmail:failure", task.getException());
+                                        Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                                Toast.LENGTH_SHORT).show();
 
-                mAuth.signInWithEmailAndPassword(textEmail.getText().toString(), textPassword.getText().toString())
-                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()) {
-                                    final FirebaseUser user = mAuth.getCurrentUser();
-                                    mAuth.getUid();
-                                    Intent intent = new Intent();
-                                    intent.putExtra("email", textEmail.getText());
-                                    intent.putExtra("password", textPassword.getText());
-                                    setResult(RESULT_OK, intent);
-                                    finish();
-                                    // Sign in success, update UI with the signed-in user's information
-                                    Log.d("loginsuccess", "signInWithEmail:success");
-                                } else {
-                                    // If sign in fails, display a message to the user.
-                                    Log.w("loginfailure", "signInWithEmail:failure", task.getException());
-                                    Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                            Toast.LENGTH_SHORT).show();
+                                    }
 
                                 }
-
-                            }
-                        });
-
-
-                Toast.makeText(LoginActivity.this, getString(R.string.required), Toast.LENGTH_LONG).show();
-
+                            });
+                } catch (NullPointerException e) {
+                    Toast.makeText(LoginActivity.this, getString(R.string.required), Toast.LENGTH_LONG).show();
+                }
             }
         });
 
@@ -95,10 +93,8 @@ public class LoginActivity extends AppCompatActivity {
         if (requestCode == REGISTER_REQUEST) {
             if (resultCode == RESULT_OK) {
                 String name = intent.getExtras().getString("name");
-                String surname = intent.getExtras().getString("surname");
                 Intent i = new Intent();
                 i.putExtra("name", name);
-                i.putExtra("surname", surname);
                 setResult(RESULT_OK, i);
                 finish();
             }
