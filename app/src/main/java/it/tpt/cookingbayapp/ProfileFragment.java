@@ -20,10 +20,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 
 public class ProfileFragment extends Fragment {
-    private Button esci;
-    private RecyclerView recyclerView;
+
+    private Button exit;
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
+    public static final int LOGIN_REQUEST = 101;
+
     public ProfileFragment(){
     }
 
@@ -42,21 +44,21 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        esci = getView().findViewById(R.id.logout);
-        esci.setOnClickListener(new View.OnClickListener() {
+        exit = getView().findViewById(R.id.logout);
+        exit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 SharedPreferences preferences = getActivity().getSharedPreferences("login", getActivity().MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();
-                editor.putBoolean("firstRun", true);
+                editor.putBoolean("notSignedIn", true);
                 editor.apply();
                 FirebaseAuth.getInstance().signOut();
                 Toast.makeText(getContext(), "Utente disconnesso!", Toast.LENGTH_SHORT).show();
                 Intent i= new Intent(getActivity(), LoginActivity.class);
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(i);
+                getActivity().startActivityForResult(i, LOGIN_REQUEST);
             }
 
         });
     }
+
 }

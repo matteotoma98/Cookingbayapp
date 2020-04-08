@@ -28,11 +28,10 @@ import javax.xml.transform.Result;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private TextInputEditText textName, textSurname, textEmail, textPassword;
+    private TextInputEditText textEmail, textPassword;
     private Button btnRegistrati;
     private Button btnAccedi;
     private FirebaseAuth mAuth;
-    public static final int LOGIN_REQUEST = 101;
     public static final int REGISTER_REQUEST = 102;
 
     @Override

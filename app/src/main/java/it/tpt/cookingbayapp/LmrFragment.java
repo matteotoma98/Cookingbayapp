@@ -61,7 +61,7 @@ public class LmrFragment extends Fragment {
         return view;
     }
 
-    void downloadRecipes() {
+    private void downloadRecipes() {
         db.collection("Recipes")
                 .whereEqualTo("authorId", uid)
                 .get()

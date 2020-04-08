@@ -26,7 +26,7 @@ public class MainActivity  extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         SharedPreferences preferences = getSharedPreferences("login", MODE_PRIVATE);
-        if(preferences.getBoolean("firstRun", true)) {
+        if(preferences.getBoolean("notSignedIn", true)) {
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivityForResult(intent, LOGIN_REQUEST);
         }
@@ -85,7 +85,7 @@ public class MainActivity  extends AppCompatActivity {
 
                 SharedPreferences preferences = getSharedPreferences("login", MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();
-                editor.putBoolean("firstRun", false);
+                editor.putBoolean("notSignedIn", false);
                 editor.apply();
 
             }
