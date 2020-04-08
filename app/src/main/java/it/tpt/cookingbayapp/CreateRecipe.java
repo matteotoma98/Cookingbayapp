@@ -268,7 +268,7 @@ public class CreateRecipe extends AppCompatActivity {
         } else if (id == R.id.exitSave) {
             if (checkInfo()) {
                 View view = findViewById(R.id.createRecipeNestedScrollView);
-                Snackbar.make(view, R.string.minimum_info_required, Snackbar.LENGTH_INDEFINITE);
+                Snackbar.make(view, R.string.minimum_info_required, Snackbar.LENGTH_LONG);
             } else {
                 if (isUploading == false) {
                     folder = currentUser.getUid() + "/" + title.getText();
