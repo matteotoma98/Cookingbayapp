@@ -89,6 +89,11 @@ public class MainActivity  extends AppCompatActivity {
                 editor.apply();
 
             }
+            else {
+                getSupportActionBar().setTitle("Ospite");
+                Intent i = new Intent(MainActivity.this, LoginActivity.class);
+                startActivityForResult(i, LOGIN_REQUEST);
+            }
         }
     }
 
