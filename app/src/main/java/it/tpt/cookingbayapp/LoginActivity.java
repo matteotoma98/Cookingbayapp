@@ -40,44 +40,42 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         mAuth = FirebaseAuth.getInstance();
-        textEmail = findViewById(R.id.textEmail);
-        textPassword = findViewById(R.id.textPassword);
+        textEmail = findViewById(R.id.loginEmail);
+        textPassword = findViewById(R.id.loginPassword);
         btnRegistrati = findViewById(R.id.register);
         btnAccedi = findViewById(R.id.loginButton);
         btnAccedi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    mAuth.signInWithEmailAndPassword(textEmail.getText().toString(), textPassword.getText().toString())
-                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                                @Override
-                                public void onComplete(@NonNull Task<AuthResult> task) {
-                                    if (task.isSuccessful()) {
-                                        final FirebaseUser user = mAuth.getCurrentUser();
-                                        mAuth.getUid();
-                                        Intent intent = new Intent();
-                                        intent.putExtra("email", textEmail.getText());
-                                        intent.putExtra("password", textPassword.getText());
-                                        setResult(RESULT_OK, intent);
-                                        finish();
-                                        // Sign in success, update UI with the signed-in user's information
-                                        Log.d("loginsuccess", "signInWithEmail:success");
-                                    } else {
-                                        // If sign in fails, display a message to the user.
-                                        Log.w("loginfailure", "signInWithEmail:failure", task.getException());
-                                        Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                                Toast.LENGTH_SHORT).show();
 
-                                    }
+                mAuth.signInWithEmailAndPassword(textEmail.getText().toString(), textPassword.getText().toString())
+                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+                                    final FirebaseUser user = mAuth.getCurrentUser();
+                                    mAuth.getUid();
+                                    Intent intent = new Intent();
+                                    intent.putExtra("email", textEmail.getText());
+                                    intent.putExtra("password", textPassword.getText());
+                                    setResult(RESULT_OK, intent);
+                                    finish();
+                                    // Sign in success, update UI with the signed-in user's information
+                                    Log.d("loginsuccess", "signInWithEmail:success");
+                                } else {
+                                    // If sign in fails, display a message to the user.
+                                    Log.w("loginfailure", "signInWithEmail:failure", task.getException());
+                                    Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                            Toast.LENGTH_SHORT).show();
 
                                 }
-                            });
+
+                            }
+                        });
 
 
-                } catch (Exception e) {
+                Toast.makeText(LoginActivity.this, getString(R.string.required), Toast.LENGTH_LONG).show();
 
-                    Toast.makeText(LoginActivity.this, getString(R.string.required), Toast.LENGTH_LONG).show();
-                }
             }
         });
 
@@ -99,9 +97,9 @@ public class LoginActivity extends AppCompatActivity {
                 String name = intent.getExtras().getString("name");
                 String surname = intent.getExtras().getString("surname");
                 Intent i = new Intent();
-                i.putExtra("name",name);
-                i.putExtra("surname",surname);
-                setResult(RESULT_OK,i);
+                i.putExtra("name", name);
+                i.putExtra("surname", surname);
+                setResult(RESULT_OK, i);
                 finish();
             }
         }
