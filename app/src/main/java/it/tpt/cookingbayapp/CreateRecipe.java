@@ -282,7 +282,7 @@ public class CreateRecipe extends AppCompatActivity {
                 }
                 if (finishedUploading) {
                     //Authorid e AuthorName in onCreate()
-                    mRecipe.setTitle(title.getText().toString());
+                    mRecipe.setTitle(title.getText().toString().trim());
                     mRecipe.setType("secondo piatto");
                     mRecipe.setPreviewUrl(main.getUrl());
                     mRecipe.setIngredients(iAdapter.getIngredients());
@@ -293,13 +293,13 @@ public class CreateRecipe extends AppCompatActivity {
                     int minutes1 = (TextUtils.isEmpty(stepMinutes1.getText())) ? 0 : Integer.parseInt(stepMinutes1.getText().toString());
                     int timer1 = hours1 * 3600 + minutes1 * 60;
 
-                    sections.add(new Section(steptext1.getText().toString(), firstStep.getUrl(), timer1));
+                    sections.add(new Section(steptext1.getText().toString().trim(), firstStep.getUrl(), timer1));
                     List<Step> templist = mAdapter.getSteps();
                     for (int i = 0; i < mAdapter.getItemCount(); i++) {
                         int hours = (TextUtils.isEmpty(templist.get(i).getHours())) ? 0 : Integer.parseInt(templist.get(i).getHours());
                         int minutes = (TextUtils.isEmpty(templist.get(i).getMinutes())) ? 0 : Integer.parseInt(templist.get(i).getMinutes());
                         int time = hours * 3600 + minutes * 60;
-                        sections.add(new Section(templist.get(i).getText(), templist.get(i).getUrl(), time));
+                        sections.add(new Section(templist.get(i).getText().trim(), templist.get(i).getUrl(), time));
                     }
                     mRecipe.setSections(sections);
                     if (isEditing) {
