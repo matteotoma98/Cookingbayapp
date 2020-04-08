@@ -70,7 +70,7 @@
                 android:layout_height="wrap_content"
                 android:text="Non possiedi un account?"/>
             <Button
-                android:id="@+id/loginr"
+                android:id="@+id/register"
                 style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

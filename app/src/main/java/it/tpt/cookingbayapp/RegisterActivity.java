@@ -22,11 +22,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class RegisterActivity extends AppCompatActivity {
-
+    public static final int LOGIN_REQUEST = 101;
     private TextInputEditText textName,textSurname,textEmail, textPassword;
     private Button btnRegistra;
     private FirebaseAuth mAuth;
-
+    private Button btnAccedi;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +40,18 @@ public class RegisterActivity extends AppCompatActivity {
         textEmail = findViewById(R.id.textEmail);
         textPassword = findViewById(R.id.textPassword);
         btnRegistra = findViewById(R.id.containedButton);
+        btnAccedi= findViewById(R.id.loginfromregister);
+        btnAccedi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    Intent intent = new Intent(RegisterActivity.this,LoginActivity.class);
+                    startActivityForResult(intent, LOGIN_REQUEST);
+                }catch(Exception e) {
+                    Toast.makeText(RegisterActivity.this, getString(R.string.required), Toast.LENGTH_LONG).show();
+                }
+            }
+        });
         btnRegistra.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

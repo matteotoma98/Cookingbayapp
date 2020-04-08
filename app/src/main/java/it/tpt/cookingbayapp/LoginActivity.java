@@ -33,7 +33,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
+        setContentView(R.layout.activity_login);
 
         //Istanza database firebase
         mAuth = FirebaseAuth.getInstance();
@@ -42,20 +42,19 @@ public class LoginActivity extends AppCompatActivity {
         textSurname = findViewById(R.id.textSurname);
         textEmail = findViewById(R.id.textEmail);
         textPassword = findViewById(R.id.textPassword);
-        btnRegistrati = findViewById(R.id.registration);
-        btnAccedi= findViewById(R.id.loginr);
+        btnRegistrati = findViewById(R.id.register);
+        btnAccedi= findViewById(R.id.loginButton);
         btnAccedi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    startActivityForResult(intent, LOGIN_REQUEST);
+
                 }catch(Exception e) {
                     Toast.makeText(LoginActivity.this, getString(R.string.required), Toast.LENGTH_LONG).show();
                 }
             }
         });
-         /*
+
         btnRegistrati.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -68,7 +67,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
 
             }
-        }); */
+        });
 
         //Action Bar rimossa nel theme, di conseguenza la seguente istruzione fa crashare il sistema
         //getSupportActionBar().setTitle(getString(R.string.login));
