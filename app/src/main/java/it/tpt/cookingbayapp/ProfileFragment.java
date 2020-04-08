@@ -1,6 +1,7 @@
 package it.tpt.cookingbayapp;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,9 +46,13 @@ public class ProfileFragment extends Fragment {
         esci.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                SharedPreferences preferences = getActivity().getSharedPreferences("login", getActivity().MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putBoolean("firstRun", true);
+                editor.apply();
                 FirebaseAuth.getInstance().signOut();
                 Toast.makeText(getContext(), "Utente disconnesso!", Toast.LENGTH_SHORT).show();
-                Intent i= new Intent(getActivity(), RegisterActivity.class);
+                Intent i= new Intent(getActivity(), LoginActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(i);
             }
