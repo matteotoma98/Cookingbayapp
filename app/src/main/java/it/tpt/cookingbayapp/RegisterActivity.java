@@ -23,9 +23,10 @@ import java.util.Map;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    private TextInputEditText textName,textSurname,textEmail, textPassword;
+    private TextInputEditText textName, textSurname, textEmail, textPassword;
     private Button btnRegistra;
     private FirebaseAuth mAuth;
+    private Button btnAccedi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +41,14 @@ public class RegisterActivity extends AppCompatActivity {
         textEmail = findViewById(R.id.textEmail);
         textPassword = findViewById(R.id.textPassword);
         btnRegistra = findViewById(R.id.containedButton);
+        btnAccedi = findViewById(R.id.loginfromregister);
+        btnAccedi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent  intent= new Intent();
+                finish();
+            }
+        });
         btnRegistra.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -55,7 +64,7 @@ public class RegisterActivity extends AppCompatActivity {
                     mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
-                            if(task.isSuccessful()){
+                            if (task.isSuccessful()) {
                                 final FirebaseUser user = mAuth.getCurrentUser();
                                 UserProfileChangeRequest profileChangeRequest = new UserProfileChangeRequest.Builder()
                                         .setDisplayName(name + " " + surname)
@@ -64,7 +73,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 user.updateProfile(profileChangeRequest).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
-                                        writeUserToDb(name,surname,email,user.getUid());
+                                        writeUserToDb(name, surname, email, user.getUid());
                                         Intent intent = new Intent();
                                         intent.putExtra("name", textName.getText().toString());
                                         intent.putExtra("surname", textSurname.getText().toString());
@@ -75,12 +84,12 @@ public class RegisterActivity extends AppCompatActivity {
                                         finish();
                                     }
                                 });
-                            }
-                            else Toast.makeText(RegisterActivity.this, getString(R.string.errorSignup), Toast.LENGTH_LONG).show();
+                            } else
+                                Toast.makeText(RegisterActivity.this, getString(R.string.errorSignup), Toast.LENGTH_LONG).show();
                         }
                     });
 
-                } catch(Exception e) {
+                } catch (Exception e) {
                     Toast.makeText(RegisterActivity.this, getString(R.string.required), Toast.LENGTH_LONG).show();
                 }
 
@@ -90,16 +99,18 @@ public class RegisterActivity extends AppCompatActivity {
         //Action Bar rimossa nel theme, di conseguenza la seguente istruzione fa crashare il sistema
         //getSupportActionBar().setTitle(getString(R.string.login));
     }
+
     private void writeUserToDb(String name, String surname, String email, String uid) {
         //SCRIVO SUL DB DOPO LA REGISTRAZIONE
         Map<String, Object> user = new HashMap<>();
         user.put("nome", name);
         user.put("cognome", surname);
-        user.put("email",email);
+        user.put("email", email);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("utenti").document(uid).set(user); //IL DOCUMENT E' L'UTENTE (STRING UID) CIOE' L'IDENTIFICATORE DEL DOCUMENTO
         //OPERAZIONE EFFETTUATA IN MODO ASINCRONO, BISOGNEREBBE METTERE UN ONCOMPLETELISTENER (RIGA 62)
     }
+
     @Override
     protected void onStart() {
         super.onStart();
