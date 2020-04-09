@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -36,6 +37,7 @@ public class LmrFragment extends Fragment {
     PersonalCardRecyclerViewAdapter adapter;
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
+    private View layout;
     FirebaseFirestore db;
     final static int CREATE_REQUEST = 129;
 
@@ -50,7 +52,7 @@ public class LmrFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.myCardRecycler_view);
         recyclerView.setHasFixedSize(true);
-
+        layout = view.findViewById(R.id.lmrCoordinatorLayout);
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
@@ -94,8 +96,10 @@ public class LmrFragment extends Fragment {
         btnCrea.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getActivity(), CreateRecipe.class);
-                startActivityForResult(i, CREATE_REQUEST);
+                if(!currentUser.isAnonymous()) {
+                    Intent i = new Intent(getActivity(), CreateRecipe.class);
+                    startActivityForResult(i, CREATE_REQUEST);
+                } else Snackbar.make(layout, R.string.anonymous, Snackbar.LENGTH_LONG);
             }
         });
     }
