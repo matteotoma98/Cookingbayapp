@@ -98,10 +98,8 @@ public class MainActivity  extends AppCompatActivity {
                 startActivityForResult(i, LOGIN_REQUEST);
             }
         }
-
-        if (requestCode == RC_SIGN_IN) {
+        else if (requestCode == RC_SIGN_IN) {
             IdpResponse response = IdpResponse.fromResultIntent(intent);
-
             if (resultCode == RESULT_OK) {
                 // Successfully signed in
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -111,7 +109,6 @@ public class MainActivity  extends AppCompatActivity {
                 editor.putBoolean("notSignedIn", false);
                 editor.apply();
             } else {
-                Log.i("TESTPREBUILT", "Error");
                 // Sign in failed. If response is null the user canceled the
                 // sign-in flow using the back button. Otherwise check
                 // response.getError().getErrorCode() and handle the error.

@@ -15,6 +15,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -57,24 +59,32 @@ public class ProfileFragment extends Fragment {
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putBoolean("notSignedIn", true);
                 editor.apply();
+
+                AuthUI.getInstance()
+                        .signOut(getActivity())
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                List<AuthUI.IdpConfig> providers = Arrays.asList(
+                                        new AuthUI.IdpConfig.EmailBuilder().build(),
+                                        new AuthUI.IdpConfig.AnonymousBuilder().build());
+
+                                // Create and launch sign-in intent
+                                getActivity().startActivityForResult(
+                                        AuthUI.getInstance()
+                                                .createSignInIntentBuilder()
+                                                .setIsSmartLockEnabled(false)
+                                                .setAvailableProviders(providers)
+                                                .build(),
+                                        RC_SIGN_IN);
+                            }
+                        });
                 /*
-                FirebaseAuth.getInstance().signOut();
                 Toast.makeText(getContext(), "Utente disconnesso!", Toast.LENGTH_SHORT).show();
                 Intent i= new Intent(getActivity(), LoginActivity.class);
                 getActivity().startActivityForResult(i, LOGIN_REQUEST);
                 */
-                List<AuthUI.IdpConfig> providers = Arrays.asList(
-                        new AuthUI.IdpConfig.EmailBuilder().build(),
-                        new AuthUI.IdpConfig.AnonymousBuilder().build());
 
-                // Create and launch sign-in intent
-                startActivityForResult(
-                        AuthUI.getInstance()
-                                .createSignInIntentBuilder()
-                                .setIsSmartLockEnabled(false)
-                                .setAvailableProviders(providers)
-                                .build(),
-                        RC_SIGN_IN);
             }
 
         });
