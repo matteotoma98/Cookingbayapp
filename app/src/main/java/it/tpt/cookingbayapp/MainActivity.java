@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.firebase.ui.auth.IdpResponse;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -18,6 +19,7 @@ public class MainActivity  extends AppCompatActivity {
     
     private BottomNavigationView bottomNavigationView;
     public static final int LOGIN_REQUEST = 101;
+    public static final int RC_SIGN_IN = 105;
     private FirebaseAuth mAuth;
 
     @Override
@@ -93,6 +95,25 @@ public class MainActivity  extends AppCompatActivity {
                 getSupportActionBar().setTitle("Ospite");
                 Intent i = new Intent(MainActivity.this, LoginActivity.class);
                 startActivityForResult(i, LOGIN_REQUEST);
+            }
+        }
+
+        if (requestCode == RC_SIGN_IN) {
+            IdpResponse response = IdpResponse.fromResultIntent(intent);
+
+            if (resultCode == RESULT_OK) {
+                // Successfully signed in
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                getSupportActionBar().setTitle(user.getDisplayName());
+                SharedPreferences preferences = getSharedPreferences("login", MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putBoolean("notSignedIn", false);
+                editor.apply();
+            } else {
+                // Sign in failed. If response is null the user canceled the
+                // sign-in flow using the back button. Otherwise check
+                // response.getError().getErrorCode() and handle the error.
+                // ...
             }
         }
     }
