@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.firebase.ui.auth.IdpResponse;
@@ -110,6 +111,7 @@ public class MainActivity  extends AppCompatActivity {
                 editor.putBoolean("notSignedIn", false);
                 editor.apply();
             } else {
+                Log.i("TESTPREBUILT", "Error");
                 // Sign in failed. If response is null the user canceled the
                 // sign-in flow using the back button. Otherwise check
                 // response.getError().getErrorCode() and handle the error.
