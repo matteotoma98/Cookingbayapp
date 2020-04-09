@@ -50,8 +50,10 @@ import it.tpt.cookingbayapp.stepRecycler.StepAdapter;
 public class CreateRecipe extends AppCompatActivity {
 
     ImageView imgPreview, imgStep1;
-    TextInputEditText title, totalTime, steptext1, ingName, ingQuantity, stepHours1, stepMinutes1;
-    TextInputLayout titleLayout;
+    private TextInputEditText title, totalTime, steptext1, ingName, ingQuantity, stepHours1, stepMinutes1;
+    private TextInputLayout titleLayout;
+    private TextInputLayout ddType;
+    private AutoCompleteTextView actwType;
     Button btnAddStep, btnAddIng, btnDelIng;
     boolean isUploading;
     boolean isEditing; //Controlla se l'activity è stata avviata da modifica piuttosto che crea ricetta
@@ -82,8 +84,6 @@ public class CreateRecipe extends AppCompatActivity {
     FirebaseFirestore db;
     String folder;
 
-    private TextInputLayout ddTipo;
-    private AutoCompleteTextView actwTipo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,18 +91,20 @@ public class CreateRecipe extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_recipe);
 
-        ddTipo = findViewById(R.id.dropdownTipo);
-        actwTipo = findViewById(R.id.actw);
+        ddType = findViewById(R.id.dropdownType);
+        actwType = findViewById(R.id.actw);
         String[] ddItems = new String[]{
                 "Primo Piatto",
                 "Secondo Piatto",
                 "Dessert",
                 "Antipasto",
                 "Contorno",
+                "Bevanda",
+                "Panino"
         };
         ArrayAdapter<String> adapter = new ArrayAdapter<>(CreateRecipe.this, R.layout.dropdown_item, ddItems);
 
-        actwTipo.setAdapter(adapter);
+        actwType.setAdapter(adapter);
 
         title = findViewById(R.id.createRecipeTitle);
         titleLayout = findViewById(R.id.createRecipeTitleLayout);
@@ -209,10 +211,13 @@ public class CreateRecipe extends AppCompatActivity {
         btnAddIng.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (TextUtils.isEmpty(ingName.getText()) || TextUtils.isEmpty(ingQuantity.getText())) {
+                //Controlla che il testo non sia vuoto o contenga solo spazi
+                if (TextUtils.isEmpty(ingName.getText()) || TextUtils.isEmpty(ingQuantity.getText())
+                        || ingName.getText().toString().trim().equals("")
+                        || ingQuantity.getText().toString().trim().equals("")) {
                     Toast.makeText(CreateRecipe.this, R.string.ing_required, Toast.LENGTH_LONG).show();
                 } else {
-                    iAdapter.addIngredient(new Ingredient(ingName.getText().toString(), ingQuantity.getText().toString()));
+                    iAdapter.addIngredient(new Ingredient(ingName.getText().toString().trim(), ingQuantity.getText().toString().trim()));
                     ingName.setText("");
                     ingQuantity.setText("");
                 }
@@ -321,7 +326,7 @@ public class CreateRecipe extends AppCompatActivity {
                                             if (finishedUploading) {
                                                 //Authorid e AuthorName in onCreate()
                                                 mRecipe.setTitle(title.getText().toString().trim());
-                                                mRecipe.setType("secondo piatto");
+                                                mRecipe.setType(actwType.getText().toString());
                                                 mRecipe.setPreviewUrl(main.getUrl());
                                                 mRecipe.setIngredients(iAdapter.getIngredients());
                                                 mRecipe.setTime(totalTime.getText().toString());
@@ -452,6 +457,7 @@ public class CreateRecipe extends AppCompatActivity {
         title.setEnabled(false);
         imgStep1.setEnabled(false);
         steptext1.setEnabled(false);
+        actwType.setEnabled(false);
         totalTime.setEnabled(false);
         stepHours1.setEnabled(false);
         stepMinutes1.setEnabled(false);
@@ -480,7 +486,7 @@ public class CreateRecipe extends AppCompatActivity {
             s = s || trimmed.equals("");
         }
 
-        return preview || t || s || TextUtils.isEmpty(totalTime.getText()) || iAdapter.getItemCount() == 0;
+        return preview || t || s || TextUtils.isEmpty(totalTime.getText()) || TextUtils.isEmpty(actwType.getText()) || iAdapter.getItemCount() == 0;
     }
 
     private ArrayList findUnaskedPermissions(ArrayList<String> wanted) {
