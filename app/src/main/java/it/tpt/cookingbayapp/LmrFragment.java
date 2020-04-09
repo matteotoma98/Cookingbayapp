@@ -99,7 +99,7 @@ public class LmrFragment extends Fragment {
                 if(!currentUser.isAnonymous()) {
                     Intent i = new Intent(getActivity(), CreateRecipe.class);
                     startActivityForResult(i, CREATE_REQUEST);
-                } else Snackbar.make(layout, R.string.anonymous, Snackbar.LENGTH_LONG);
+                } else Snackbar.make(layout, R.string.anonymous, Snackbar.LENGTH_LONG).show();
             }
         });
     }
