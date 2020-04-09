@@ -103,7 +103,8 @@ public class MainActivity  extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 // Successfully signed in
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                getSupportActionBar().setTitle(user.getDisplayName());
+                if(user.isAnonymous()) getSupportActionBar().setTitle("Cooking Bay");
+                else getSupportActionBar().setTitle(user.getDisplayName());
                 SharedPreferences preferences = getSharedPreferences("login", MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putBoolean("notSignedIn", false);
