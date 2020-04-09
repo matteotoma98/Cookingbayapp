@@ -60,7 +60,6 @@
                 android:layout_width="110dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-
                 android:hint="Min"
                 app:boxBackgroundColor="@android:color/white"
                 app:startIconContentDescription="timer"
@@ -78,7 +77,6 @@
                 android:id="@+id/dropdownTipo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
                 android:layout_marginStart="10dp"
                 android:hint="Tipologia"
                 app:boxBackgroundColor="@android:color/white"
@@ -89,10 +87,12 @@
 
                 <AutoCompleteTextView
                     android:id="@+id/actw"
+                    android:layout_gravity="bottom"
                     android:inputType="none"
+                    android:focusable="false"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:padding="18.5dp" />
+                     />
 
             </com.google.android.material.textfield.TextInputLayout>
 
