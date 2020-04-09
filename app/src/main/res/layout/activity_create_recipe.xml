@@ -82,13 +82,14 @@
                 android:layout_marginStart="10dp"
                 android:hint="Tipologia"
                 app:boxBackgroundColor="@android:color/white"
-                app:endIconMode="dropdown_menu"
                 app:startIconContentDescription="type"
-                app:startIconDrawable="@drawable/ic_restaurant_black_24dp">
+                app:startIconDrawable="@drawable/ic_restaurant_black_24dp"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu">
 
 
                 <AutoCompleteTextView
                     android:id="@+id/actw"
+                    android:inputType="none"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:padding="18.5dp" />
