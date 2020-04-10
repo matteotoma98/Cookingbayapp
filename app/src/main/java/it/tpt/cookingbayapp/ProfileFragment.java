@@ -11,33 +11,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Arrays;
 import java.util.List;
 
-import it.tpt.cookingbayapp.stepRecycler.Step;
-
 
 public class ProfileFragment extends Fragment {
 
-    private static final int RESULT_OK = 10;
     private Button exit;
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
@@ -45,7 +37,7 @@ public class ProfileFragment extends Fragment {
     private Uri previewUri;
     public static final int LOGIN_REQUEST = 101;
     public static final int RC_SIGN_IN = 105;
-    private final static int PREVIEW_REQUEST = 238;
+    private final static int PROPIC_REQUEST = 239;
     private boolean isUploading;
 
     public ProfileFragment() {
@@ -83,7 +75,7 @@ public class ProfileFragment extends Fragment {
         imagePreview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivityForResult(ImagePickActivity.getPickImageChooserIntent(getActivity(), "profile"), PREVIEW_REQUEST);
+                startActivityForResult(ImagePickActivity.getPickImageChooserIntent(getActivity(), "profile"), PROPIC_REQUEST);
             }
         });
         super.onViewCreated(view, savedInstanceState);
@@ -126,8 +118,10 @@ public class ProfileFragment extends Fragment {
         });
     }
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        if (requestCode == PREVIEW_REQUEST && resultCode == RESULT_OK) {
-            isUploading = false;
+        super.onActivityResult(requestCode, resultCode, intent);
+        Log.i("PICUPLOADPROFILE", "RESULT MAYBE");
+        if (requestCode == PROPIC_REQUEST && resultCode == getActivity().RESULT_OK) {
+            Log.i("PICUPLOADPROFILE", "RESULT OK");
             if (ImagePickActivity.getPickImageResultUri(getActivity(), intent, "profile") != null) {
                 //Prendi l'uri assegnato alla cache
                 previewUri = ImagePickActivity.getPickImageResultUri(getActivity(), intent, "profile");
