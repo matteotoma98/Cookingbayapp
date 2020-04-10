@@ -33,35 +33,42 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Primo Piatto"
-        app:checkedIconVisible="true"
         />
         <com.google.android.material.chip.Chip
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Secondo Piatto"
-            app:checkedIconVisible="true"
             />
         <com.google.android.material.chip.Chip
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Dessert"
-            app:checkedIconVisible="true"
             />
         <com.google.android.material.chip.Chip
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Antipasto"
-            app:checkedIconVisible="true"
             />
         <com.google.android.material.chip.Chip
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Contorno"
-            app:checkedIconVisible="true"
+            />
+        <com.google.android.material.chip.Chip
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bevanda"
+            />
+        <com.google.android.material.chip.Chip
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Panino"
             />
     </com.google.android.material.chip.ChipGroup>
 
@@ -72,7 +79,6 @@
         android:layout_gravity="center"
         app:icon="@drawable/ic_search_black_24dp"
         android:text="Cerca"/>
-
     <androidx.recyclerview.widget.RecyclerView
         android:layout_marginTop="10dp"
         android:id="@+id/searchRecycler"
