@@ -23,4 +23,5 @@
     <string name="ing_required">Perfavore inserisci il nome e la quantità dell\'ingrediente</string>
     <string name="titlenoteditable">Il titolo non può essere modificato!</string>
     <string name="anonymous">Questa funzione non è disponibile in modalità ospite!</string>
+    <string name="timer">Avvia timer</string>
 </resources>
