@@ -20,7 +20,7 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionViewHolder> {
     private List<Section> sectionList;
     private Context mContext;
 
-    public SectionAdapter(Context context, List<Section> sectionList){
+    public SectionAdapter(Context context, List<Section> sectionList) {
         this.sectionList = sectionList;
         mContext = context;
     }
@@ -37,14 +37,18 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionViewHolder> {
         if (sectionList != null && position < sectionList.size()) {
             holder.sectionTitle.setText("Step " + (position + 1));
             holder.sectionText.setText(sectionList.get(position).getText());
-            Glide.with(mContext)
-                    .load(sectionList.get(position).getImageUrl())
-                    .into(holder.sectionPic);
+            if (sectionList.get(position).getImageUrl().equals(""))
+                holder.sectionPic.setVisibility(View.GONE);
+            else {
+                Glide.with(holder.sectionPic.getContext())
+                        .load(sectionList.get(position).getImageUrl())
+                        .into(holder.sectionPic);
+            }
         }
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return sectionList.size();
     }
 }
