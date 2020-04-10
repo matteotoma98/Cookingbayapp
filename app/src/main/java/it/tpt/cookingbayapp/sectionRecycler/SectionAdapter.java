@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -37,8 +38,13 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionViewHolder> {
         if (sectionList != null && position < sectionList.size()) {
             holder.sectionTitle.setText("Step " + (position + 1));
             holder.sectionText.setText(sectionList.get(position).getText());
-            if (sectionList.get(position).getImageUrl().equals(""))
+            if(sectionList.get(position).getTimer()==0) holder.timer.setVisibility(View.GONE);
+            if (sectionList.get(position).getImageUrl().equals("")) {
+                final LinearLayout.LayoutParams layoutparams = (LinearLayout.LayoutParams) holder.sectionText.getLayoutParams();
+                layoutparams.setMargins(0,0,0,0);
+                holder.sectionText.setLayoutParams(layoutparams);
                 holder.sectionPic.setVisibility(View.GONE);
+            }
             else {
                 Glide.with(holder.sectionPic.getContext())
                         .load(sectionList.get(position).getImageUrl())
