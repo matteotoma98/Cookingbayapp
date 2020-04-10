@@ -141,6 +141,7 @@ public class CreateRecipe extends AppCompatActivity {
             main.setUrl(editRecipe.getPreviewUrl());
             title.setText(editRecipe.getTitle());
             totalTime.setText(editRecipe.getTime());
+            actwType.setText(editRecipe.getType(), false);
 
             ArrayList<Step> steps = new ArrayList<>();
             ArrayList<Section> sections = editRecipe.getSections();

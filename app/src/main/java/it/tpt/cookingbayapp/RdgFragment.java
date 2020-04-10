@@ -1,8 +1,10 @@
 package it.tpt.cookingbayapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -61,7 +63,7 @@ public class RdgFragment extends Fragment {
 
         db = FirebaseFirestore.getInstance();
 
-        //downloadRecipes();
+        downloadRecipes();
         Log.i("download", "Recipes downloaded");
 
         //int largePadding = getResources().getDimensionPixelSize(R.dimen.shr_product_grid_spacing);
@@ -71,12 +73,6 @@ public class RdgFragment extends Fragment {
         return view;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        downloadRecipes();
-        Log.i("download", "Recipes downloaded");
-    }
 
     private void downloadRecipes() {
         db.collectionGroup("Recipes")
@@ -99,5 +95,11 @@ public class RdgFragment extends Fragment {
                         }
                     }
                 });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        downloadRecipes();
     }
 }
