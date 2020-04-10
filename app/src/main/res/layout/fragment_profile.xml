@@ -42,7 +42,8 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                >
 
                 <Button
                     android:id="@+id/logout"
@@ -53,6 +54,18 @@
                     android:textColor="@color/colorAccent"
                     app:icon="@drawable/ic_exit_to_app_black_24dp"
                     app:iconTint="@color/colorAccent" />
+
+                <Button
+                    android:id="@+id/cambia_account"
+                    style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Cambia account"
+                    android:textColor="@color/colorAccent"
+                    app:icon="@drawable/ic_supervisor_account_black_24dp"
+                    app:iconTint="@color/colorAccent"
+                    android:paddingHorizontal="16dp"
+                    />
             </LinearLayout>
 
 
