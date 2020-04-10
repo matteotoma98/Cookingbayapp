@@ -13,33 +13,34 @@
         android:orientation="horizontal"
         android:padding="20dp">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/cardProfilePic"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:contentDescription="profilePic"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/missingprofile"
-            />
 
         <LinearLayout
-            android:layout_width="281dp"
-            android:layout_height="wrap_content"
+            android:layout_width="346dp"
+            android:layout_height="294dp"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/textView"
-                android:layout_width="282dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+
                 android:paddingStart="10dp"
-                android:paddingTop="20dp"
+                android:paddingTop="5dp"
                 android:text="NOME UTENTE"
+                android:textAlignment="center"
                 android:textColor="@color/primaryText"
                 android:textSize="25sp"
-                android:textStyle="bold"
-                />
+                android:textStyle="bold" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/cardProfilePic"
+                android:layout_width="match_parent"
+                android:layout_height="151dp"
+                android:contentDescription="profilePic"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/missingprofile" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -49,28 +50,34 @@
                 <Button
                     android:id="@+id/logout"
                     style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="130dp"
                     android:text="Esci"
                     android:textColor="@color/colorAccent"
-                    android:textSize="12dp"
+                    android:textSize="15dp"
                     app:icon="@drawable/ic_exit_to_app_black_24dp"
                     app:iconTint="@color/colorAccent" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:orientation="horizontal">
 
                 <Button
                     android:id="@+id/cambia_account"
                     style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="80dp"
                     android:autoSizeTextType="none"
                     android:text="Cambia account"
-                    android:textSize="12dp"
                     android:textColor="@color/colorAccent"
+                    android:textSize="15dp"
                     app:icon="@drawable/ic_supervisor_account_black_24dp"
                     app:iconTint="@color/colorAccent" />
             </LinearLayout>
-
-
         </LinearLayout>
     </LinearLayout>
 
@@ -88,7 +95,7 @@
             android:layout_gravity="center"
             android:text="Modifica Nome Utente"
             android:textColor="@color/colorAccent"
-            android:textSize="12dp"
+            android:textSize="15dp"
             app:icon="@drawable/ic_person_outline_black_24dp"
             app:iconTint="@color/colorAccent" />
 
@@ -98,7 +105,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="Modifica Password"
-            android:textSize="12dp"
+            android:textSize="15dp"
             android:textColor="@color/colorAccent"
             app:icon="@drawable/ic_lock_outline_black_24dp"
             app:iconTint="@color/colorAccent" />
@@ -109,7 +116,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="Non premere"
-            android:textSize="12dp"
+            android:textSize="15dp"
             android:textColor="@color/colorAccent"
             app:icon="@drawable/ic_delete_forever_black_24dp"
             app:iconTint="@color/colorAccent" />
