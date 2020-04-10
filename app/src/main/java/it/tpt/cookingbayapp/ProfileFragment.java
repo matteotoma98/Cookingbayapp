@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -30,6 +31,7 @@ public class ProfileFragment extends Fragment {
     private Button exit;
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
+    private ImageView imageView;
     public static final int LOGIN_REQUEST = 101;
     public static final int RC_SIGN_IN = 105;
 
@@ -44,12 +46,20 @@ public class ProfileFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
+        imageView = view.findViewById(R.id.cardProfilePic);
         String uid = currentUser.getUid();
+
         return view;
+    }
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+
+        super.onCreate(savedInstanceState);
     }
 
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
+
         super.onViewCreated(view, savedInstanceState);
         exit = getView().findViewById(R.id.logout);
         exit.setOnClickListener(new View.OnClickListener() {

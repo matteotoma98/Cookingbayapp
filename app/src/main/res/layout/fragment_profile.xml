@@ -21,29 +21,30 @@
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/missingprofile"/>
+            android:src="@drawable/missingprofile"
+            />
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="281dp"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/textView"
-                android:layout_width="match_parent"
+                android:layout_width="282dp"
                 android:layout_height="wrap_content"
                 android:paddingStart="10dp"
                 android:paddingTop="20dp"
                 android:text="NOME UTENTE"
                 android:textColor="@color/primaryText"
                 android:textSize="25sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
-                android:orientation="horizontal"
-                >
+                android:orientation="horizontal">
 
                 <Button
                     android:id="@+id/logout"
@@ -52,6 +53,7 @@
                     android:layout_height="wrap_content"
                     android:text="Esci"
                     android:textColor="@color/colorAccent"
+                    android:textSize="12dp"
                     app:icon="@drawable/ic_exit_to_app_black_24dp"
                     app:iconTint="@color/colorAccent" />
 
@@ -60,12 +62,12 @@
                     style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:autoSizeTextType="none"
                     android:text="Cambia account"
+                    android:textSize="12dp"
                     android:textColor="@color/colorAccent"
                     app:icon="@drawable/ic_supervisor_account_black_24dp"
-                    app:iconTint="@color/colorAccent"
-                    android:paddingHorizontal="16dp"
-                    />
+                    app:iconTint="@color/colorAccent" />
             </LinearLayout>
 
 
@@ -86,6 +88,7 @@
             android:layout_gravity="center"
             android:text="Modifica Nome Utente"
             android:textColor="@color/colorAccent"
+            android:textSize="12dp"
             app:icon="@drawable/ic_person_outline_black_24dp"
             app:iconTint="@color/colorAccent" />
 
@@ -95,6 +98,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="Modifica Password"
+            android:textSize="12dp"
             android:textColor="@color/colorAccent"
             app:icon="@drawable/ic_lock_outline_black_24dp"
             app:iconTint="@color/colorAccent" />
@@ -105,6 +109,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="Non premere"
+            android:textSize="12dp"
             android:textColor="@color/colorAccent"
             app:icon="@drawable/ic_delete_forever_black_24dp"
             app:iconTint="@color/colorAccent" />
