@@ -269,9 +269,10 @@ public class CreateRecipe extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.exitNoSave) {
-            Toast.makeText(this, "Ricetta non salvata", Toast.LENGTH_SHORT).show();
-            finish();
-            //  startActivity(new Intent(this, LmrFragment.class));
+            if (isUploading == false) {
+                Toast.makeText(this, "Ricetta non salvata", Toast.LENGTH_SHORT).show();
+                finish();
+            }
         } else if (id == R.id.exitSave) {
             if (checkInfo()) {
                 View view = findViewById(R.id.createRecipeLinearLayout1);
@@ -329,6 +330,11 @@ public class CreateRecipe extends AppCompatActivity {
                                                 mRecipe.setType(actwType.getText().toString());
                                                 mRecipe.setPreviewUrl(main.getUrl());
                                                 mRecipe.setIngredients(iAdapter.getIngredients());
+                                                ArrayList<String> names = new ArrayList<>();
+                                                for(int i = 0; i < iAdapter.getItemCount(); i++) {
+                                                    names.add(iAdapter.getIngredients().get(i).getName().toLowerCase());
+                                                }
+                                                mRecipe.setIngNames(names);
                                                 mRecipe.setTime(totalTime.getText().toString());
                                                 ArrayList<Section> sections = new ArrayList<>();
                                                 //Timer primo step

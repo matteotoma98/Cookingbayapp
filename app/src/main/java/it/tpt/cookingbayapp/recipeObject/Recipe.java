@@ -13,6 +13,7 @@ public class Recipe implements Serializable{
     private String authorId;
     private String authorName;
     private ArrayList<Ingredient> ingredients;
+    private ArrayList<String> ingNames;
     private ArrayList<Section> sections;
 
     //Per le classi da utilizzare con FireStore serve sempre un costruttore senza argomenti disponibile
@@ -28,6 +29,14 @@ public class Recipe implements Serializable{
         this.authorName = authorName;
         this.ingredients = ingredients;
         this.sections = sections;
+    }
+
+    public ArrayList<String> getIngNames() {
+        return ingNames;
+    }
+
+    public void setIngNames(ArrayList<String> ingNames) {
+        this.ingNames = ingNames;
     }
 
     public String getAuthorId() {
