@@ -59,6 +59,7 @@ public class RegisterActivity extends AppCompatActivity {
                     final String surname = textSurname.getText().toString().trim();
                     final String email = textEmail.getText().toString().trim();
                     final String password = textPassword.getText().toString();
+                    final String profilepicture = "missingprofile";
 
                     //Creazione dell'utente
                     mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -73,7 +74,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 user.updateProfile(profileChangeRequest).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
-                                        writeUserToDb(name, surname, email, user.getUid());
+                                        writeUserToDb(name, surname, email, user.getUid(),profilepicture);
                                         Intent intent = new Intent();
                                         intent.putExtra("name", user.getDisplayName());
                                         setResult(RESULT_OK, intent);
@@ -96,12 +97,13 @@ public class RegisterActivity extends AppCompatActivity {
         //getSupportActionBar().setTitle(getString(R.string.login));
     }
 
-    private void writeUserToDb(String name, String surname, String email, String uid) {
+    private void writeUserToDb(String name, String surname, String email, String uid, String profilepicture) {
         //SCRIVO SUL DB DOPO LA REGISTRAZIONE
         Map<String, Object> user = new HashMap<>();
         user.put("nome", name);
         user.put("cognome", surname);
         user.put("email", email);
+        user.put("profilepic", profilepicture);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("utenti").document(uid).set(user); //IL DOCUMENT E' L'UTENTE (STRING UID) CIOE' L'IDENTIFICATORE DEL DOCUMENTO
         //OPERAZIONE EFFETTUATA IN MODO ASINCRONO, BISOGNEREBBE METTERE UN ONCOMPLETELISTENER (RIGA 62)
