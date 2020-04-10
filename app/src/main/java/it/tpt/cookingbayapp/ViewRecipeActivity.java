@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 import de.hdodenhof.circleimageview.CircleImageView;
 import it.tpt.cookingbayapp.ingredientsRecycler.IngredientsRecyclerViewAdapter;
 import it.tpt.cookingbayapp.recipeObject.Recipe;
+import it.tpt.cookingbayapp.sectionRecycler.SectionAdapter;
 
 public class ViewRecipeActivity extends AppCompatActivity {
 
@@ -22,6 +23,8 @@ public class ViewRecipeActivity extends AppCompatActivity {
     CircleImageView profilePic;
     ImageView previewPic;
     RecyclerView iRecyclerView;
+    RecyclerView sRecyclerView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,11 +54,16 @@ public class ViewRecipeActivity extends AppCompatActivity {
         iRecyclerView = findViewById(R.id.ingRecycler_view);
         iRecyclerView.setHasFixedSize(true);
         iRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        IngredientsRecyclerViewAdapter adapter = new IngredientsRecyclerViewAdapter(recipe.getIngredients());
-        iRecyclerView.setAdapter(adapter);
+        IngredientsRecyclerViewAdapter iAdapter = new IngredientsRecyclerViewAdapter(recipe.getIngredients());
+        iRecyclerView.setAdapter(iAdapter);
 
+        sRecyclerView = findViewById(R.id.section_recycler);
+        sRecyclerView.setHasFixedSize(true);
+        sRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        SectionAdapter sAdapter = new SectionAdapter(this, recipe.getSections());
+        sRecyclerView.setAdapter(sAdapter);
 
-
+        
         getSupportActionBar().setTitle(recipe.getTitle());
     }
 }
