@@ -21,7 +21,7 @@
 
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/cardProfilePic"
+                android:id="@+id/userProfilePic"
                 android:layout_width="match_parent"
                 android:layout_height="151dp"
                 android:contentDescription="profilePic"
