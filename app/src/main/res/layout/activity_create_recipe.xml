@@ -10,22 +10,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
-        <ImageView
-            android:id="@+id/imgAnteprima"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintDimensionRatio="H, 16:9"
-            android:scaleType="centerCrop"
-            android:src="@drawable/preview_dummy" />
+            <ImageView
+                android:id="@+id/imgAnteprima"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/preview_dummy"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="H, 16:9"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -83,24 +84,23 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/dropdownType"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:hint="Tipologia"
                 app:boxBackgroundColor="@android:color/white"
                 app:startIconContentDescription="type"
-                app:startIconDrawable="@drawable/ic_restaurant_black_24dp"
-                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu">
+                app:startIconDrawable="@drawable/ic_restaurant_black_24dp">
 
 
                 <AutoCompleteTextView
                     android:id="@+id/actw"
-                    android:layout_gravity="bottom"
-                    android:inputType="none"
-                    android:focusable="false"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                     />
+                    android:layout_gravity="bottom"
+                    android:focusable="false"
+                    android:inputType="none" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -299,11 +299,13 @@
                     </LinearLayout>
 
                 </LinearLayout>
+
                 <View
-                    android:layout_marginTop="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@android:color/darker_gray"/>
+                    android:layout_marginTop="10dp"
+                    android:background="@android:color/darker_gray" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"

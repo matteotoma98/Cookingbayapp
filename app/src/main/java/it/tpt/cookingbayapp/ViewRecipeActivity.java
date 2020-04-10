@@ -63,7 +63,7 @@ public class ViewRecipeActivity extends AppCompatActivity {
         SectionAdapter sAdapter = new SectionAdapter(this, recipe.getSections());
         sRecyclerView.setAdapter(sAdapter);
 
-        
+
         getSupportActionBar().setTitle(recipe.getTitle());
     }
 }
