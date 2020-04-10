@@ -37,28 +37,29 @@ import it.tpt.cookingbayapp.stepRecycler.Step;
 
 public class ProfileFragment extends Fragment {
 
-    private static final int RESULT_OK = 10 ;
+    private static final int RESULT_OK = 10;
     private Button exit;
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
-    private ImageView imageView;
+    private ImageView imagePreview;
     private Uri previewUri;
     public static final int LOGIN_REQUEST = 101;
     public static final int RC_SIGN_IN = 105;
-    private final static int PREVIEW_REQUEST = 234;
+    private final static int PREVIEW_REQUEST = 238;
     private boolean isUploading;
-    public ProfileFragment(){
+
+    public ProfileFragment() {
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view =  inflater.inflate(R.layout.fragment_profile,container,false);
+        View view = inflater.inflate(R.layout.fragment_profile, container, false);
         FirebaseFirestore db;
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
-        imageView = view.findViewById(R.id.cardProfilePic);
+        imagePreview = view.findViewById(R.id.userProfilePic);
         String uid = currentUser.getUid();
 
         return view;
@@ -73,11 +74,18 @@ public class ProfileFragment extends Fragment {
                 .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
                 .centerCrop()
                 .into(imageView); */
+
     }
 
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         // imageView.setImageURI(Uri.parse(String.valueOf(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl("http://i.imgur.com/DvpvklR.png")));
+        imagePreview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivityForResult(ImagePickActivity.getPickImageChooserIntent(getActivity(), "profile"), PREVIEW_REQUEST);
+            }
+        });
         super.onViewCreated(view, savedInstanceState);
         exit = getView().findViewById(R.id.logout);
         exit.setOnClickListener(new View.OnClickListener() {
@@ -107,15 +115,34 @@ public class ProfileFragment extends Fragment {
                                         RC_SIGN_IN);
                             }
                         });
+
+
                 /*
                 Toast.makeText(getContext(), "Utente disconnesso!", Toast.LENGTH_SHORT).show();
                 Intent i= new Intent(getActivity(), LoginActivity.class);
                 getActivity().startActivityForResult(i, LOGIN_REQUEST);
                 */
-
             }
-
         });
+    }
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        if (requestCode == PREVIEW_REQUEST && resultCode == RESULT_OK) {
+            isUploading = false;
+            if (ImagePickActivity.getPickImageResultUri(getActivity(), intent, "profile") != null) {
+                //Prendi l'uri assegnato alla cache
+                previewUri = ImagePickActivity.getPickImageResultUri(getActivity(), intent, "profile");
+                Glide.with(getContext())
+                        .load(previewUri)
+                        .centerCrop()
+                        .into(imagePreview);
+            } else {
+                Bitmap bitmap = (Bitmap) intent.getExtras().get("data");
+                Glide.with(getContext())
+                        .load(bitmap)
+                        .centerCrop()
+                        .into(imagePreview);
+            }
+        }
     }
 
 }
