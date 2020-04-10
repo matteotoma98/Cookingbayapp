@@ -18,10 +18,10 @@ import it.tpt.cookingbayapp.recipeObject.Recipe;
 public class ViewRecipeActivity extends AppCompatActivity {
 
     //Section text è momentaneo
-    TextView recipeTitle, recipeAuthor, recipeType, recipeTime, sectionText;
+    TextView recipeTitle, recipeAuthor, recipeType, recipeTime;
     CircleImageView profilePic;
     ImageView previewPic;
-    RecyclerView recyclerView;
+    RecyclerView iRecyclerView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,7 +31,6 @@ public class ViewRecipeActivity extends AppCompatActivity {
         recipeAuthor = findViewById(R.id.viewRecipeAuthor);
         recipeTime = findViewById(R.id.viewRecipeTime);
         recipeType = findViewById(R.id.viewRecipeType);
-        sectionText = findViewById(R.id.sectionText);
         previewPic = findViewById(R.id.viewPreviewPic);
         profilePic = findViewById(R.id.viewProfilePic);
 
@@ -42,7 +41,6 @@ public class ViewRecipeActivity extends AppCompatActivity {
         recipeAuthor.setText(recipe.getAuthorName());
         recipeTime.setText(recipe.getTime());
         recipeType.setText(recipe.getType());
-        sectionText.setText(recipe.getSections().get(0).getText());
 
         if(recipe.getProfilePicUrl().toString().equals("missingprofile")){
             profilePic.setImageResource(R.drawable.missingprofile);
@@ -50,11 +48,11 @@ public class ViewRecipeActivity extends AppCompatActivity {
         else Glide.with(this).load(recipe.getProfilePicUrl()).into(profilePic);
         Glide.with(this).load(recipe.getPreviewUrl()).into(previewPic);
 
-        recyclerView = findViewById(R.id.ingRecycler_view);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        iRecyclerView = findViewById(R.id.ingRecycler_view);
+        iRecyclerView.setHasFixedSize(true);
+        iRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         IngredientsRecyclerViewAdapter adapter = new IngredientsRecyclerViewAdapter(recipe.getIngredients());
-        recyclerView.setAdapter(adapter);
+        iRecyclerView.setAdapter(adapter);
 
 
 
