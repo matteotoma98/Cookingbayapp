@@ -85,23 +85,40 @@ public class ProfileFragment extends Fragment {
         switch_account.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferences preferences = getActivity().getSharedPreferences("login", getActivity().MODE_PRIVATE);
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putBoolean("notSignedIn", true);
-                editor.apply();
-                if(currentUser.isAnonymous()) currentUser.delete();
-                List<AuthUI.IdpConfig> providers = Arrays.asList(
-                        new AuthUI.IdpConfig.EmailBuilder().build(),
-                        new AuthUI.IdpConfig.AnonymousBuilder().build());
+                if (currentUser.isAnonymous())
+                    currentUser.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            List<AuthUI.IdpConfig> providers = Arrays.asList(
+                                    new AuthUI.IdpConfig.EmailBuilder().build(),
+                                    new AuthUI.IdpConfig.AnonymousBuilder().build());
 
-                // Create and launch sign-in intent
-                getActivity().startActivityForResult(
-                        AuthUI.getInstance()
-                                .createSignInIntentBuilder()
-                                .setIsSmartLockEnabled(false)
-                                .setAvailableProviders(providers)
-                                .build(),
-                        RC_SIGN_IN);
+                            // Create and launch sign-in intent
+                            getActivity().startActivityForResult(
+                                    AuthUI.getInstance()
+                                            .createSignInIntentBuilder()
+                                            .setIsSmartLockEnabled(false)
+                                            .setAvailableProviders(providers)
+                                            .build(),
+                                    RC_SIGN_IN);
+                        }
+                    });
+                else {
+
+                    List<AuthUI.IdpConfig> providers = Arrays.asList(
+                            new AuthUI.IdpConfig.EmailBuilder().build(),
+                            new AuthUI.IdpConfig.AnonymousBuilder().build());
+
+                    // Create and launch sign-in intent
+                    getActivity().startActivityForResult(
+                            AuthUI.getInstance()
+                                    .createSignInIntentBuilder()
+                                    .setIsSmartLockEnabled(false)
+                                    .setAvailableProviders(providers)
+                                    .build(),
+                            RC_SIGN_IN);
+                }
+
             }
         });
 
@@ -132,7 +149,8 @@ public class ProfileFragment extends Fragment {
                                             });
                                 }
                             });
-                } else Snackbar.make(layout, R.string.already_anonymous, Snackbar.LENGTH_SHORT).show();
+                } else
+                    Snackbar.make(layout, R.string.already_anonymous, Snackbar.LENGTH_SHORT).show();
 
             }
         });
