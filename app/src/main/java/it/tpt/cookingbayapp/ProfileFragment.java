@@ -108,18 +108,11 @@ public class ProfileFragment extends Fragment {
                             }
                         });
 
-
-                /*
-                Toast.makeText(getContext(), "Utente disconnesso!", Toast.LENGTH_SHORT).show();
-                Intent i= new Intent(getActivity(), LoginActivity.class);
-                getActivity().startActivityForResult(i, LOGIN_REQUEST);
-                */
             }
         });
     }
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
-        Log.i("PICUPLOADPROFILE", "RESULT MAYBE");
         if (requestCode == PROPIC_REQUEST && resultCode == getActivity().RESULT_OK) {
             Log.i("PICUPLOADPROFILE", "RESULT OK");
             if (ImagePickActivity.getPickImageResultUri(getActivity(), intent, "profile") != null) {

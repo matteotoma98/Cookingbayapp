@@ -1,6 +1,8 @@
 package it.tpt.cookingbayapp.sectionRecycler;
 
 import android.content.Context;
+import android.content.Intent;
+import android.provider.AlarmClock;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +32,19 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionViewHolder> {
     @Override
     public SectionViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.section_item, parent, false);
-        return new SectionViewHolder(layoutView);
+        final SectionViewHolder holder = new SectionViewHolder(layoutView);
+
+        holder.timer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AlarmClock.ACTION_SET_TIMER);
+                intent.putExtra(AlarmClock.EXTRA_LENGTH, sectionList.get(holder.getAdapterPosition()).getTimer());
+                intent.putExtra(AlarmClock.EXTRA_SKIP_UI, true);
+                mContext.startActivity(intent);
+            }
+        });
+
+        return holder;
     }
 
     @Override
@@ -41,7 +55,10 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionViewHolder> {
             if(sectionList.get(position).getTimer()==0) holder.timer.setVisibility(View.GONE);
             if (sectionList.get(position).getImageUrl().equals("")) {
                 final LinearLayout.LayoutParams layoutparams = (LinearLayout.LayoutParams) holder.sectionText.getLayoutParams();
+                final LinearLayout.LayoutParams layoutparams2 = (LinearLayout.LayoutParams) holder.sectionTitle.getLayoutParams();
                 layoutparams.setMargins(0,0,0,0);
+                layoutparams2.setMargins(0,0,0,0);
+                holder.sectionTitle.setLayoutParams(layoutparams2);
                 holder.sectionText.setLayoutParams(layoutparams);
                 holder.sectionPic.setVisibility(View.GONE);
             }
