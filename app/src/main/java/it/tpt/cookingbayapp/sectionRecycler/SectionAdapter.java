@@ -42,7 +42,7 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionViewHolder> {
                 intent.putExtra(AlarmClock.EXTRA_LENGTH, sectionList.get(holder.getAdapterPosition()).getTimer());
                 intent.putExtra(AlarmClock.EXTRA_SKIP_UI, true);
                 mContext.startActivity(intent);
-                Toast.makeText(mContext, R.string.timerlaunched, Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext, R.string.timer_launched, Toast.LENGTH_LONG).show();
             }
         });
 

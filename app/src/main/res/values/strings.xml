@@ -18,12 +18,14 @@
     <string name="sorgente">Seleziona la sorgente</string>
     <string name="minimum_info_required">Perfavore inserisci le informazioni principali e la descrizione del primo step!</string>
     <string name="uploading">Attendi l\'upload delle immagini per la condivisione</string>
-    <string name="donesharing">Ricetta Condivisa!</string>
-    <string name="doneediting">Ricetta modificata!</string>
+    <string name="done_sharing">Ricetta Condivisa!</string>
+    <string name="done_editing">Ricetta modificata!</string>
     <string name="ing_required">Perfavore inserisci il nome e la quantità dell\'ingrediente</string>
-    <string name="titlenoteditable">Il titolo non può essere modificato!</string>
+    <string name="title_not_editable">Il titolo non può essere modificato!</string>
     <string name="anonymous">Questa funzione non è disponibile in modalità ospite!</string>
     <string name="timer">Avvia timer</string>
-    <string name="timerlaunched">Timer avviato</string>
+    <string name="timer_launched">Timer avviato</string>
     <string name="exiterror">Impossibile disconnettersi</string>
+    <string name="logged_as_anonymous">Sei ora connesso come ospite</string>
+    <string name="already_anonymous">Sei già in modalità ospite</string>
 </resources>

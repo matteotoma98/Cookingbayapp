@@ -135,7 +135,7 @@ public class CreateRecipe extends AppCompatActivity {
         Intent intent = getIntent();
         if (isEditing) {
             getSupportActionBar().setTitle("Modifica ricetta");
-            titleLayout.setHint(getString(R.string.titlenoteditable));
+            titleLayout.setHint(getString(R.string.title_not_editable));
 
             Recipe editRecipe = (Recipe) intent.getSerializableExtra("recipeToEdit");
             main.setUrl(editRecipe.getPreviewUrl());
@@ -368,7 +368,7 @@ public class CreateRecipe extends AppCompatActivity {
                                                                     Log.w("TAG", "Error writing document", e);
                                                                 }
                                                             });
-                                                    Toast.makeText(CreateRecipe.this, R.string.doneediting, Toast.LENGTH_LONG).show();
+                                                    Toast.makeText(CreateRecipe.this, R.string.done_editing, Toast.LENGTH_LONG).show();
                                                     setResult(RESULT_OK);
                                                     finish();
                                                 } else {
@@ -387,7 +387,7 @@ public class CreateRecipe extends AppCompatActivity {
                                                                     Log.w("Firestore up", "Error adding document", e);
                                                                 }
                                                             });
-                                                    Toast.makeText(CreateRecipe.this, R.string.donesharing, Toast.LENGTH_LONG).show();
+                                                    Toast.makeText(CreateRecipe.this, R.string.done_sharing, Toast.LENGTH_LONG).show();
                                                     setResult(RESULT_OK);
                                                     finish();
                                                 }

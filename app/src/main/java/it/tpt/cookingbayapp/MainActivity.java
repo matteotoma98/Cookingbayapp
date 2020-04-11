@@ -36,7 +36,8 @@ public class MainActivity  extends AppCompatActivity {
         else {
             mAuth = FirebaseAuth.getInstance();
             FirebaseUser currentUser = mAuth.getCurrentUser();
-            getSupportActionBar().setTitle(currentUser.getDisplayName());
+            if(currentUser.isAnonymous()) getSupportActionBar().setTitle("Cooking Bay");
+            else getSupportActionBar().setTitle(currentUser.getDisplayName());
         }
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);

@@ -23,6 +23,7 @@ import com.bumptech.glide.Glide;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -35,15 +36,14 @@ import java.util.List;
 public class ProfileFragment extends Fragment {
 
     private Button exit;
-    private Button swtich_account;
+    private Button switch_account;
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
-    private ImageView imagePreview;
-    private Uri previewUri;
-    public static final int LOGIN_REQUEST = 101;
+    private ImageView profilePic;
+    private Uri profileUri;
     public static final int RC_SIGN_IN = 105;
     private final static int PROPIC_REQUEST = 239;
-    private boolean isUploading;
+
 
     public ProfileFragment() {
     }
@@ -56,7 +56,7 @@ public class ProfileFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
-        imagePreview = view.findViewById(R.id.userProfilePic);
+        profilePic = view.findViewById(R.id.userProfilePic);
         String uid = currentUser.getUid();
         return view;
     }
@@ -68,8 +68,9 @@ public class ProfileFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
-        // imageView.setImageURI(Uri.parse(String.valueOf(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl("http://i.imgur.com/DvpvklR.png")));
-        imagePreview.setOnClickListener(new View.OnClickListener() {
+
+        final View layout = view.findViewById(R.id.profileCoordinatorLayout);
+        profilePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivityForResult(ImagePickActivity.getPickImageChooserIntent(getActivity(), "profile"), PROPIC_REQUEST);
@@ -77,8 +78,8 @@ public class ProfileFragment extends Fragment {
         });
         super.onViewCreated(view, savedInstanceState);
         exit = getView().findViewById(R.id.logout);
-        swtich_account = getView().findViewById(R.id.cambia_account);
-        swtich_account.setOnClickListener(new View.OnClickListener() {
+        switch_account = getView().findViewById(R.id.cambia_account);
+        switch_account.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 SharedPreferences preferences = getActivity().getSharedPreferences("login", getActivity().MODE_PRIVATE);
@@ -103,30 +104,31 @@ public class ProfileFragment extends Fragment {
         exit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AuthUI.getInstance()
-                        .signOut(getActivity())
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                mAuth.signInAnonymously()
-                                        .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                                if (task.isSuccessful()) {
-                                                    // Sign in success, update UI with the signed-in user's information
-                                                    Log.d("signin", "signInAnonymously:success");
-                                                    ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Cooking Bay");
-                                                } else {
-                                                    // If sign in fails, display a message to the user.
-                                                    Log.w("signinerror", "signInAnonymously:failure", task.getException());
-                                                    Toast.makeText((Context) getActivity(), R.string.exiterror, Toast.LENGTH_SHORT).show();
+                if (!currentUser.isAnonymous()) {
+                    AuthUI.getInstance()
+                            .signOut(getActivity())
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    mAuth.signInAnonymously()
+                                            .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                                    if (task.isSuccessful()) {
+                                                        // Sign in success, update UI with the signed-in user's information
+                                                        Log.d("signin", "signInAnonymously:success");
+                                                        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Cooking Bay");
+                                                        Snackbar.make(layout, R.string.logged_as_anonymous, Snackbar.LENGTH_SHORT).show();
+                                                    } else {
+                                                        // If sign in fails, display a message to the user.
+                                                        Log.w("signinerror", "signInAnonymously:failure", task.getException());
+                                                        Toast.makeText((Context) getActivity(), R.string.exiterror, Toast.LENGTH_SHORT).show();
+                                                    }
                                                 }
-
-                                                // ...
-                                            }
-                                        });
-                            }
-                        });
+                                            });
+                                }
+                            });
+                } else Snackbar.make(layout, R.string.already_anonymous, Snackbar.LENGTH_SHORT).show();
 
             }
         });
@@ -138,17 +140,17 @@ public class ProfileFragment extends Fragment {
             Log.i("PICUPLOADPROFILE", "RESULT OK");
             if (ImagePickActivity.getPickImageResultUri(getActivity(), intent, "profile") != null) {
                 //Prendi l'uri assegnato alla cache
-                previewUri = ImagePickActivity.getPickImageResultUri(getActivity(), intent, "profile");
+                profileUri = ImagePickActivity.getPickImageResultUri(getActivity(), intent, "profile");
                 Glide.with(getContext())
-                        .load(previewUri)
+                        .load(profileUri)
                         .centerCrop()
-                        .into(imagePreview);
+                        .into(profilePic);
             } else {
                 Bitmap bitmap = (Bitmap) intent.getExtras().get("data");
                 Glide.with(getContext())
                         .load(bitmap)
                         .centerCrop()
-                        .into(imagePreview);
+                        .into(profilePic);
             }
         }
     }
