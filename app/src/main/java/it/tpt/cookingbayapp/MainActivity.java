@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
             IdpResponse response = IdpResponse.fromResultIntent(intent);
             if (resultCode == RESULT_OK) {
                 // Successfully signed in
-                FirebaseUser user = mAuth.getCurrentUser();
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 if (user.isAnonymous()) getSupportActionBar().setTitle("Cooking Bay");
                 else {
                     getSupportActionBar().setTitle(user.getDisplayName());

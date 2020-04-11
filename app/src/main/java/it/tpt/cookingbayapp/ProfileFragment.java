@@ -104,23 +104,27 @@ public class ProfileFragment extends Fragment {
                                     RC_SIGN_IN);
                         }
                     });
+                } else {
+                    AuthUI.getInstance()
+                            .signOut(getActivity())
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    List<AuthUI.IdpConfig> providers = Arrays.asList(
+                                            new AuthUI.IdpConfig.EmailBuilder().build(),
+                                            new AuthUI.IdpConfig.AnonymousBuilder().build());
+
+                                    // Create and launch sign-in intent
+                                    getActivity().startActivityForResult(
+                                            AuthUI.getInstance()
+                                                    .createSignInIntentBuilder()
+                                                    .setIsSmartLockEnabled(false)
+                                                    .setAvailableProviders(providers)
+                                                    .build(),
+                                            RC_SIGN_IN);
+                                }
+                            });
                 }
-                else {
-
-                    List<AuthUI.IdpConfig> providers = Arrays.asList(
-                            new AuthUI.IdpConfig.EmailBuilder().build(),
-                            new AuthUI.IdpConfig.AnonymousBuilder().build());
-
-                    // Create and launch sign-in intent
-                    getActivity().startActivityForResult(
-                            AuthUI.getInstance()
-                                    .createSignInIntentBuilder()
-                                    .setIsSmartLockEnabled(false)
-                                    .setAvailableProviders(providers)
-                                    .build(),
-                            RC_SIGN_IN);
-                }
-
             }
         });
 
