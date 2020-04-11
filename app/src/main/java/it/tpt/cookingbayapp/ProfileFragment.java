@@ -1,5 +1,6 @@
 package it.tpt.cookingbayapp;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -11,15 +12,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -31,6 +35,7 @@ import java.util.List;
 public class ProfileFragment extends Fragment {
 
     private Button exit;
+    private Button swtich_account;
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
     private ImageView imagePreview;
@@ -53,20 +58,12 @@ public class ProfileFragment extends Fragment {
         currentUser = mAuth.getCurrentUser();
         imagePreview = view.findViewById(R.id.userProfilePic);
         String uid = currentUser.getUid();
-
         return view;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        /* Glide.with(this)
-                .load("http://i.imgur.com/DvpvklR.png")
-                .apply(RequestOptions.skipMemoryCacheOf(true))
-                .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
-                .centerCrop()
-                .into(imageView); */
-
     }
 
     @Override
@@ -80,37 +77,61 @@ public class ProfileFragment extends Fragment {
         });
         super.onViewCreated(view, savedInstanceState);
         exit = getView().findViewById(R.id.logout);
-        exit.setOnClickListener(new View.OnClickListener() {
+        swtich_account = getView().findViewById(R.id.cambia_account);
+        swtich_account.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 SharedPreferences preferences = getActivity().getSharedPreferences("login", getActivity().MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putBoolean("notSignedIn", true);
                 editor.apply();
+                List<AuthUI.IdpConfig> providers = Arrays.asList(
+                        new AuthUI.IdpConfig.EmailBuilder().build(),
+                        new AuthUI.IdpConfig.AnonymousBuilder().build());
 
+                // Create and launch sign-in intent
+                getActivity().startActivityForResult(
+                        AuthUI.getInstance()
+                                .createSignInIntentBuilder()
+                                .setIsSmartLockEnabled(false)
+                                .setAvailableProviders(providers)
+                                .build(),
+                        RC_SIGN_IN);
+            }
+        });
+
+        exit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 AuthUI.getInstance()
                         .signOut(getActivity())
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
-                                List<AuthUI.IdpConfig> providers = Arrays.asList(
-                                        new AuthUI.IdpConfig.EmailBuilder().build(),
-                                        new AuthUI.IdpConfig.AnonymousBuilder().build());
+                                mAuth.signInAnonymously()
+                                        .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                                if (task.isSuccessful()) {
+                                                    // Sign in success, update UI with the signed-in user's information
+                                                    Log.d("signin", "signInAnonymously:success");
+                                                    ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Cooking Bay");
+                                                } else {
+                                                    // If sign in fails, display a message to the user.
+                                                    Log.w("signinerror", "signInAnonymously:failure", task.getException());
+                                                    Toast.makeText((Context) getActivity(), "Authentication failed.", Toast.LENGTH_SHORT).show();
+                                                }
 
-                                // Create and launch sign-in intent
-                                getActivity().startActivityForResult(
-                                        AuthUI.getInstance()
-                                                .createSignInIntentBuilder()
-                                                .setIsSmartLockEnabled(false)
-                                                .setAvailableProviders(providers)
-                                                .build(),
-                                        RC_SIGN_IN);
+                                                // ...
+                                            }
+                                        });
                             }
                         });
 
             }
         });
     }
+
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         if (requestCode == PROPIC_REQUEST && resultCode == getActivity().RESULT_OK) {
