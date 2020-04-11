@@ -85,8 +85,9 @@ public class ProfileFragment extends Fragment {
         switch_account.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (currentUser.isAnonymous())
-                    currentUser.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                if (currentUser.isAnonymous()) {
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    user.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             List<AuthUI.IdpConfig> providers = Arrays.asList(
@@ -103,6 +104,7 @@ public class ProfileFragment extends Fragment {
                                     RC_SIGN_IN);
                         }
                     });
+                }
                 else {
 
                     List<AuthUI.IdpConfig> providers = Arrays.asList(
