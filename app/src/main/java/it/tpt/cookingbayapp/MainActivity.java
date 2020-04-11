@@ -14,6 +14,10 @@ import com.firebase.ui.auth.IdpResponse;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class MainActivity  extends AppCompatActivity {
@@ -86,7 +90,6 @@ public class MainActivity  extends AppCompatActivity {
                 String name = intent.getExtras().getString("name");
 
                 getSupportActionBar().setTitle(name); //dà il nome e il cognome in alto nella action bar
-
                 SharedPreferences preferences = getSharedPreferences("login", MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putBoolean("notSignedIn", false);
@@ -105,12 +108,19 @@ public class MainActivity  extends AppCompatActivity {
                 // Successfully signed in
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 if(user.isAnonymous()) getSupportActionBar().setTitle("Cooking Bay");
-                else getSupportActionBar().setTitle(user.getDisplayName());
+                else {
+                    getSupportActionBar().setTitle(user.getDisplayName());
+                    writeUserToDb(user.getDisplayName(),user.getEmail(),user.getUid());
+                }
                 SharedPreferences preferences = getSharedPreferences("login", MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putBoolean("notSignedIn", false);
                 editor.apply();
             } else {
+                SharedPreferences preferences = getSharedPreferences("login", MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putBoolean("notSignedIn", false);
+                editor.apply();
                 // Sign in failed. If response is null the user canceled the
                 // sign-in flow using the back button. Otherwise check
                 // response.getError().getErrorCode() and handle the error.
@@ -118,6 +128,12 @@ public class MainActivity  extends AppCompatActivity {
             }
         }
     }
-
+    private void writeUserToDb(String name, String email, String uid) {
+        Map<String, Object> user = new HashMap<>();
+        user.put("nome", name);
+        user.put("email", email);
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("Users").document(uid).set(user);
+    }
 
 }

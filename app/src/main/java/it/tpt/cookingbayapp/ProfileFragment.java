@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -41,6 +42,7 @@ public class ProfileFragment extends Fragment {
     private FirebaseUser currentUser;
     private ImageView profilePic;
     private Uri profileUri;
+    private TextView nome_utente;
     public static final int RC_SIGN_IN = 105;
     private final static int PROPIC_REQUEST = 239;
 
@@ -58,6 +60,7 @@ public class ProfileFragment extends Fragment {
         currentUser = mAuth.getCurrentUser();
         profilePic = view.findViewById(R.id.userProfilePic);
         String uid = currentUser.getUid();
+        nome_utente = view.findViewById(R.id.nome_utente);
         return view;
     }
 
@@ -86,6 +89,7 @@ public class ProfileFragment extends Fragment {
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putBoolean("notSignedIn", true);
                 editor.apply();
+                if(currentUser.isAnonymous()) currentUser.delete();
                 List<AuthUI.IdpConfig> providers = Arrays.asList(
                         new AuthUI.IdpConfig.EmailBuilder().build(),
                         new AuthUI.IdpConfig.AnonymousBuilder().build());
