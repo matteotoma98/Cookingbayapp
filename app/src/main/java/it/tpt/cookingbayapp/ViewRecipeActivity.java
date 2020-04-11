@@ -42,7 +42,7 @@ public class ViewRecipeActivity extends AppCompatActivity {
 
         recipeTitle.setText(recipe.getTitle());
         recipeAuthor.setText(recipe.getAuthorName());
-        recipeTime.setText(recipe.getTime());
+        recipeTime.setText(recipe.getTime() + " min");
         recipeType.setText(recipe.getType());
 
         if(recipe.getProfilePicUrl().toString().equals("missingprofile")){

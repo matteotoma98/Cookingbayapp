@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -41,6 +42,7 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionViewHolder> {
                 intent.putExtra(AlarmClock.EXTRA_LENGTH, sectionList.get(holder.getAdapterPosition()).getTimer());
                 intent.putExtra(AlarmClock.EXTRA_SKIP_UI, true);
                 mContext.startActivity(intent);
+                Toast.makeText(mContext, R.string.timerlaunched, Toast.LENGTH_LONG).show();
             }
         });
 
