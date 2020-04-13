@@ -52,7 +52,9 @@ public class StepAdapter extends RecyclerView.Adapter<StepViewHolder> {
         View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.step_item, parent, false);
         final StepViewHolder holder = new StepViewHolder(layoutView);
 
-        //Eliminare lo step
+        if(viewType == 0) holder.delete.setVisibility(View.GONE); //Il primo step non può essere eliminato perciò il bottone elimina viene nascosto
+
+        //Imposta il ClickListener per eliminare lo step
         holder.setStepDeleteClickListener(new StepClickListener() {
             @Override
             public void onItemClickListener(int position) {
@@ -123,19 +125,28 @@ public class StepAdapter extends RecyclerView.Adapter<StepViewHolder> {
         return holder;
     }
 
+    /**
+     * Aggiunge uno step alla lista e notifica dell'aggiunta
+     */
     public void addStep() {
         steps.add(new Step("", Uri.parse("")));
         notifyItemInserted(steps.size() - 1);
     }
 
-    public void removeStep(int position) {
-        steps.remove(position);
+    /**
+     * Serve per ottenere in modo corretto la posizione nel onCreateViewHolder
+     * @param position
+     * @return position
+     */
+    @Override
+    public int getItemViewType(int position) {
+        return position;
     }
 
     @Override
     public void onBindViewHolder(@NonNull StepViewHolder holder, int position) {
         if (steps != null && position < steps.size()) {
-            String stepn = "Step " + (position + 2);
+            String stepn = "Step " + (position + 1);
             holder.stepnumber.setText(stepn);
             holder.steptext.setText(steps.get(position).getText());
             holder.stepHours.setText(steps.get(position).getHours());
@@ -180,10 +191,13 @@ public class StepAdapter extends RecyclerView.Adapter<StepViewHolder> {
         return steps;
     }
 
+    /**
+     * Serve per ottenere la posizione dell'holder che è stato cliccato
+     * @return Posizione dell'holder cliccato
+     */
     public int getCurrentPicPosition() {
         return currentPicPosition;
     }
-
     public void setCurrentPicPosition(int currentPicPosition) {
         this.currentPicPosition = currentPicPosition;
     }

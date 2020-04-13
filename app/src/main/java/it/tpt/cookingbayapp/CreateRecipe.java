@@ -59,8 +59,8 @@ import it.tpt.cookingbayapp.stepRecycler.StepAdapter;
  */
 public class CreateRecipe extends AppCompatActivity {
 
-    private ImageView imgPreview, imgStep1;
-    private TextInputEditText title, totalTime, steptext1, ingName, ingQuantity, stepHours1, stepMinutes1;
+    private ImageView imgPreview;
+    private TextInputEditText title, totalTime, ingName, ingQuantity;
     private TextInputLayout titleLayout;
     private TextInputLayout ddType;
     private AutoCompleteTextView actwType;
@@ -68,9 +68,8 @@ public class CreateRecipe extends AppCompatActivity {
     boolean isUploading; //Utilizzato per evitare che l'utente clicchi nuovamente il pulsante SALVA (Che effettua l'upload)
     boolean isEditing; //Controlla se l'activity è stata avviata da modifica piuttosto che crea ricetta
 
-    //Questi due oggetti step servono per comodità, solo il metodo setUrl() e getUrl() vengono utilizzati
+    //Questo oggetto step serve per comodità, solo i metodi setUrl() e getUrl() vengono utilizzati all'interno di ImagePickActivity
     private Step main;
-    private Step firstStep;
 
     //RecyclerView utilizzate rispettivamente per la visualizzazione degli ingredienti e degli step
     private RecyclerView iRecyclerView;
@@ -120,14 +119,11 @@ public class CreateRecipe extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(CreateRecipe.this, R.layout.dropdown_item, ddItems);
         actwType.setAdapter(adapter);
 
+        //Assegnazioni degli oggetti Java ai corrispettivi elementi XML
         title = findViewById(R.id.createRecipeTitle);
         titleLayout = findViewById(R.id.createRecipeTitleLayout);
         totalTime = findViewById(R.id.recipeTime);
-        steptext1 = findViewById(R.id.steptext1);
-        stepHours1 = findViewById(R.id.stepHours1);
-        stepMinutes1 = findViewById(R.id.stepMinutes1);
         imgPreview = findViewById(R.id.imgAnteprima);
-        imgStep1 = findViewById(R.id.imgStep1);
         ingName = findViewById(R.id.txtIngredient);
         ingQuantity = findViewById(R.id.txtQuantity);
         btnAddStep = findViewById(R.id.addstep);
@@ -140,7 +136,6 @@ public class CreateRecipe extends AppCompatActivity {
         isEditing = getIntent().getBooleanExtra("edit", false); //Per controllare se è in corso una modifica o una nuova ricetta
         title.setEnabled(!isEditing); //Disabilita la modifica del titolo
         main = new Step("", previewUri);
-        firstStep = new Step("", stepUri);
 
         //Inizializzo Firebase
         db = FirebaseFirestore.getInstance();
@@ -164,26 +159,10 @@ public class CreateRecipe extends AppCompatActivity {
             totalTime.setText(editRecipe.getTime());
             actwType.setText(editRecipe.getType(), false); //Il filtro va messo su falso , altrimenti il menu a tendina mostra solo l'elemento impostato tramite questa istruzione
 
+            //Popola la lista degli step con le sezioni estratte dall'oggetto editRecipe
             ArrayList<Step> steps = new ArrayList<>();
             ArrayList<Section> sections = editRecipe.getSections();
-            Section temp1 = sections.get(0);
-            int hours1 = temp1.getTimer() / 3600;
-            int minutes1 = (temp1.getTimer() % 3600) / 60;
-            steptext1.setText(temp1.getText());
-            stepHours1.setText(String.valueOf(hours1));
-            stepMinutes1.setText(String.valueOf(minutes1));
-            firstStep.setUrl(temp1.getImageUrl());
-            //Imposta l'immagine del primo step
-            if (!temp1.getImageUrl().equals("")) {
-                Glide.with(this)
-                        .load(temp1.getImageUrl())
-                        .apply(RequestOptions.skipMemoryCacheOf(true))
-                        .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
-                        .centerCrop()
-                        .into(imgStep1);
-            }
-            //Popola la lista degli step con le sezioni estratte dall'oggetto editRecipe
-            for (int i = 1; i < sections.size(); i++) {
+            for (int i = 0; i < sections.size(); i++) {
                 Section temp = sections.get(i);
                 int hours = temp.getTimer() / 3600;
                 int minutes = (temp.getTimer() % 3600) / 60;
@@ -206,24 +185,26 @@ public class CreateRecipe extends AppCompatActivity {
 
         } else { //Se è in corso la creazione di una nuova ricetta
             getSupportActionBar().setTitle("Crea nuova ricetta");
+            //Passa la lista degli ingredienti e degli step ai corrispondenti adapter
+            ArrayList<Step> tempArray = new ArrayList<>();
             mAdapter = new StepAdapter(new ArrayList<Step>(), this);
+            mAdapter.addStep(); //Aggiungi il primo step obbligatorio
             mRecyclerView.setAdapter(mAdapter);
             iAdapter = new IngredientsRecyclerViewAdapter(new ArrayList<Ingredient>());
             iRecyclerView.setAdapter(iAdapter);
-
+            //Crea la ricetta da condividere e si assegnano le informazioni dell'utente
             mRecipe = new Recipe();
             mRecipe.setAuthorName(currentUser.getDisplayName());
             mRecipe.setAuthorId(currentUser.getUid());
             mRecipe.setProfilePicUrl("missingprofile");
-
         }
-
 
         permissions.add(Manifest.permission.CAMERA);
         permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
         permissions.add(Manifest.permission.READ_EXTERNAL_STORAGE);
         permissionsToRequest = findUnaskedPermissions(permissions);
 
+        //ClickListener per aggiungere uno step
         btnAddStep.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -269,17 +250,6 @@ public class CreateRecipe extends AppCompatActivity {
 
             }
         });
-
-        imgStep1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (permissionsToRequest.size() > 0) {
-                    requestPermissions(permissionsToRequest.toArray(new String[permissionsToRequest.size()]), ALL_PERMISSIONS_RESULT);
-                } else {
-                    startActivityForResult(ImagePickActivity.getPickImageChooserIntent(CreateRecipe.this, "firstStep"), STEP1_REQUEST);
-                }
-            }
-        });
     }
 
     @Override
@@ -305,7 +275,7 @@ public class CreateRecipe extends AppCompatActivity {
                 finish();
             }
         } else if (id == R.id.exitSave) { //Esegue l'upload e fa partire il task per la condivisione
-            if (checkInfo()) { //Controlla che le informazioni principali siano tutte inserite
+            if (checkInfoNotComplete()) { //Controlla che le informazioni principali siano tutte inserite
                 View view = findViewById(R.id.createRecipeLinearLayout1);
                 Snackbar.make(view, R.string.minimum_info_required, Snackbar.LENGTH_LONG).show();
             } else {
@@ -314,10 +284,6 @@ public class CreateRecipe extends AppCompatActivity {
                     if (previewUri != null) {
                         main.setUrl("");
                         ImagePickActivity.uploadToStorage(this, previewUri, folder, "preview", main);
-                    }
-                    if (stepUri != null) {
-                        firstStep.setUrl("");
-                        ImagePickActivity.uploadToStorage(this, stepUri, folder, "firstStep", firstStep);
                     }
                     for (int i = 0; i < mAdapter.getItemCount(); i++) {
                         if (mAdapter.getSteps().get(i).getHasPicture()) {
@@ -361,25 +327,6 @@ public class CreateRecipe extends AppCompatActivity {
                         .into(imgPreview);
             }
         }
-        if (requestCode == STEP1_REQUEST && resultCode == RESULT_OK) {
-            firstStep.setHasPicture(true);
-            if (ImagePickActivity.getPickImageResultUri(this, intent, "firstStep") != null) {
-                //Prendi l'uri assegnato alla cache
-                stepUri = ImagePickActivity.getPickImageResultUri(this, intent, "firstStep");
-                Glide.with(this)
-                        .load(stepUri)
-                        .apply(RequestOptions.skipMemoryCacheOf(true))
-                        .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
-                        .centerCrop()
-                        .into(imgStep1);
-            } else {
-                Bitmap bitmap = (Bitmap) intent.getExtras().get("data");
-                Glide.with(this)
-                        .load(bitmap)
-                        .centerCrop()
-                        .into(imgStep1);
-            }
-        }
         if (requestCode == STEP_REQUEST && resultCode == RESULT_OK) { //Request delle'immagini degli step provenienti dallo StepAdapter
             List<Step> templist = mAdapter.getSteps();
             int position = mAdapter.getCurrentPicPosition(); //Per sapere quale elemento della RecyclerView è stato cliccato
@@ -395,12 +342,8 @@ public class CreateRecipe extends AppCompatActivity {
     private void disableEditing() {
         imgPreview.setEnabled(false);
         title.setEnabled(false);
-        imgStep1.setEnabled(false);
-        steptext1.setEnabled(false);
         actwType.setEnabled(false);
         totalTime.setEnabled(false);
-        stepHours1.setEnabled(false);
-        stepMinutes1.setEnabled(false);
         ingName.setEnabled(false);
         ingQuantity.setEnabled(false);
         btnAddIng.setEnabled(false);
@@ -411,20 +354,21 @@ public class CreateRecipe extends AppCompatActivity {
     }
 
     //Funzione per controllare che l'utente abbia inserito tutti le informazioni generali
-    private boolean checkInfo() {
-        boolean preview = (previewUri == null && !isEditing);
+    private boolean checkInfoNotComplete() {
+        boolean preview = (previewUri == null && !isEditing); //Se non è in corso la modifica l'utente deve caricare obbligatoriamente l'immagine di anteprima
         boolean t = TextUtils.isEmpty(title.getText());
         String trimmed;
         if (!t) {
             trimmed = title.getText().toString().trim(); //Controlla che l'utente non abbia inserito solo spazi
             t = t || trimmed.equals("");
         }
-        boolean s = TextUtils.isEmpty(steptext1.getText());
+        //Check del primo step di cui la descrizione è obbligatoria
+        boolean s = TextUtils.isEmpty(mAdapter.getSteps().get(0).getText());
         if (!s) {
-            trimmed = steptext1.getText().toString().trim(); //Controlla che l'utente non abbia inserito solo spazi
+            trimmed = mAdapter.getSteps().get(0).getText().toString().trim(); //Controlla che l'utente non abbia inserito solo spazi
             s = s || trimmed.equals("");
         }
-
+        //Oltre ai booleani precedenti controlla inoltre che ci sia almeno un ingrediente e sia selezionato il tipo di pietanza
         return preview || t || s || TextUtils.isEmpty(totalTime.getText()) || TextUtils.isEmpty(actwType.getText()) || iAdapter.getItemCount() == 0;
     }
 
@@ -441,8 +385,6 @@ public class CreateRecipe extends AppCompatActivity {
                 if(isCancelled()) break;
                 if (!main.getUrl().equals("")) {
                     finishedUploading = true;
-                    if (firstStep.getHasPicture() && firstStep.getUrl().equals(""))
-                        finishedUploading = false;
                     for (int i = 0; i < mAdapter.getItemCount(); i++) {
                         if (mAdapter.getSteps().get(i).getHasPicture() && mAdapter.getSteps().get(i).getUrl().equals("")) {
                             finishedUploading = false;
@@ -458,7 +400,7 @@ public class CreateRecipe extends AppCompatActivity {
         protected void onPostExecute(Long result) {
             View view = findViewById(R.id.createRecipeLinearLayout1);
             Snackbar snackbar =
-                    Snackbar.make(view, R.string.uploading, Snackbar.LENGTH_INDEFINITE)
+                    Snackbar.make(view, R.string.done_uploading, Snackbar.LENGTH_INDEFINITE)
                             .setAction("CONDIVIDI", new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -473,13 +415,9 @@ public class CreateRecipe extends AppCompatActivity {
                                     }
                                     mRecipe.setIngNames(names);
                                     mRecipe.setTime(totalTime.getText().toString());
-                                    ArrayList<Section> sections = new ArrayList<>();
-                                    //Timer primo step
-                                    int hours1 = (TextUtils.isEmpty(stepHours1.getText())) ? 0 : Integer.parseInt(stepHours1.getText().toString());
-                                    int minutes1 = (TextUtils.isEmpty(stepMinutes1.getText())) ? 0 : Integer.parseInt(stepMinutes1.getText().toString());
-                                    int timer1 = hours1 * 3600 + minutes1 * 60;
-                                    sections.add(new Section(steptext1.getText().toString().trim(), firstStep.getUrl(), timer1));
+
                                     //Aggiunge alla lista di oggetti Section gli step dell'editor con i rispettivi URL e il timer convertito in secondi
+                                    ArrayList<Section> sections = new ArrayList<>();
                                     List<Step> templist = mAdapter.getSteps();
                                     for (int i = 0; i < mAdapter.getItemCount(); i++) {
                                         int hours = (TextUtils.isEmpty(templist.get(i).getHours())) ? 0 : Integer.parseInt(templist.get(i).getHours());
@@ -488,6 +426,7 @@ public class CreateRecipe extends AppCompatActivity {
                                         sections.add(new Section(templist.get(i).getText().trim(), templist.get(i).getUrl(), time));
                                     }
                                     mRecipe.setSections(sections);
+
                                     if (isEditing) {
                                         //aggiorna la ricetta esistente
                                         db.collection("Recipes").document(getIntent().getStringExtra("recipeId"))
