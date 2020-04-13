@@ -113,7 +113,7 @@ public class LmrFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CREATE_REQUEST) {
-            if(requestCode == getActivity().RESULT_OK) {
+            if(resultCode == getActivity().RESULT_OK) {
                 downloadRecipes();
             }
         }

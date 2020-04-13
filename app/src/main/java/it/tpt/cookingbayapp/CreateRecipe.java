@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 
@@ -83,7 +84,6 @@ public class CreateRecipe extends AppCompatActivity {
     private ArrayList<String> permissions = new ArrayList<>();
     private final static int ALL_PERMISSIONS_RESULT = 107;
     private final static int PREVIEW_REQUEST = 234;
-    private final static int STEP1_REQUEST = 235;
     private final static int STEP_REQUEST = 236;
 
     private Recipe mRecipe; //Ricetta che verrà caricata sul FireStore
@@ -129,8 +129,6 @@ public class CreateRecipe extends AppCompatActivity {
         btnAddStep = findViewById(R.id.addstep);
         btnAddIng = findViewById(R.id.addingredient);
         btnDelIng = findViewById(R.id.deleteIngredient);
-
-        mCheckUploadTask = new CheckUploadTask(); //Crea l'AsyncTask
 
         isUploading = false; //Ovviamente falso all'atto di creazione dell'activity
         isEditing = getIntent().getBooleanExtra("edit", false); //Per controllare se è in corso una modifica o una nuova ricetta
@@ -255,8 +253,8 @@ public class CreateRecipe extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        //Termina l'asyncTask alla distruzione dell'activity
-        mCheckUploadTask.cancel(true);
+        //Termina l'asyncTask alla distruzione dell'activity (se non nullo)
+        if(mCheckUploadTask != null) mCheckUploadTask.cancel(true);
     }
 
     @Override
@@ -300,6 +298,7 @@ public class CreateRecipe extends AppCompatActivity {
                     ProgressBar bar = new ProgressBar(this);
                     contentLay.addView(bar);
                     up.show(); //Mostra la snackbar
+                    mCheckUploadTask = new CheckUploadTask();
                     mCheckUploadTask.execute(); //Esegui l'AsyncTask
                 }
             }
