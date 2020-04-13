@@ -215,7 +215,7 @@ public class CreateRecipe extends AppCompatActivity {
             mRecipe.setAuthorName(currentUser.getDisplayName());
             mRecipe.setAuthorId(currentUser.getUid());
             mRecipe.setProfilePicUrl("missingprofile");
-            
+
         }
 
 
@@ -299,13 +299,13 @@ public class CreateRecipe extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.exitNoSave) {
-            if (isUploading == false) {
+        if (id == R.id.exitNoSave) { //Esci senza salvare (stessa funzione del premere indietro)
+            if (isUploading == false) { //Se è in corso l'upload evita che l'utente prema questa opzione
                 Toast.makeText(this, "Ricetta non salvata", Toast.LENGTH_SHORT).show();
                 finish();
             }
-        } else if (id == R.id.exitSave) {
-            if (checkInfo()) {
+        } else if (id == R.id.exitSave) { //Esegue l'upload e fa partire il task per la condivisione
+            if (checkInfo()) { //Controlla che le informazioni principali siano tutte inserite
                 View view = findViewById(R.id.createRecipeLinearLayout1);
                 Snackbar.make(view, R.string.minimum_info_required, Snackbar.LENGTH_LONG).show();
             } else {
@@ -325,16 +325,16 @@ public class CreateRecipe extends AppCompatActivity {
                             ImagePickActivity.uploadToStorage(this, mAdapter.getSteps().get(i).getStepUri(), folder, "step" + i, mAdapter.getSteps().get(i));
                         }
                     }
-                    View view = findViewById(R.id.createRecipeLinearLayout1);
                     isUploading = true;
-                    disableEditing();
-                    Snackbar up = Snackbar.make(view, "Attendi l'upload", Snackbar.LENGTH_INDEFINITE);
+                    disableEditing(); //Disabilita l'editing durante l'upload
+                    View view = findViewById(R.id.createRecipeLinearLayout1);
+                    Snackbar up = Snackbar.make(view, R.string.uploading, Snackbar.LENGTH_INDEFINITE);
+                    //Si assegna una progress bar circolare alla snackbar
                     ViewGroup contentLay = (ViewGroup) up.getView().findViewById(com.google.android.material.R.id.snackbar_text).getParent();
                     ProgressBar bar = new ProgressBar(this);
                     contentLay.addView(bar);
-                    up.show();
-                    mCheckUploadTask.execute();
-
+                    up.show(); //Mostra la snackbar
+                    mCheckUploadTask.execute(); //Esegui l'AsyncTask
                 }
             }
         }
@@ -343,11 +343,10 @@ public class CreateRecipe extends AppCompatActivity {
 
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
-        if (requestCode == PREVIEW_REQUEST && resultCode == RESULT_OK) {
-            isUploading = false;
-            if (ImagePickActivity.getPickImageResultUri(this, intent, "preview") != null) {
-                //Prendi l'uri assegnato alla cache
-                previewUri = ImagePickActivity.getPickImageResultUri(this, intent, "preview");
+        if (requestCode == PREVIEW_REQUEST && resultCode == RESULT_OK) { //Request dell'immagine di anteprima
+            //Prendi l'uri assegnato alla cache
+            previewUri = ImagePickActivity.getPickImageResultUri(this, intent, "preview");
+            if (previewUri != null) {
                 Glide.with(this)
                         .load(previewUri)
                         .apply(RequestOptions.skipMemoryCacheOf(true))
@@ -363,7 +362,6 @@ public class CreateRecipe extends AppCompatActivity {
             }
         }
         if (requestCode == STEP1_REQUEST && resultCode == RESULT_OK) {
-            isUploading = false;
             firstStep.setHasPicture(true);
             if (ImagePickActivity.getPickImageResultUri(this, intent, "firstStep") != null) {
                 //Prendi l'uri assegnato alla cache
@@ -382,11 +380,10 @@ public class CreateRecipe extends AppCompatActivity {
                         .into(imgStep1);
             }
         }
-        if (requestCode == STEP_REQUEST && resultCode == RESULT_OK) {
-            isUploading = false;
+        if (requestCode == STEP_REQUEST && resultCode == RESULT_OK) { //Request delle'immagini degli step provenienti dallo StepAdapter
             List<Step> templist = mAdapter.getSteps();
-            int position = mAdapter.getCurrentPicPosition();
-            templist.get(position).setHasPicture(true);
+            int position = mAdapter.getCurrentPicPosition(); //Per sapere quale elemento della RecyclerView è stato cliccato
+            templist.get(position).setHasPicture(true); //Comunica che lo step ha un'immagine e necessita dunque dell'upload
             if (ImagePickActivity.getPickImageResultUri(this, intent, "step" + position) != null) {
                 templist.get(position).setStepUri(ImagePickActivity.getPickImageResultUri(this, intent, "step" + position));
                 mAdapter.notifyItemChanged(position);
@@ -431,6 +428,10 @@ public class CreateRecipe extends AppCompatActivity {
         return preview || t || s || TextUtils.isEmpty(totalTime.getText()) || TextUtils.isEmpty(actwType.getText()) || iAdapter.getItemCount() == 0;
     }
 
+    /**
+     * AsyncTask che controlla che tutti gli upload siano completi
+     * di seguito avvia una snackbar con pulsante per finalizzare la condivisione (onPostExecute)
+     */
     private class CheckUploadTask extends AsyncTask<Void, Integer, Long> {
         @Override
         protected Long doInBackground(Void... voids) {
@@ -477,8 +478,8 @@ public class CreateRecipe extends AppCompatActivity {
                                     int hours1 = (TextUtils.isEmpty(stepHours1.getText())) ? 0 : Integer.parseInt(stepHours1.getText().toString());
                                     int minutes1 = (TextUtils.isEmpty(stepMinutes1.getText())) ? 0 : Integer.parseInt(stepMinutes1.getText().toString());
                                     int timer1 = hours1 * 3600 + minutes1 * 60;
-
                                     sections.add(new Section(steptext1.getText().toString().trim(), firstStep.getUrl(), timer1));
+                                    //Aggiunge alla lista di oggetti Section gli step dell'editor con i rispettivi URL e il timer convertito in secondi
                                     List<Step> templist = mAdapter.getSteps();
                                     for (int i = 0; i < mAdapter.getItemCount(); i++) {
                                         int hours = (TextUtils.isEmpty(templist.get(i).getHours())) ? 0 : Integer.parseInt(templist.get(i).getHours());
@@ -533,11 +534,13 @@ public class CreateRecipe extends AppCompatActivity {
         }
 
         @Override
-        protected void onCancelled() {
+        protected void onCancelled() { //Nel caso l'activity venga chiusa prima del completamento elimina i file caricati
             super.onCancelled();
             String deletePath = "images/" + currentUser.getUid() + "/" + title.getText().toString().trim();
             FirebaseStorage storage = FirebaseStorage.getInstance();
             StorageReference listRef = storage.getReference().child(deletePath);
+            //Elimina tutti i file della cartella specificata (La cartella in se viene eliminata da Firebase automaticamente se non contiene più file)
+            //Eliminare direttamente la cartella al momento non è possibile
             listRef.listAll()
                     .addOnSuccessListener(new OnSuccessListener<ListResult>() {
                         @Override
