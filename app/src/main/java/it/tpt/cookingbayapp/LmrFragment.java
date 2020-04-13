@@ -81,7 +81,7 @@ public class LmrFragment extends Fragment {
                             recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1, GridLayoutManager.VERTICAL, false));
                             adapter = new PersonalCardRecyclerViewAdapter(getActivity(), recipeList, recipeIds);
                             recyclerView.setAdapter(adapter);
-                            Log.i("Finish", "Recipes downloaded");
+                            Log.i("Redownload", "Recipes downloaded");
                         } else {
                             Log.d("TAG", "Error getting documents: ", task.getException());
                         }
@@ -112,9 +112,10 @@ public class LmrFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == CREATE_REQUEST && resultCode == getActivity().RESULT_OK) {
-            downloadRecipes();
-            Log.i("Redownload", "Downloaded again");
+        if (requestCode == CREATE_REQUEST) {
+            if(requestCode == getActivity().RESULT_OK) {
+                downloadRecipes();
+            }
         }
     }
 

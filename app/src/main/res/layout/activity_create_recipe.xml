@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
     <LinearLayout
         android:id="@+id/createRecipeLinearLayout1"
         android:layout_width="match_parent"
@@ -14,6 +13,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <ImageView
                 android:id="@+id/imgAnteprima"
                 android:layout_width="0dp"
@@ -317,7 +317,6 @@
                         android:layout_height="match_parent" />
 
                 </LinearLayout>
-
                 <Button
                     android:id="@+id/addstep"
                     style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
@@ -331,3 +330,4 @@
         </LinearLayout>
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>
+

@@ -17,7 +17,8 @@
     <string name="ingredients">Ingredienti</string>
     <string name="sorgente">Seleziona la sorgente</string>
     <string name="minimum_info_required">Perfavore inserisci le informazioni principali e la descrizione del primo step!</string>
-    <string name="uploading">Attendi l\'upload delle immagini per la condivisione</string>
+    <string name="uploading">Attendi l\'upload delle immagini</string>
+    <string name="done_uploading">Upload completato!</string>
     <string name="done_sharing">Ricetta Condivisa!</string>
     <string name="done_editing">Ricetta modificata!</string>
     <string name="ing_required">Perfavore inserisci il nome e la quantità dell\'ingrediente</string>

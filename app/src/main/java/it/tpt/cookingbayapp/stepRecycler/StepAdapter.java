@@ -29,11 +29,17 @@ public class StepAdapter extends RecyclerView.Adapter<StepViewHolder> {
     private final static int STEP_REQUEST = 236;
     private int currentPicPosition;
     private boolean disabled;
+    private boolean editing;
 
     public StepAdapter(List<Step> steps, Context context) {
         this.steps = steps;
         mContext = context;
         disabled = false;
+        editing = false;
+    }
+
+    public void setEditing(boolean editing) {
+        this.editing = editing;
     }
 
     public void setDisabled(boolean disabled) {
@@ -162,6 +168,9 @@ public class StepAdapter extends RecyclerView.Adapter<StepViewHolder> {
                 holder.steptext.setEnabled(false);
                 holder.imgStep.setEnabled(false);
                 holder.delete.setEnabled(false);
+            }
+            if(editing) {
+                holder.delete.setVisibility(View.GONE);
             }
 
         }
