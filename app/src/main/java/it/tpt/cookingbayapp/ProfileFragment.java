@@ -30,9 +30,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.Arrays;
-import java.util.List;
-
 
 public class ProfileFragment extends Fragment {
 
@@ -43,7 +40,6 @@ public class ProfileFragment extends Fragment {
     private ImageView profilePic;
     private Uri profileUri;
     private TextView username;
-    public static final int RC_SIGN_IN = 105;
     private final static int PROPIC_REQUEST = 239;
     public static final int LOGIN_REQUEST = 101;
 
@@ -97,19 +93,6 @@ public class ProfileFragment extends Fragment {
 
                             Intent intent = new Intent(getActivity(), LoginActivity.class);
                             getActivity().startActivityForResult(intent, LOGIN_REQUEST);
-                         /*   List<AuthUI.IdpConfig> providers = Arrays.asList(
-                                    new AuthUI.IdpConfig.EmailBuilder().build(),
-                                    new AuthUI.IdpConfig.AnonymousBuilder().build());
-
-                            // Create and launch sign-in intent
-                            getActivity().startActivityForResult(
-                                    AuthUI.getInstance()
-                                            .createSignInIntentBuilder()
-                                            .setIsSmartLockEnabled(false)
-                                            .setAvailableProviders(providers)
-                                            .build(),
-                                    RC_SIGN_IN); */
-
                         }
                     });
                 } else {
@@ -119,19 +102,7 @@ public class ProfileFragment extends Fragment {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     Intent intent = new Intent(getActivity(), LoginActivity.class);
-                                    startActivityForResult(intent, LOGIN_REQUEST);
-                                    /* List<AuthUI.IdpConfig> providers = Arrays.asList(
-                                            new AuthUI.IdpConfig.EmailBuilder().build(),
-                                            new AuthUI.IdpConfig.AnonymousBuilder().build());
-
-                                    // Create and launch sign-in intent
-                                    getActivity().startActivityForResult(
-                                            AuthUI.getInstance()
-                                                    .createSignInIntentBuilder()
-                                                    .setIsSmartLockEnabled(false)
-                                                    .setAvailableProviders(providers)
-                                                    .build(),
-                                            RC_SIGN_IN); */
+                                    getActivity().startActivityForResult(intent, LOGIN_REQUEST);
                                 }
                             });
                 }
