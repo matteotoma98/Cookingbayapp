@@ -56,8 +56,7 @@ public class RdgFragment extends Fragment {
 
         db = FirebaseFirestore.getInstance();
 
-        downloadRecipes();
-        Log.i("download", "Recipes downloaded");
+        downloadRecipes(); //Scarica le ricette
 
         //int largePadding = getResources().getDimensionPixelSize(R.dimen.shr_product_grid_spacing);
         //int smallPadding = getResources().getDimensionPixelSize(R.dimen.shr_product_grid_spacing_small);
@@ -66,9 +65,10 @@ public class RdgFragment extends Fragment {
         return view;
     }
 
-
+    /**
+     * Scarica le ricette giornaliere da Firestore e le assegna al recyclerView
+     */
     private void downloadRecipes() {
-        Log.i("seconds", String.valueOf(getCurrentDayInSeconds()));
         db.collection("Recipes")
                 .whereGreaterThanOrEqualTo("date", getCurrentDayInSeconds())
                 .get()
@@ -92,6 +92,11 @@ public class RdgFragment extends Fragment {
                 });
     }
 
+    /**
+     * Ottiene i secondi passati dal 1970 alle ore 0:00 del giorno corrente
+     * Si utilizzano i secondi perché Timestamp non é serializable mentre Date non é Parceable
+     * @return Secondi
+     */
     public long getCurrentDayInSeconds() {
         Calendar c = Calendar.getInstance();
         c.set(Calendar.HOUR_OF_DAY, 0);
