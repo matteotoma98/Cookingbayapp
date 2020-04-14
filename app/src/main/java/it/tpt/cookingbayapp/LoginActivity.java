@@ -49,6 +49,8 @@ public class LoginActivity extends AppCompatActivity {
         btnRegistrati = findViewById(R.id.register);
         btnAccedi = findViewById(R.id.loginButton);
         btnAnonymous = findViewById(R.id.anonymous_button);
+
+        //Click listener per accedere e terminare l'activity
         btnAccedi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,7 +81,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
-
+        //Click listener per avviare l'attività di registrazione
         btnRegistrati.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,6 +89,7 @@ public class LoginActivity extends AppCompatActivity {
                 startActivityForResult(intent, REGISTER_REQUEST);
             }
         });
+        //Click listener per accedere come ospite
         btnAnonymous.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -104,7 +107,9 @@ public class LoginActivity extends AppCompatActivity {
                                                     if (task.isSuccessful()) {
                                                         // Sign in success, update UI with the signed-in user's information
                                                         Log.d("signin", "signInAnonymously:success");
-                                                        ((AppCompatActivity) LoginActivity.this).getSupportActionBar().setTitle("Cooking Bay");
+                                                        getSupportActionBar().setTitle("Cooking Bay");
+                                                        setResult(RESULT_OK);
+                                                        finish();
                                                     } else {
                                                         // If sign in fails, display a message to the user.
                                                         Log.w("signinerror", "signInAnonymously:failure", task.getException());
@@ -115,8 +120,6 @@ public class LoginActivity extends AppCompatActivity {
                                 }
                             });
                 }
-                setResult(RESULT_OK);
-                finish();
             }
         });
     }
