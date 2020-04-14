@@ -55,7 +55,7 @@ public class LoginActivity extends AppCompatActivity {
                                         FirebaseUser user = mAuth.getCurrentUser();
                                         mAuth.getUid();
                                         Intent intent = new Intent();
-                                        intent.putExtra("name", user.getDisplayName());
+                                        intent.putExtra("username", user.getDisplayName());
                                         setResult(RESULT_OK, intent);
                                         finish();
                                         // Sign in success, update UI with the signed-in user's information
@@ -91,9 +91,9 @@ public class LoginActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, intent);
         if (requestCode == REGISTER_REQUEST) {
             if (resultCode == RESULT_OK) {
-                String name = intent.getExtras().getString("name");
+                String username = intent.getExtras().getString("username");
                 Intent i = new Intent();
-                i.putExtra("name", name);
+                i.putExtra("username", username);
                 setResult(RESULT_OK, i);
                 finish();
             }

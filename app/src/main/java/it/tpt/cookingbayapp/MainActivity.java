@@ -103,9 +103,9 @@ public class MainActivity extends AppCompatActivity {
         }
         if (requestCode == LOGIN_REQUEST) {
             if (resultCode == RESULT_OK) {
-                String name = intent.getExtras().getString("name");
+                String username = intent.getExtras().getString("username");
 
-                getSupportActionBar().setTitle(name); //dà il nome e il cognome in alto nella action bar
+                getSupportActionBar().setTitle(username); //dà il nome e il cognome in alto nella action bar
                 SharedPreferences preferences = getSharedPreferences("login", MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putBoolean("notSignedIn", false);
@@ -146,9 +146,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void writeUserToDb(String name, String email, String uid) {
+    private void writeUserToDb(String username, String email, String uid) {
         Map<String, Object> user = new HashMap<>();
-        user.put("nome", name);
+        user.put("username", username);
         user.put("email", email);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("Users").document(uid).set(user);

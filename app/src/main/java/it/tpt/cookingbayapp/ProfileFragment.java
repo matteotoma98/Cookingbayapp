@@ -42,7 +42,7 @@ public class ProfileFragment extends Fragment {
     private FirebaseUser currentUser;
     private ImageView profilePic;
     private Uri profileUri;
-    private TextView nome_utente;
+    private TextView username;
     public static final int RC_SIGN_IN = 105;
     private final static int PROPIC_REQUEST = 239;
 
@@ -60,7 +60,7 @@ public class ProfileFragment extends Fragment {
         currentUser = mAuth.getCurrentUser();
         profilePic = view.findViewById(R.id.userProfilePic);
         String uid = currentUser.getUid();
-        nome_utente = view.findViewById(R.id.nome_utente);
+        username = view.findViewById(R.id.textUsername);
         return view;
     }
 
@@ -76,7 +76,9 @@ public class ProfileFragment extends Fragment {
         profilePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivityForResult(ImagePickActivity.getPickImageChooserIntent(getActivity(), "profile"), PROPIC_REQUEST);
+                if(!currentUser.isAnonymous()) {
+                    startActivityForResult(ImagePickActivity.getPickImageChooserIntent(getActivity(), "profile"), PROPIC_REQUEST);
+                } else  Snackbar.make(layout, R.string.profilepicanonymous, Snackbar.LENGTH_LONG).show();
             }
         });
         super.onViewCreated(view, savedInstanceState);

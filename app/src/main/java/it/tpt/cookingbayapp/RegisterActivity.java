@@ -23,7 +23,7 @@ import java.util.Map;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    private TextInputEditText textName, textSurname, textEmail, textPassword;
+    private TextInputEditText textUsername, textEmail, textPassword;
     private Button btnRegistra;
     private FirebaseAuth mAuth;
     private Button btnAccedi;
@@ -36,8 +36,7 @@ public class RegisterActivity extends AppCompatActivity {
         //Istanza database firebase
         mAuth = FirebaseAuth.getInstance();
 
-        textName = findViewById(R.id.textName);
-        textSurname = findViewById(R.id.textSurname);
+        textUsername = findViewById(R.id.textUsername);
         textEmail = findViewById(R.id.textEmail);
         textPassword = findViewById(R.id.textPassword);
         btnRegistra = findViewById(R.id.containedButton);
@@ -45,7 +44,7 @@ public class RegisterActivity extends AppCompatActivity {
         btnAccedi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent  intent= new Intent();
+                Intent intent = new Intent();
                 finish();
             }
         });
@@ -55,8 +54,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                 try {
                     //Il final serve per renderli visibili nella classe interna OnCompleteListener
-                    final String name = textName.getText().toString().trim();
-                    final String surname = textSurname.getText().toString().trim();
+                    final String username = textUsername.getText().toString().trim();
                     final String email = textEmail.getText().toString().trim();
                     final String password = textPassword.getText().toString();
                     final String profilepicture = "missingprofile";
@@ -68,15 +66,15 @@ public class RegisterActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 final FirebaseUser user = mAuth.getCurrentUser();
                                 UserProfileChangeRequest profileChangeRequest = new UserProfileChangeRequest.Builder()
-                                        .setDisplayName(name + " " + surname)
+                                        .setDisplayName(username)
                                         .build();
 
                                 user.updateProfile(profileChangeRequest).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
-                                        writeUserToDb(name, surname, email, user.getUid(),profilepicture);
+                                        writeUserToDb(username, email, user.getUid(), profilepicture);
                                         Intent intent = new Intent();
-                                        intent.putExtra("name", user.getDisplayName());
+                                        intent.putExtra("username", user.getDisplayName());
                                         setResult(RESULT_OK, intent);
                                         finish();
                                     }
@@ -93,15 +91,12 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
-        //Action Bar rimossa nel theme, di conseguenza la seguente istruzione fa crashare il sistema
-        //getSupportActionBar().setTitle(getString(R.string.login));
     }
 
-    private void writeUserToDb(String name, String surname, String email, String uid, String profilepicture) {
+    private void writeUserToDb(String username, String email, String uid, String profilepicture) {
         //SCRIVO SUL DB DOPO LA REGISTRAZIONE
         Map<String, Object> user = new HashMap<>();
-        user.put("nome", name);
-        user.put("cognome", surname);
+        user.put("nome", username);
         user.put("email", email);
         user.put("profilepic", profilepicture);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
