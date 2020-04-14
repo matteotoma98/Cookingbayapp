@@ -73,17 +73,19 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
 
         final View layout = view.findViewById(R.id.profileCoordinatorLayout);
+
+        super.onViewCreated(view, savedInstanceState);
+        exit = getView().findViewById(R.id.logout);
+        switch_account = getView().findViewById(R.id.cambia_account);
         profilePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!currentUser.isAnonymous()) {
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                if(!user.isAnonymous()) {
                     startActivityForResult(ImagePickActivity.getPickImageChooserIntent(getActivity(), "profile"), PROPIC_REQUEST);
                 } else  Snackbar.make(layout, R.string.profilepicanonymous, Snackbar.LENGTH_LONG).show();
             }
         });
-        super.onViewCreated(view, savedInstanceState);
-        exit = getView().findViewById(R.id.logout);
-        switch_account = getView().findViewById(R.id.cambia_account);
         switch_account.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -164,6 +166,7 @@ public class ProfileFragment extends Fragment {
             }
         });
     }
+
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
