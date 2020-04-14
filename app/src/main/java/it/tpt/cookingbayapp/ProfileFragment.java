@@ -96,7 +96,7 @@ public class ProfileFragment extends Fragment {
                         public void onComplete(@NonNull Task<Void> task) {
 
                             Intent intent = new Intent(getActivity(), LoginActivity.class);
-                            startActivityForResult(intent, LOGIN_REQUEST);
+                            getActivity().startActivityForResult(intent, LOGIN_REQUEST);
                          /*   List<AuthUI.IdpConfig> providers = Arrays.asList(
                                     new AuthUI.IdpConfig.EmailBuilder().build(),
                                     new AuthUI.IdpConfig.AnonymousBuilder().build());
