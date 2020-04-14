@@ -93,34 +93,31 @@ public class LoginActivity extends AppCompatActivity {
         btnAnonymous.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                if (!user.isAnonymous()) {
-                    AuthUI.getInstance()
-                            .signOut(LoginActivity.this)
-                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    mAuth.signInAnonymously()
-                                            .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<AuthResult> task) {
-                                                    if (task.isSuccessful()) {
-                                                        // Sign in success, update UI with the signed-in user's information
-                                                        Log.d("signin", "signInAnonymously:success");
-                                                        getSupportActionBar().setTitle("Cooking Bay");
-                                                        setResult(RESULT_OK);
-                                                        finish();
-                                                    } else {
-                                                        // If sign in fails, display a message to the user.
-                                                        Log.w("signinerror", "signInAnonymously:failure", task.getException());
-                                                        Toast.makeText(LoginActivity.this, R.string.exiterror, Toast.LENGTH_SHORT).show();
-                                                    }
+                AuthUI.getInstance()
+                        .signOut(LoginActivity.this)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                mAuth.signInAnonymously()
+                                        .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                                if (task.isSuccessful()) {
+                                                    // Sign in success, update UI with the signed-in user's information
+                                                    Log.d("signin", "signInAnonymously:success");
+                                                    setResult(RESULT_OK);
+                                                    finish();
+                                                } else {
+                                                    // If sign in fails, display a message to the user.
+                                                    Log.w("signinerror", "signInAnonymously:failure", task.getException());
+                                                    Toast.makeText(LoginActivity.this, R.string.exiterror, Toast.LENGTH_SHORT).show();
                                                 }
-                                            });
-                                }
-                            });
-                }
+                                            }
+                                        });
+                            }
+                        });
             }
+
         });
     }
 
