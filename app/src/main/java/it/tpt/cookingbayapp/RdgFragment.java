@@ -15,26 +15,19 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
 
 import it.tpt.cookingbayapp.cardRecycler.RecipeCardRecyclerViewAdapter;
-import it.tpt.cookingbayapp.recipeObject.Ingredient;
 import it.tpt.cookingbayapp.recipeObject.Recipe;
-import it.tpt.cookingbayapp.recipeObject.Section;
+
 
 
 public class RdgFragment extends Fragment {
@@ -75,7 +68,9 @@ public class RdgFragment extends Fragment {
 
 
     private void downloadRecipes() {
-        db.collectionGroup("Recipes")
+        Log.i("seconds", String.valueOf(getCurrentDayInSeconds()));
+        db.collection("Recipes")
+                .whereGreaterThanOrEqualTo("date", getCurrentDayInSeconds())
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -95,6 +90,17 @@ public class RdgFragment extends Fragment {
                         }
                     }
                 });
+    }
+
+    public long getCurrentDayInSeconds() {
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+        c.set(Calendar.MILLISECOND, 0);
+        long now = c.getTimeInMillis();
+        long secondsPassed = now / 1000;
+        return secondsPassed;
     }
 
     @Override

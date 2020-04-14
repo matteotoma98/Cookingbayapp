@@ -35,6 +35,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -447,6 +448,7 @@ public class CreateRecipe extends AppCompatActivity {
                                         finish();
                                     } else {
                                         //Aggiunge una nuova ricetta
+                                        mRecipe.setDate(Timestamp.now().getSeconds());
                                         db.collection("Recipes")
                                                 .add(mRecipe)
                                                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
