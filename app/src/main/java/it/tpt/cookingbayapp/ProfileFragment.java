@@ -96,15 +96,8 @@ public class ProfileFragment extends Fragment {
                         }
                     });
                 } else {
-                    AuthUI.getInstance()
-                            .signOut(getActivity())
-                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    Intent intent = new Intent(getActivity(), LoginActivity.class);
-                                    getActivity().startActivityForResult(intent, LOGIN_REQUEST);
-                                }
-                            });
+                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                    getActivity().startActivityForResult(intent, LOGIN_REQUEST);
                 }
             }
         });
