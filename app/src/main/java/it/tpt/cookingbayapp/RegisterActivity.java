@@ -44,7 +44,6 @@ public class RegisterActivity extends AppCompatActivity {
         btnAccedi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
                 finish();
             }
         });
@@ -72,10 +71,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 user.updateProfile(profileChangeRequest).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
-                                        writeUserToDb(username, email, user.getUid(), profilepicture);
-                                        Intent intent = new Intent();
-                                        intent.putExtra("username", user.getDisplayName());
-                                        setResult(RESULT_OK, intent);
+                                        setResult(RESULT_OK);
                                         finish();
                                     }
                                 });
@@ -91,17 +87,6 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
-    }
-
-    private void writeUserToDb(String username, String email, String uid, String profilepicture) {
-        //SCRIVO SUL DB DOPO LA REGISTRAZIONE
-        Map<String, Object> user = new HashMap<>();
-        user.put("nome", username);
-        user.put("email", email);
-        user.put("profilepic", profilepicture);
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("utenti").document(uid).set(user); //IL DOCUMENT E' L'UTENTE (STRING UID) CIOE' L'IDENTIFICATORE DEL DOCUMENTO
-        //OPERAZIONE EFFETTUATA IN MODO ASINCRONO, BISOGNEREBBE METTERE UN ONCOMPLETELISTENER (RIGA 62)
     }
 
     @Override

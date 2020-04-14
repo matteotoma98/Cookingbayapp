@@ -78,4 +78,26 @@
                 android:textColor="@color/colorAccent"
                 app:iconTint="@color/colorAccent" />
         </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        >
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Oppure"/>
+        <Button
+            android:id="@+id/anonymous_button"
+            style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Accedi come ospite"
+            android:textColor="@color/colorAccent"
+            app:iconTint="@color/colorAccent" />
+    </LinearLayout>
     </LinearLayout>
