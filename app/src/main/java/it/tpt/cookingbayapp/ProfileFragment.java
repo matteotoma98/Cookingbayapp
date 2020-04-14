@@ -45,7 +45,7 @@ public class ProfileFragment extends Fragment {
     private TextView username;
     public static final int RC_SIGN_IN = 105;
     private final static int PROPIC_REQUEST = 239;
-
+    public static final int LOGIN_REQUEST = 101;
 
     public ProfileFragment() {
     }
@@ -94,7 +94,10 @@ public class ProfileFragment extends Fragment {
                     user.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            List<AuthUI.IdpConfig> providers = Arrays.asList(
+
+                            Intent intent = new Intent(getActivity(), LoginActivity.class);
+                            startActivityForResult(intent, LOGIN_REQUEST);
+                         /*   List<AuthUI.IdpConfig> providers = Arrays.asList(
                                     new AuthUI.IdpConfig.EmailBuilder().build(),
                                     new AuthUI.IdpConfig.AnonymousBuilder().build());
 
@@ -105,7 +108,8 @@ public class ProfileFragment extends Fragment {
                                             .setIsSmartLockEnabled(false)
                                             .setAvailableProviders(providers)
                                             .build(),
-                                    RC_SIGN_IN);
+                                    RC_SIGN_IN); */
+
                         }
                     });
                 } else {
@@ -114,7 +118,9 @@ public class ProfileFragment extends Fragment {
                             .addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
-                                    List<AuthUI.IdpConfig> providers = Arrays.asList(
+                                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                                    startActivityForResult(intent, LOGIN_REQUEST);
+                                    /* List<AuthUI.IdpConfig> providers = Arrays.asList(
                                             new AuthUI.IdpConfig.EmailBuilder().build(),
                                             new AuthUI.IdpConfig.AnonymousBuilder().build());
 
@@ -125,7 +131,7 @@ public class ProfileFragment extends Fragment {
                                                     .setIsSmartLockEnabled(false)
                                                     .setAvailableProviders(providers)
                                                     .build(),
-                                            RC_SIGN_IN);
+                                            RC_SIGN_IN); */
                                 }
                             });
                 }

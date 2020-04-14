@@ -39,10 +39,10 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences preferences = getSharedPreferences("login", MODE_PRIVATE);
         if (preferences.getBoolean("notSignedIn", true)) {
-            /*
+
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivityForResult(intent, LOGIN_REQUEST);
-             */
+             /*
             List<AuthUI.IdpConfig> providers = Arrays.asList(
                     new AuthUI.IdpConfig.EmailBuilder().build(),
                     new AuthUI.IdpConfig.AnonymousBuilder().build());
@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
                             .setIsSmartLockEnabled(false)
                             .setAvailableProviders(providers)
                             .build(),
-                    RC_SIGN_IN);
+                    RC_SIGN_IN); */
         } else {
             if (currentUser.isAnonymous()) getSupportActionBar().setTitle("Cooking Bay");
             else getSupportActionBar().setTitle(currentUser.getDisplayName());
@@ -103,18 +103,33 @@ public class MainActivity extends AppCompatActivity {
         }
         if (requestCode == LOGIN_REQUEST) {
             if (resultCode == RESULT_OK) {
-                String username = intent.getExtras().getString("username");
-
-                getSupportActionBar().setTitle(username); //dà il nome e il cognome in alto nella action bar
+                // Successfully signed in
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                if (user.isAnonymous()) getSupportActionBar().setTitle("Cooking Bay");
+                else {
+                    getSupportActionBar().setTitle(user.getDisplayName());
+                    writeUserToDb(user.getDisplayName(), user.getEmail(), user.getUid());
+                }
+                //String username = intent.getExtras().getString("username");
+                //getSupportActionBar().setTitle(username); //dà il nome e il cognome in alto nella action bar
                 SharedPreferences preferences = getSharedPreferences("login", MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putBoolean("notSignedIn", false);
                 editor.apply();
 
-            } else {
-                getSupportActionBar().setTitle("Ospite");
-                Intent i = new Intent(MainActivity.this, LoginActivity.class);
-                startActivityForResult(i, LOGIN_REQUEST);
+            }
+            else {
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                if (user == null) FirebaseAuth.getInstance().signInAnonymously();
+                SharedPreferences preferences = getSharedPreferences("login", MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putBoolean("notSignedIn", false);
+                editor.apply();
+
+                // Sign in failed. If response is null the user canceled the
+                // sign-in flow using the back button. Otherwise check
+                // response.getError().getErrorCode() and handle the error.
+                // ...
             }
         } else if (requestCode == RC_SIGN_IN) {
             IdpResponse response = IdpResponse.fromResultIntent(intent);
