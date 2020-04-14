@@ -148,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
                 editor.apply();
             } else {
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                if (user == null) FirebaseAuth.getInstance().signInAnonymously();
+                if (user == null && !user.isAnonymous()) FirebaseAuth.getInstance().signInAnonymously();
                 SharedPreferences preferences = getSharedPreferences("login", MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putBoolean("notSignedIn", false);
