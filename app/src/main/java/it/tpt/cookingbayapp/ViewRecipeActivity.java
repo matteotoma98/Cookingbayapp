@@ -1,69 +1,91 @@
 package it.tpt.cookingbayapp;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
+import com.google.android.material.tabs.TabLayout;
 
-import de.hdodenhof.circleimageview.CircleImageView;
-import it.tpt.cookingbayapp.ingredientsRecycler.IngredientsRecyclerViewAdapter;
+import java.util.ArrayList;
+import java.util.List;
+
 import it.tpt.cookingbayapp.recipeObject.Recipe;
-import it.tpt.cookingbayapp.sectionRecycler.SectionAdapter;
+
 
 public class ViewRecipeActivity extends AppCompatActivity {
 
-    //Section text è momentaneo
-    TextView recipeTitle, recipeAuthor, recipeType, recipeTime;
-    CircleImageView profilePic;
-    ImageView previewPic;
-    RecyclerView iRecyclerView;
-    RecyclerView sRecyclerView;
+    private ViewPager mViewPager;
+    private TabLayout mTabLayout;
 
-    @Override
+    private VrFragment mVrFragment;
+    private ComFragment mComFragment;
+
+        @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_recipe);
 
-        recipeTitle = findViewById(R.id.viewRecipeTitle);
-        recipeAuthor = findViewById(R.id.viewRecipeAuthor);
-        recipeTime = findViewById(R.id.viewRecipeTime);
-        recipeType = findViewById(R.id.viewRecipeType);
-        previewPic = findViewById(R.id.viewPreviewPic);
-        profilePic = findViewById(R.id.viewProfilePic);
+        mViewPager=findViewById(R.id.view_pager);
+        mTabLayout=findViewById(R.id.tab_layout);
 
-        Intent intent = getIntent();
-        Recipe recipe = (Recipe) intent.getSerializableExtra("recipe");
+        mVrFragment= new VrFragment();
+        mComFragment= new ComFragment();
 
-        recipeTitle.setText(recipe.getTitle());
-        recipeAuthor.setText(recipe.getAuthorName());
-        recipeTime.setText(recipe.getTime() + " min");
-        recipeType.setText(recipe.getType());
+            Intent intent = getIntent();
+            Recipe recipe = (Recipe) intent.getSerializableExtra("recipe");
+            Bundle recipebundle = new Bundle();
+            recipebundle.putSerializable("recipe", recipe);
+            mVrFragment.setArguments(recipebundle);
+            getSupportActionBar().setTitle(recipe.getTitle());
 
-        if(recipe.getProfilePicUrl().toString().equals("missingprofile")){
-            profilePic.setImageResource(R.drawable.missingprofile);
+            mTabLayout.setupWithViewPager(mViewPager);
+
+        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(),0);
+        viewPagerAdapter.addFragment(mVrFragment, "Ricetta");
+        viewPagerAdapter.addFragment(mComFragment, "Commenti");
+            mViewPager.setAdapter(viewPagerAdapter);
+
+    }
+
+    private class ViewPagerAdapter extends FragmentPagerAdapter {
+
+            private List<Fragment> fragments= new ArrayList<>();
+            private List<String> fragmentTitle = new ArrayList<>();
+
+
+
+        public ViewPagerAdapter(@NonNull FragmentManager fm, int behavior) {
+            super(fm, behavior);
         }
-        else Glide.with(this).load(recipe.getProfilePicUrl()).into(profilePic);
-        Glide.with(this).load(recipe.getPreviewUrl()).into(previewPic);
 
-        iRecyclerView = findViewById(R.id.ingRecycler_view);
-        iRecyclerView.setHasFixedSize(true);
-        iRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        IngredientsRecyclerViewAdapter iAdapter = new IngredientsRecyclerViewAdapter(recipe.getIngredients());
-        iRecyclerView.setAdapter(iAdapter);
+        public void addFragment(Fragment fragment,String title){
+            fragments.add(fragment);
+            fragmentTitle.add(title);
 
-        sRecyclerView = findViewById(R.id.section_recycler);
-        sRecyclerView.setHasFixedSize(true);
-        sRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        SectionAdapter sAdapter = new SectionAdapter(this, recipe.getSections());
-        sRecyclerView.setAdapter(sAdapter);
+        }
 
+        @NonNull
+        @Override
+        public Fragment getItem(int position) {
+            return fragments.get(position);
+        }
 
-        getSupportActionBar().setTitle(recipe.getTitle());
+        @Override
+        public int getCount() {
+            return fragments.size();
+        }
+
+        @Nullable
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return fragmentTitle.get(position);
+        }
     }
 }
