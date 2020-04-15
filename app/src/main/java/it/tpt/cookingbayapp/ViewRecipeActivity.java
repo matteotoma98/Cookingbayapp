@@ -10,6 +10,8 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.google.android.material.tabs.TabLayout;
 
@@ -27,6 +29,8 @@ public class ViewRecipeActivity extends AppCompatActivity {
     private VrFragment mVrFragment;
     private ComFragment mComFragment;
 
+    boolean iconset;
+
         @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +41,7 @@ public class ViewRecipeActivity extends AppCompatActivity {
 
         mVrFragment= new VrFragment();
         mComFragment= new ComFragment();
-
+        iconset=false;
             Intent intent = getIntent();
             Recipe recipe = (Recipe) intent.getSerializableExtra("recipe");
             Bundle recipebundle = new Bundle();
@@ -52,6 +56,26 @@ public class ViewRecipeActivity extends AppCompatActivity {
         viewPagerAdapter.addFragment(mComFragment, "Commenti");
             mViewPager.setAdapter(viewPagerAdapter);
 
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.vr_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.addFavourite) {
+            if (iconset) {
+                item.setIcon(R.drawable.ic_favorite_border_black_24dp);
+                iconset=false;
+            } else {
+                item.setIcon(R.drawable.ic_favorite_black_24dp);
+                iconset=true;
+            }
+        }
+             return super.onOptionsItemSelected(item);
     }
 
     private class ViewPagerAdapter extends FragmentPagerAdapter {
