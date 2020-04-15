@@ -195,7 +195,7 @@ public class CreateRecipe extends AppCompatActivity {
             mRecipe = new Recipe();
             mRecipe.setAuthorName(currentUser.getDisplayName());
             mRecipe.setAuthorId(currentUser.getUid());
-            mRecipe.setProfilePicUrl("missingprofile");
+            mRecipe.setProfilePicUrl(currentUser.getPhotoUrl().toString());
         }
 
         permissions.add(Manifest.permission.CAMERA);

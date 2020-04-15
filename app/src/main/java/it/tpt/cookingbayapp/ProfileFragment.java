@@ -64,8 +64,10 @@ public class ProfileFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
         if(currentUser != null) {
+            uid = currentUser.getUid();
             Glide.with(getContext())
                     .load(currentUser.getPhotoUrl())
+                    .error(R.drawable.missingprofile)
                     .centerCrop()
                     .into(profilePic);
         }
