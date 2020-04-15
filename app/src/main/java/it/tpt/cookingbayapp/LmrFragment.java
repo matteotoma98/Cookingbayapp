@@ -34,11 +34,11 @@ public class LmrFragment extends Fragment {
     String uid;
     private FloatingActionButton btnCrea;
     private RecyclerView recyclerView;
-    PersonalCardRecyclerViewAdapter adapter;
+    private PersonalCardRecyclerViewAdapter adapter;
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
     private View layout;
-    FirebaseFirestore db;
+    private FirebaseFirestore db;
     final static int CREATE_REQUEST = 129;
 
     public LmrFragment() {
@@ -56,13 +56,18 @@ public class LmrFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
-        uid = currentUser.getUid();
+        //Essendo le chiamate a Firebase asincrone c'è il rischio che che l'utente clicchi su questo fragment prima ancora che sia terminato il login
+        if(currentUser!=null) uid = currentUser.getUid();
 
-        downloadRecipes();
+        downloadRecipes(); //Scarica le ricette e le assegna al recyclerView
 
         return view;
     }
 
+    /**
+     * Scarica fa Firebase le proprie ricette tramite query whereEqualTo
+     * e le inserisce nel RecyclerView
+     */
     private void downloadRecipes() {
         db.collection("Recipes")
                 .whereEqualTo("authorId", uid)
@@ -92,11 +97,13 @@ public class LmrFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        //Bottone per creare una ricetta
         btnCrea = (FloatingActionButton) getView().findViewById(R.id.floating_action_button);
         btnCrea.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!currentUser.isAnonymous()) {
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                if(!user.isAnonymous()) {
                     Intent i = new Intent(getActivity(), CreateRecipe.class);
                     startActivityForResult(i, CREATE_REQUEST);
                 } else Snackbar.make(layout, R.string.anonymous, Snackbar.LENGTH_LONG).show();

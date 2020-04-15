@@ -2,7 +2,6 @@ package it.tpt.cookingbayapp;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -40,6 +39,7 @@ public class ProfileFragment extends Fragment {
     private ImageView profilePic;
     private Uri profileUri;
     private TextView username;
+    private View layout;
     private final static int PROPIC_REQUEST = 239;
     public static final int LOGIN_REQUEST = 101;
 
@@ -54,9 +54,15 @@ public class ProfileFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
+        //Essendo le chiamate a Firebase asincrone c'è il rischio che che l'utente clicchi su questo fragment prima ancora che sia terminato il login
+        String uid;
+        if(currentUser!=null) uid = currentUser.getUid();
+
         profilePic = view.findViewById(R.id.userProfilePic);
-        String uid = currentUser.getUid();
+        exit = view.findViewById(R.id.logout);
+        switch_account = view.findViewById(R.id.cambia_account);
         username = view.findViewById(R.id.textUsername);
+        layout = view.findViewById(R.id.profileCoordinatorLayout);
         return view;
     }
 
@@ -67,12 +73,9 @@ public class ProfileFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
-
-        final View layout = view.findViewById(R.id.profileCoordinatorLayout);
-
         super.onViewCreated(view, savedInstanceState);
-        exit = getView().findViewById(R.id.logout);
-        switch_account = getView().findViewById(R.id.cambia_account);
+
+        //Click listener per cambiare l'immagine di profilo
         profilePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -82,31 +85,31 @@ public class ProfileFragment extends Fragment {
                 } else  Snackbar.make(layout, R.string.profilepicanonymous, Snackbar.LENGTH_LONG).show();
             }
         });
+        //Click listener per cambiare account
         switch_account.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                if (user.isAnonymous()) {
+                if (user!=null && user.isAnonymous()) { //Se si è correntemente connessi come ospite si elimina prima l'account, altrimenti Firebase si riempe di account anonimi
                     user.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-
                             Intent intent = new Intent(getActivity(), LoginActivity.class);
                             getActivity().startActivityForResult(intent, LOGIN_REQUEST);
                         }
                     });
-                } else {
+                } else { //Se con si è connessi come ospite
                     Intent intent = new Intent(getActivity(), LoginActivity.class);
                     getActivity().startActivityForResult(intent, LOGIN_REQUEST);
                 }
             }
         });
-
+        //Click listener per uscire (e connettersi dunque come ospite)
         exit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                if (!user.isAnonymous()) {
+                if (user!= null && !user.isAnonymous()) { //Evita che si crei un nuovo account anonimo se lo si è già
                     AuthUI.getInstance()
                             .signOut(getActivity())
                             .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -132,7 +135,6 @@ public class ProfileFragment extends Fragment {
                             });
                 } else
                     Snackbar.make(layout, R.string.already_anonymous, Snackbar.LENGTH_SHORT).show();
-
             }
         });
     }
