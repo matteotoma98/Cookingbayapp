@@ -32,14 +32,13 @@ import it.tpt.cookingbayapp.recipeObject.Recipe;
 
 public class RdgFragment extends Fragment {
 
-    FirebaseFirestore db;
+    private FirebaseFirestore db;
+    private RecyclerView recyclerView;
 
     public RdgFragment() {
         // Required empty public constructor
     }
 
-
-    RecyclerView recyclerView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
