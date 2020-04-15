@@ -59,7 +59,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
-
+        profilePic = view.findViewById(R.id.userProfilePic);
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
@@ -70,7 +70,6 @@ public class ProfileFragment extends Fragment {
                     .into(profilePic);
         }
 
-        profilePic = view.findViewById(R.id.userProfilePic);
         exit = view.findViewById(R.id.logout);
         switch_account = view.findViewById(R.id.cambia_account);
         username = view.findViewById(R.id.textUsername);
