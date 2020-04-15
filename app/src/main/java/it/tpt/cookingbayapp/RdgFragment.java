@@ -56,7 +56,7 @@ public class RdgFragment extends Fragment {
 
         db = FirebaseFirestore.getInstance();
 
-        downloadRecipes(); //Scarica le ricette
+        downloadRecipes(0); //Scarica le ricette
 
         //int largePadding = getResources().getDimensionPixelSize(R.dimen.shr_product_grid_spacing);
         //int smallPadding = getResources().getDimensionPixelSize(R.dimen.shr_product_grid_spacing_small);
@@ -67,24 +67,31 @@ public class RdgFragment extends Fragment {
 
     /**
      * Scarica le ricette giornaliere da Firestore e le assegna al recyclerView
+     * E' una funzione ricorsiva. Se ci sono meno di tre ricette giornaliere scarica tutte le ricette dal giorno precedente e cosi via
+     * @param daysBefore quanti giorni indietro bisogna cercare, utilizzato nella query whereGreaterThanOrEqualTo
      */
-    private void downloadRecipes() {
+    private void downloadRecipes(int daysBefore) {
         db.collection("Recipes")
-                .whereGreaterThanOrEqualTo("date", getCurrentDayInSeconds())
+                .whereGreaterThanOrEqualTo("date", getCurrentDayInSeconds() - daysBefore*24*60*60)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             ArrayList<Recipe> recipeList = new ArrayList<>();
+                            int count = 0;
                             for (final QueryDocumentSnapshot document : task.getResult()) {
                                 Recipe recipe = document.toObject(Recipe.class);
                                 recipeList.add(recipe);
+                                count++;
                             }
-                            recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1, GridLayoutManager.VERTICAL, false));
-                            RecipeCardRecyclerViewAdapter adapter = new RecipeCardRecyclerViewAdapter(getActivity(), recipeList);
-                            recyclerView.setAdapter(adapter);
-                            Log.i("Finish", "Recipes downloaded");
+                            if(count<3) downloadRecipes(1);
+                            else {
+                                recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1, GridLayoutManager.VERTICAL, false));
+                                RecipeCardRecyclerViewAdapter adapter = new RecipeCardRecyclerViewAdapter(getActivity(), recipeList);
+                                recyclerView.setAdapter(adapter);
+                                Log.i("Finish", "Recipes downloaded");
+                            }
                         } else {
                             Log.d("TAG", "Error getting documents: ", task.getException());
                         }
@@ -111,6 +118,6 @@ public class RdgFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        downloadRecipes();
+        downloadRecipes(0);
     }
 }
