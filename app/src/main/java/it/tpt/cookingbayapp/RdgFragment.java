@@ -69,7 +69,7 @@ public class RdgFragment extends Fragment {
      * E' una funzione ricorsiva. Se ci sono meno di tre ricette giornaliere scarica tutte le ricette dal giorno precedente e cosi via
      * @param daysBefore quanti giorni indietro bisogna cercare, utilizzato nella query whereGreaterThanOrEqualTo
      */
-    private void downloadRecipes(int daysBefore) {
+    private void downloadRecipes(final int daysBefore) {
         db.collection("Recipes")
                 .whereGreaterThanOrEqualTo("date", getCurrentDayInSeconds() - daysBefore*24*60*60)
                 .get()
@@ -84,7 +84,7 @@ public class RdgFragment extends Fragment {
                                 recipeList.add(recipe);
                                 count++;
                             }
-                            if(count<3) downloadRecipes(1);
+                            if(count<3) downloadRecipes(daysBefore+1);
                             else {
                                 recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1, GridLayoutManager.VERTICAL, false));
                                 RecipeCardRecyclerViewAdapter adapter = new RecipeCardRecyclerViewAdapter(getActivity(), recipeList);
