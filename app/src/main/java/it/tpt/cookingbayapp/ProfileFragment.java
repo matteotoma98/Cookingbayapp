@@ -63,8 +63,12 @@ public class ProfileFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
-        //Essendo le chiamate a Firebase asincrone c'è il rischio che che l'utente clicchi su questo fragment prima ancora che sia terminato il login
-        if(currentUser!=null) uid = currentUser.getUid();
+        if(currentUser != null) {
+            Glide.with(getContext())
+                    .load(currentUser.getPhotoUrl())
+                    .centerCrop()
+                    .into(profilePic);
+        }
 
         profilePic = view.findViewById(R.id.userProfilePic);
         exit = view.findViewById(R.id.logout);
@@ -171,6 +175,7 @@ public class ProfileFragment extends Fragment {
                         if (task.isSuccessful()) {
                             final String url = task.getResult().toString();
                             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                            uid = user.getUid();
                             UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                                     .setPhotoUri(Uri.parse(url))
                                     .build();
@@ -184,6 +189,7 @@ public class ProfileFragment extends Fragment {
                                         }
                                     });
                             db.collection("Recipes")
+                                    .whereEqualTo("authorId", uid)
                                     .get()
                                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                         @Override
@@ -217,6 +223,7 @@ public class ProfileFragment extends Fragment {
             if (ImagePickActivity.getPickImageResultUri(getActivity(), intent, "profile") != null) {
                 //Prendi l'uri assegnato alla cache
                 profileUri = ImagePickActivity.getPickImageResultUri(getActivity(), intent, "profile");
+                uploadPicAndUpdateRecipes();
                 Glide.with(getContext())
                         .load(profileUri)
                         .centerCrop()
