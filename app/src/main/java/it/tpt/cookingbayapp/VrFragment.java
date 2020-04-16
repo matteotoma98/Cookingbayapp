@@ -1,8 +1,8 @@
 package it.tpt.cookingbayapp;
 
-import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,13 +21,15 @@ import it.tpt.cookingbayapp.recipeObject.Recipe;
 import it.tpt.cookingbayapp.sectionRecycler.SectionAdapter;
 
 
-public class VrFragment extends Fragment {
+public class VrFragment extends Fragment implements View.OnClickListener{
 
-    TextView recipeTitle, recipeAuthor, recipeType, recipeTime;
-    CircleImageView profilePic;
-    ImageView previewPic;
-    RecyclerView iRecyclerView;
-    RecyclerView sRecyclerView;
+    private TextView recipeTitle, recipeAuthor, recipeType, recipeTime;
+    private CircleImageView profilePic;
+    private ImageView previewPic;
+    private RecyclerView iRecyclerView;
+    private RecyclerView sRecyclerView;
+    private ImageView like, dislike;
+    private boolean
 
     public VrFragment() {
 
@@ -39,8 +41,7 @@ public class VrFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_vr, container, false);
         recipeTitle = view.findViewById(R.id.viewRecipeTitle);
         recipeAuthor = view.findViewById(R.id.viewRecipeAuthor);
@@ -48,27 +49,37 @@ public class VrFragment extends Fragment {
         recipeType = view.findViewById(R.id.viewRecipeType);
         previewPic = view.findViewById(R.id.viewPreviewPic);
         profilePic = view.findViewById(R.id.viewProfilePic);
+        like = view.findViewById(R.id.likeBtn);
+        dislike = view.findViewById(R.id.dislikeBtn);
+        like.setOnClickListener(this);
+        dislike.setOnClickListener(this);
 
+
+        //Ottieni la ricetta passata dall'activity ViewRecipe
         Bundle vrBundle = this.getArguments();
         Recipe recipe = (Recipe) vrBundle.getSerializable("recipe");
 
+        //Assegna le informazioni generali
         recipeTitle.setText(recipe.getTitle());
         recipeAuthor.setText(recipe.getAuthorName());
         recipeTime.setText(recipe.getTime() + " min");
         recipeType.setText(recipe.getType());
 
-        if(recipe.getProfilePicUrl().equals("missingprofile")){
+        //Assegna la foto di profilo default se non è specificata nella ricetta
+        if(recipe.getProfilePicUrl().equals("")){
             profilePic.setImageResource(R.drawable.missingprofile);
         }
         else Glide.with(this).load(recipe.getProfilePicUrl()).into(profilePic);
-        Glide.with(this).load(recipe.getPreviewUrl()).into(previewPic);
+        Glide.with(this).load(recipe.getPreviewUrl()).into(previewPic); //Assegna la foto di anteprima
 
+        //Passa la lista degli ingredienti al recyclerView
         iRecyclerView = view.findViewById(R.id.ingRecycler_view);
         iRecyclerView.setHasFixedSize(true);
         iRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         IngredientsRecyclerViewAdapter iAdapter = new IngredientsRecyclerViewAdapter(recipe.getIngredients());
         iRecyclerView.setAdapter(iAdapter);
 
+        //Passa la lista degli step al recyclerView
         sRecyclerView = view.findViewById(R.id.section_recycler);
         sRecyclerView.setHasFixedSize(true);
         sRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -77,5 +88,18 @@ public class VrFragment extends Fragment {
 
         return view;
     }
+
+    //Gestione del click del like e del dislike
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.likeBtn:
+                like.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorAccent));
+                break;
+            case R.id.dislikeBtn:
+                dislike.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorAccent));
+                break;
+        }
     }
+}
 
