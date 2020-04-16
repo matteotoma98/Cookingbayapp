@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import it.tpt.cookingbayapp.ingredientsRecycler.IngredientsRecyclerViewAdapter;
@@ -34,6 +37,8 @@ public class VrFragment extends Fragment implements View.OnClickListener{
     //Booleani utilizzati per la logica del click su like e dislike
     private boolean likeClicked;
     private boolean dislikeClicked;
+
+    private String recipeId;
 
     public VrFragment() {
 
@@ -67,6 +72,7 @@ public class VrFragment extends Fragment implements View.OnClickListener{
         //Ottieni la ricetta passata dall'activity ViewRecipe
         Bundle vrBundle = this.getArguments();
         Recipe recipe = (Recipe) vrBundle.getSerializable("recipe");
+        recipeId = vrBundle.getString("recipeId");
 
         //Assegna le informazioni generali
         recipeTitle.setText(recipe.getTitle());
@@ -100,6 +106,17 @@ public class VrFragment extends Fragment implements View.OnClickListener{
         sRecyclerView.setAdapter(sAdapter);
 
         return view;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.i("VRFRAG", "On destroy called");
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        if(likeClicked) db.collection("Recipes").document(recipeId)
+                .update("likes", FieldValue.increment(1));
+        else if(dislikeClicked) db.collection("Recipes").document(recipeId)
+                .update("dislikes", FieldValue.increment(1));
     }
 
     //Gestione del click del like e del dislike

@@ -22,12 +22,13 @@ import it.tpt.cookingbayapp.recipeObject.Recipe;
 public class RecipeCardRecyclerViewAdapter extends RecyclerView.Adapter<RecipeCardViewHolder> {
 
     private List<Recipe> recipeList;
+    private List<String> recipeIds;
     Context mContext;
 
-    public RecipeCardRecyclerViewAdapter(Context c, List<Recipe> recipeList) {
+    public RecipeCardRecyclerViewAdapter(Context c, List<Recipe> recipeList, List<String> recipeIds) {
         mContext = c;
         this.recipeList = recipeList;
-
+        this.recipeIds = recipeIds;
     }
 
     @NonNull
@@ -41,6 +42,7 @@ public class RecipeCardRecyclerViewAdapter extends RecyclerView.Adapter<RecipeCa
             public void onRecipeClickListener(View v, int position) {
                 Intent intent = new Intent(mContext, ViewRecipeActivity.class);
                 intent.putExtra("recipe", recipeList.get(position));
+                intent.putExtra("recipeId", recipeIds.get(position));
                 mContext.startActivity(intent);
             }
 

@@ -78,16 +78,18 @@ public class RdgFragment extends Fragment {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             ArrayList<Recipe> recipeList = new ArrayList<>();
+                            ArrayList<String> recipeIds = new ArrayList<>();
                             int count = 0;
                             for (final QueryDocumentSnapshot document : task.getResult()) {
                                 Recipe recipe = document.toObject(Recipe.class);
                                 recipeList.add(recipe);
+                                recipeIds.add(document.getId());
                                 count++;
                             }
                             if(count<3) downloadRecipes(daysBefore+1);
                             else {
                                 recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1, GridLayoutManager.VERTICAL, false));
-                                RecipeCardRecyclerViewAdapter adapter = new RecipeCardRecyclerViewAdapter(getActivity(), recipeList);
+                                RecipeCardRecyclerViewAdapter adapter = new RecipeCardRecyclerViewAdapter(getActivity(), recipeList, recipeIds);
                                 recyclerView.setAdapter(adapter);
                                 Log.i("Finish", "Recipes downloaded");
                             }

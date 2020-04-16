@@ -44,8 +44,10 @@ public class ViewRecipeActivity extends AppCompatActivity {
         iconset=false;
             Intent intent = getIntent();
             Recipe recipe = (Recipe) intent.getSerializableExtra("recipe");
+            String recipeId = intent.getStringExtra("recipeId");
             Bundle recipebundle = new Bundle();
             recipebundle.putSerializable("recipe", recipe);
+            recipebundle.putString("recipeId", recipeId);
             mVrFragment.setArguments(recipebundle);
             getSupportActionBar().setTitle(recipe.getTitle());
 
