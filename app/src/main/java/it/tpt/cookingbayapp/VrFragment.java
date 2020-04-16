@@ -28,8 +28,10 @@ public class VrFragment extends Fragment implements View.OnClickListener{
     private ImageView previewPic;
     private RecyclerView iRecyclerView;
     private RecyclerView sRecyclerView;
-    private ImageView like, dislike;
-    private boolean
+    private ImageView like, dislike; //Icone del like e dislike cliccabili
+    //Booleani utilizzati per la logica del click su like e dislike
+    private boolean likeClicked;
+    private boolean dislikeClicked;
 
     public VrFragment() {
 
@@ -53,6 +55,8 @@ public class VrFragment extends Fragment implements View.OnClickListener{
         dislike = view.findViewById(R.id.dislikeBtn);
         like.setOnClickListener(this);
         dislike.setOnClickListener(this);
+        likeClicked = false;
+        dislikeClicked = false;
 
 
         //Ottieni la ricetta passata dall'activity ViewRecipe
@@ -94,10 +98,28 @@ public class VrFragment extends Fragment implements View.OnClickListener{
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.likeBtn:
-                like.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorAccent));
+                if(likeClicked) {
+                    like.setColorFilter(ContextCompat.getColor(getContext(), R.color.likeDislikeNotClicked));
+                    likeClicked = false;
+                }
+                else {
+                    like.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorAccent));
+                    dislike.setColorFilter(ContextCompat.getColor(getContext(), R.color.likeDislikeNotClicked));
+                    likeClicked = true;
+                    dislikeClicked = false;
+                }
                 break;
             case R.id.dislikeBtn:
-                dislike.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorAccent));
+                if(dislikeClicked) {
+                    dislike.setColorFilter(ContextCompat.getColor(getContext(), R.color.likeDislikeNotClicked));
+                    dislikeClicked = false;
+                }
+                else {
+                    dislike.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorAccent));
+                    like.setColorFilter(ContextCompat.getColor(getContext(), R.color.likeDislikeNotClicked));
+                    dislikeClicked = true;
+                    likeClicked = false;
+                }
                 break;
         }
     }
