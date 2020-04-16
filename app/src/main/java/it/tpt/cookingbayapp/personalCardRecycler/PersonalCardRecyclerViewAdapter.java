@@ -58,7 +58,7 @@ public class PersonalCardRecyclerViewAdapter extends RecyclerView.Adapter<Person
                 Intent intent = new Intent(mContext, ViewRecipeActivity.class);
                 intent.putExtra("recipe", recipeList.get(position));
                 intent.putExtra("recipeId", recipeIds.get(position));
-                mContext.startActivity(intent);
+                ((Activity) mContext).startActivityForResult(intent, 777);
             }
 
             @Override

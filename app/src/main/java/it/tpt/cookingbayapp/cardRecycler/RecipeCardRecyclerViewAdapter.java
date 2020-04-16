@@ -1,5 +1,6 @@
 package it.tpt.cookingbayapp.cardRecycler;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -7,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 
@@ -43,7 +45,7 @@ public class RecipeCardRecyclerViewAdapter extends RecyclerView.Adapter<RecipeCa
                 Intent intent = new Intent(mContext, ViewRecipeActivity.class);
                 intent.putExtra("recipe", recipeList.get(position));
                 intent.putExtra("recipeId", recipeIds.get(position));
-                mContext.startActivity(intent);
+                ((Activity) mContext).startActivityForResult(intent, 777);
             }
 
             @Override
