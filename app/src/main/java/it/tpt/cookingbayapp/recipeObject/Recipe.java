@@ -1,7 +1,5 @@
 package it.tpt.cookingbayapp.recipeObject;
 
-import com.google.firebase.Timestamp;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -18,6 +16,8 @@ public class Recipe implements Serializable{
     private ArrayList<String> ingNames;
     private ArrayList<Section> sections;
     private long date;
+    private int likes;
+    private int dislikes;
 
     //Per le classi da utilizzare con FireStore serve sempre un costruttore senza argomenti disponibile
     public Recipe(){ }
@@ -33,6 +33,24 @@ public class Recipe implements Serializable{
         this.ingredients = ingredients;
         this.sections = sections;
         this.date = date;
+        this.likes = 0;
+        this.dislikes = 0;
+    }
+
+    public int getLikes() {
+        return likes;
+    }
+
+    public void setLikes(int likes) {
+        this.likes = likes;
+    }
+
+    public int getDislikes() {
+        return dislikes;
+    }
+
+    public void setDislikes(int dislikes) {
+        this.dislikes = dislikes;
     }
 
     public long getDate() {
