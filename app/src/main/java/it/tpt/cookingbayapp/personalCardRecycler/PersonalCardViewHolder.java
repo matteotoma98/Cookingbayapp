@@ -1,5 +1,6 @@
 package it.tpt.cookingbayapp.personalCardRecycler;
 
+import android.content.DialogInterface;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -8,7 +9,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 import de.hdodenhof.circleimageview.CircleImageView;
+import it.tpt.cookingbayapp.MainActivity;
 import it.tpt.cookingbayapp.R;
 import it.tpt.cookingbayapp.RecipeClickListener;
 
