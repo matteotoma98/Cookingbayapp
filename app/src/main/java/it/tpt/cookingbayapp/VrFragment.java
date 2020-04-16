@@ -29,6 +29,8 @@ public class VrFragment extends Fragment implements View.OnClickListener{
     private RecyclerView iRecyclerView;
     private RecyclerView sRecyclerView;
     private ImageView like, dislike; //Icone del like e dislike cliccabili
+    private TextView likeCounterText, dislikeCounterText;
+    private int likeCounter, dislikeCounter; //Contatori per comodità
     //Booleani utilizzati per la logica del click su like e dislike
     private boolean likeClicked;
     private boolean dislikeClicked;
@@ -51,6 +53,9 @@ public class VrFragment extends Fragment implements View.OnClickListener{
         recipeType = view.findViewById(R.id.viewRecipeType);
         previewPic = view.findViewById(R.id.viewPreviewPic);
         profilePic = view.findViewById(R.id.viewProfilePic);
+
+        likeCounterText = view.findViewById(R.id.likeCounterText);
+        dislikeCounterText = view.findViewById(R.id.dislikeCounterText);
         like = view.findViewById(R.id.likeBtn);
         dislike = view.findViewById(R.id.dislikeBtn);
         like.setOnClickListener(this);
@@ -68,6 +73,10 @@ public class VrFragment extends Fragment implements View.OnClickListener{
         recipeAuthor.setText(recipe.getAuthorName());
         recipeTime.setText(recipe.getTime() + " min");
         recipeType.setText(recipe.getType());
+        likeCounter = recipe.getLikes();
+        dislikeCounter = recipe.getDislikes();
+        likeCounterText.setText(String.valueOf(likeCounter));
+        dislikeCounterText.setText(String.valueOf(dislikeCounter));
 
         //Assegna la foto di profilo default se non è specificata nella ricetta
         if(recipe.getProfilePicUrl().equals("")){
@@ -100,11 +109,14 @@ public class VrFragment extends Fragment implements View.OnClickListener{
             case R.id.likeBtn:
                 if(likeClicked) {
                     like.setColorFilter(ContextCompat.getColor(getContext(), R.color.likeDislikeNotClicked));
+                    likeCounterText.setText(String.valueOf(likeCounter));
                     likeClicked = false;
                 }
                 else {
                     like.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorAccent));
                     dislike.setColorFilter(ContextCompat.getColor(getContext(), R.color.likeDislikeNotClicked));
+                    likeCounterText.setText(String.valueOf(likeCounter+1));
+                    dislikeCounterText.setText(String.valueOf(dislikeCounter));
                     likeClicked = true;
                     dislikeClicked = false;
                 }
@@ -112,11 +124,14 @@ public class VrFragment extends Fragment implements View.OnClickListener{
             case R.id.dislikeBtn:
                 if(dislikeClicked) {
                     dislike.setColorFilter(ContextCompat.getColor(getContext(), R.color.likeDislikeNotClicked));
+                    dislikeCounterText.setText(String.valueOf(dislikeCounter));
                     dislikeClicked = false;
                 }
                 else {
                     dislike.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorAccent));
                     like.setColorFilter(ContextCompat.getColor(getContext(), R.color.likeDislikeNotClicked));
+                    dislikeCounterText.setText(String.valueOf(dislikeCounter+1));
+                    likeCounterText.setText(String.valueOf(likeCounter));
                     dislikeClicked = true;
                     likeClicked = false;
                 }
