@@ -12,11 +12,11 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/userProfilePic"
-            android:layout_width="match_parent"
+            android:layout_width="151dp"
             android:layout_height="151dp"
             android:contentDescription="profilePic"
             android:paddingBottom="8dp"
-            android:scaleType="centerCrop"
+            android:layout_gravity="center"
             android:src="@drawable/missingprofile" />
 
         <TextView
