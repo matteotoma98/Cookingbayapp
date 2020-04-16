@@ -40,6 +40,7 @@ public class LmrFragment extends Fragment {
     private View layout;
     private FirebaseFirestore db;
     final static int CREATE_REQUEST = 129;
+    public final static int VIEW_REQUEST = 777;
 
     public LmrFragment() {
 
@@ -123,6 +124,9 @@ public class LmrFragment extends Fragment {
             if(resultCode == getActivity().RESULT_OK) {
                 downloadRecipes();
             }
+        }
+        if (requestCode == VIEW_REQUEST) {
+            downloadRecipes();
         }
     }
 

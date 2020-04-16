@@ -37,6 +37,7 @@ public class PersonalCardRecyclerViewAdapter extends RecyclerView.Adapter<Person
     private List<Recipe> recipeList;
     private List<String> recipeIds;
     final static int CREATE_REQUEST = 129;
+    public final static int VIEW_REQUEST = 777;
     Context mContext;
 
     public PersonalCardRecyclerViewAdapter(Context c, List<Recipe> recipeList, List<String> recipeIds) {
@@ -58,7 +59,7 @@ public class PersonalCardRecyclerViewAdapter extends RecyclerView.Adapter<Person
                 Intent intent = new Intent(mContext, ViewRecipeActivity.class);
                 intent.putExtra("recipe", recipeList.get(position));
                 intent.putExtra("recipeId", recipeIds.get(position));
-                ((Activity) mContext).startActivityForResult(intent, 777);
+                ((Activity) mContext).startActivityForResult(intent, VIEW_REQUEST);
             }
 
             @Override
