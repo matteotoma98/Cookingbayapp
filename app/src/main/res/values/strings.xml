@@ -30,4 +30,5 @@
     <string name="logged_as_anonymous">Sei ora connesso come ospite</string>
     <string name="already_anonymous">Sei già in modalità ospite</string>
     <string name="profilepicanonymous">Non puoi caricare una foto profilo in modalità ospite</string>
+    <string name="likedislikeanonymous">Non puoi votare in modalità ospite</string>
 </resources>

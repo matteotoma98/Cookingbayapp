@@ -30,6 +30,7 @@ public class ViewRecipeActivity extends AppCompatActivity {
     private ComFragment mComFragment;
 
     boolean iconset;
+    boolean favouriteset;
 
         @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +43,7 @@ public class ViewRecipeActivity extends AppCompatActivity {
         mVrFragment= new VrFragment();
         mComFragment= new ComFragment();
         iconset=false;
+        favouriteset=true;
             Intent intent = getIntent();
             Recipe recipe = (Recipe) intent.getSerializableExtra("recipe");
             String recipeId = intent.getStringExtra("recipeId");
@@ -69,12 +71,16 @@ public class ViewRecipeActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.addFavourite) {
-            if (iconset) {
-                item.setIcon(R.drawable.ic_favorite_border_black_24dp);
-                iconset=false;
-            } else {
-                item.setIcon(R.drawable.ic_favorite_black_24dp);
-                iconset=true;
+            if(favouriteset) {
+                if (iconset) {
+                    item.setIcon(R.drawable.ic_favorite_border_black_24dp);
+                    iconset = false;
+                  favouriteset=true;
+                } else {
+                    item.setIcon(R.drawable.ic_favorite_black_24dp);
+                    iconset = true;
+                    favouriteset = false;
+                }
             }
         }
              return super.onOptionsItemSelected(item);

@@ -45,7 +45,7 @@ public class ProfileFragment extends Fragment {
     private FirebaseUser currentUser;
     private ImageView profilePic;
     private Uri profileUri;
-    private TextView username;
+    private TextView nome_utente;
     private View layout;
     private final static int PROPIC_REQUEST = 239;
     public static final int LOGIN_REQUEST = 101;
@@ -63,18 +63,19 @@ public class ProfileFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
-        if(currentUser != null) {
+        if (currentUser != null) {
             uid = currentUser.getUid();
             Glide.with(getContext())
                     .load(currentUser.getPhotoUrl())
                     .error(R.drawable.missingprofile)
                     .centerCrop()
                     .into(profilePic);
+
         }
 
         exit = view.findViewById(R.id.logout);
         switch_account = view.findViewById(R.id.cambia_account);
-        username = view.findViewById(R.id.textUsername);
+        nome_utente = view.findViewById(R.id.textUsername);
         layout = view.findViewById(R.id.profileCoordinatorLayout);
         return view;
     }
@@ -86,16 +87,17 @@ public class ProfileFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
+        updateUI();
         super.onViewCreated(view, savedInstanceState);
-
-        //Click listener per cambiare l'immagine di profilo
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         profilePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                if(!user.isAnonymous()) {
+                if (!user.isAnonymous()) {
                     startActivityForResult(ImagePickActivity.getPickImageChooserIntent(getActivity(), "profile"), PROPIC_REQUEST);
-                } else  Snackbar.make(layout, R.string.profilepicanonymous, Snackbar.LENGTH_LONG).show();
+                } else
+                    Snackbar.make(layout, R.string.profilepicanonymous, Snackbar.LENGTH_LONG).show();
             }
         });
         //Click listener per cambiare account
@@ -103,7 +105,7 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                if (user!=null && user.isAnonymous()) { //Se si è correntemente connessi come ospite si elimina prima l'account, altrimenti Firebase si riempe di account anonimi
+                if (user != null && user.isAnonymous()) { //Se si è correntemente connessi come ospite si elimina prima l'account, altrimenti Firebase si riempe di account anonimi
                     user.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
@@ -121,8 +123,9 @@ public class ProfileFragment extends Fragment {
         exit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                if (user!= null && !user.isAnonymous()) { //Evita che si crei un nuovo account anonimo se lo si è già
+                if (user != null && !user.isAnonymous()) { //Evita che si crei un nuovo account anonimo se lo si è già
                     AuthUI.getInstance()
                             .signOut(getActivity())
                             .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -155,7 +158,7 @@ public class ProfileFragment extends Fragment {
     private void uploadPicAndUpdateRecipes() {
         try {
             if (profileUri != null) {
-                final String nameOfimage =  "profile_pic." + ImagePickActivity.getExtension(getContext(), profileUri);
+                final String nameOfimage = "profile_pic." + ImagePickActivity.getExtension(getContext(), profileUri);
 
                 StorageReference objectStorageReference;
                 objectStorageReference = FirebaseStorage.getInstance().getReference("images/" + uid); // Create folder to Firebase Storage
@@ -185,7 +188,7 @@ public class ProfileFragment extends Fragment {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
-                                                Log.d("UPADATEPROPIC", "User profile updated.");
+                                                Log.d("UPDATEPROPIC", "User profile updated.");
                                             }
                                         }
                                     });
@@ -219,6 +222,7 @@ public class ProfileFragment extends Fragment {
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
+        updateUI();
         if (requestCode == PROPIC_REQUEST && resultCode == getActivity().RESULT_OK) {
             Log.i("PICUPLOADPROFILE", "RESULT OK");
             if (ImagePickActivity.getPickImageResultUri(getActivity(), intent, "profile") != null) {
@@ -239,4 +243,16 @@ public class ProfileFragment extends Fragment {
         }
     }
 
+    public void updateUI(){
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user!=null && user.isAnonymous()) nome_utente.setText("Utente anonimo");
+        else {
+            nome_utente.setText(user.getDisplayName());
+            Glide.with(getContext())
+                    .load(user.getPhotoUrl())
+                    .error(R.drawable.missingprofile)
+                    .centerCrop()
+                    .into(profilePic);
+        }
+    }
 }

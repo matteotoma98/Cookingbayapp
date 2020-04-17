@@ -15,6 +15,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -24,8 +27,9 @@ import it.tpt.cookingbayapp.recipeObject.Recipe;
 import it.tpt.cookingbayapp.sectionRecycler.SectionAdapter;
 
 
-public class VrFragment extends Fragment implements View.OnClickListener{
-
+public class VrFragment extends Fragment implements View.OnClickListener {
+    private FirebaseAuth mAuth;
+    private FirebaseUser currentUser;
     private TextView recipeTitle, recipeAuthor, recipeType, recipeTime;
     private CircleImageView profilePic;
     private ImageView previewPic;
@@ -37,7 +41,7 @@ public class VrFragment extends Fragment implements View.OnClickListener{
     //Booleani utilizzati per la logica del click su like e dislike
     private boolean likeClicked;
     private boolean dislikeClicked;
-
+    private View layout;
     private String recipeId;
 
     public VrFragment() {
@@ -51,6 +55,8 @@ public class VrFragment extends Fragment implements View.OnClickListener{
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
         View view = inflater.inflate(R.layout.fragment_vr, container, false);
         recipeTitle = view.findViewById(R.id.viewRecipeTitle);
         recipeAuthor = view.findViewById(R.id.viewRecipeAuthor);
@@ -83,12 +89,11 @@ public class VrFragment extends Fragment implements View.OnClickListener{
         dislikeCounter = recipe.getDislikes();
         likeCounterText.setText(String.valueOf(likeCounter));
         dislikeCounterText.setText(String.valueOf(dislikeCounter));
-
+        layout = view.findViewById(R.id.vrfragment_layout);
         //Assegna la foto di profilo default se non è specificata nella ricetta
-        if(recipe.getProfilePicUrl().equals("")){
+        if (recipe.getProfilePicUrl().equals("")) {
             profilePic.setImageResource(R.drawable.missingprofile);
-        }
-        else Glide.with(this).load(recipe.getProfilePicUrl()).into(profilePic);
+        } else Glide.with(this).load(recipe.getProfilePicUrl()).into(profilePic);
         Glide.with(this).load(recipe.getPreviewUrl()).into(previewPic); //Assegna la foto di anteprima
 
         //Passa la lista degli ingredienti al recyclerView
@@ -113,47 +118,50 @@ public class VrFragment extends Fragment implements View.OnClickListener{
         super.onDestroy();
         Log.i("VRFRAG", "On destroy called");
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        if(likeClicked) db.collection("Recipes").document(recipeId)
+        if (likeClicked) db.collection("Recipes").document(recipeId)
                 .update("likes", FieldValue.increment(1));
-        else if(dislikeClicked) db.collection("Recipes").document(recipeId)
+        else if (dislikeClicked) db.collection("Recipes").document(recipeId)
                 .update("dislikes", FieldValue.increment(1));
     }
 
     //Gestione del click del like e del dislike
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.likeBtn:
-                if(likeClicked) {
-                    like.setColorFilter(ContextCompat.getColor(getContext(), R.color.likeDislikeNotClicked));
-                    likeCounterText.setText(String.valueOf(likeCounter));
-                    likeClicked = false;
-                }
-                else {
-                    like.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorAccent));
-                    dislike.setColorFilter(ContextCompat.getColor(getContext(), R.color.likeDislikeNotClicked));
-                    likeCounterText.setText(String.valueOf(likeCounter+1));
-                    dislikeCounterText.setText(String.valueOf(dislikeCounter));
-                    likeClicked = true;
-                    dislikeClicked = false;
-                }
-                break;
-            case R.id.dislikeBtn:
-                if(dislikeClicked) {
-                    dislike.setColorFilter(ContextCompat.getColor(getContext(), R.color.likeDislikeNotClicked));
-                    dislikeCounterText.setText(String.valueOf(dislikeCounter));
-                    dislikeClicked = false;
-                }
-                else {
-                    dislike.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorAccent));
-                    like.setColorFilter(ContextCompat.getColor(getContext(), R.color.likeDislikeNotClicked));
-                    dislikeCounterText.setText(String.valueOf(dislikeCounter+1));
-                    likeCounterText.setText(String.valueOf(likeCounter));
-                    dislikeClicked = true;
-                    likeClicked = false;
-                }
-                break;
-        }
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (!user.isAnonymous()) {
+            switch (v.getId()) {
+                case R.id.likeBtn:
+
+                    if (likeClicked) {
+                        like.setColorFilter(ContextCompat.getColor(getContext(), R.color.likeDislikeNotClicked));
+                        likeCounterText.setText(String.valueOf(likeCounter));
+                        likeClicked = false;
+
+                    } else {
+                        like.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorAccent));
+                        dislike.setColorFilter(ContextCompat.getColor(getContext(), R.color.likeDislikeNotClicked));
+                        likeCounterText.setText(String.valueOf(likeCounter + 1));
+                        dislikeCounterText.setText(String.valueOf(dislikeCounter));
+                        likeClicked = true;
+                        dislikeClicked = false;
+                    }
+                    break;
+                case R.id.dislikeBtn:
+                    if (dislikeClicked) {
+                        dislike.setColorFilter(ContextCompat.getColor(getContext(), R.color.likeDislikeNotClicked));
+                        dislikeCounterText.setText(String.valueOf(dislikeCounter));
+                        dislikeClicked = false;
+                    } else {
+                        dislike.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorAccent));
+                        like.setColorFilter(ContextCompat.getColor(getContext(), R.color.likeDislikeNotClicked));
+                        dislikeCounterText.setText(String.valueOf(dislikeCounter + 1));
+                        likeCounterText.setText(String.valueOf(likeCounter));
+                        dislikeClicked = true;
+                        likeClicked = false;
+                    }
+                    break;
+            }
+        } else Snackbar.make(layout, R.string.likedislikeanonymous, Snackbar.LENGTH_LONG).show();
     }
 }
 
