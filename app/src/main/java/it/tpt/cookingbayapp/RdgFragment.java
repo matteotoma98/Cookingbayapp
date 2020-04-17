@@ -16,7 +16,9 @@ import android.view.ViewGroup;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -70,6 +72,7 @@ public class RdgFragment extends Fragment {
      * @param daysBefore quanti giorni indietro bisogna cercare, utilizzato nella query whereGreaterThanOrEqualTo
      */
     private void downloadRecipes(final int daysBefore) {
+        /*
         db.collection("Recipes")
                 .whereGreaterThanOrEqualTo("date", getCurrentDayInSeconds() - daysBefore*24*60*60)
                 .get()
@@ -98,6 +101,35 @@ public class RdgFragment extends Fragment {
                         }
                     }
                 });
+         */
+        db.collection("Recipes")
+                .whereGreaterThanOrEqualTo("date", getCurrentDayInSeconds() - daysBefore*24*60*60)
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Log.w("TAG", "Listen failed.", e);
+                            return;
+                        }
+                        ArrayList<Recipe> recipeList = new ArrayList<>();
+                        ArrayList<String> recipeIds = new ArrayList<>();
+                        int count = 0;
+                        for (QueryDocumentSnapshot doc : value) {
+                            Recipe recipe = doc.toObject(Recipe.class);
+                            recipeList.add(recipe);
+                            recipeIds.add(doc.getId());
+                            count++;
+                        }
+                        if(count<3) downloadRecipes(daysBefore+1);
+                        else {
+                            recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1, GridLayoutManager.VERTICAL, false));
+                            RecipeCardRecyclerViewAdapter adapter = new RecipeCardRecyclerViewAdapter(getActivity(), recipeList, recipeIds);
+                            recyclerView.setAdapter(adapter);
+                            Log.i("Finish", "Recipes downloaded");
+                        }
+
+                    }
+                });
     }
 
     /**
@@ -119,6 +151,6 @@ public class RdgFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        downloadRecipes(0);
+        //downloadRecipes(0);
     }
 }

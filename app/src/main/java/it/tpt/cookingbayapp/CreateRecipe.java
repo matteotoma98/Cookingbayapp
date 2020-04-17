@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 
@@ -40,12 +39,15 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import it.tpt.cookingbayapp.ingredientsRecycler.IngredientsRecyclerViewAdapter;
 import it.tpt.cookingbayapp.recipeObject.Ingredient;
@@ -428,9 +430,16 @@ public class CreateRecipe extends AppCompatActivity {
                                     mRecipe.setSections(sections);
 
                                     if (isEditing) {
-                                        //aggiorna la ricetta esistente
+                                        //aggiorna la ricetta esistente con solo le informazioni modificate per evitare di sovrascrivere ad esempio like e dislike
+                                        Map<String, Object> map = new HashMap<String, Object>();
+                                        map.put("sections", sections);
+                                        map.put("ingredredients", iAdapter.getIngredients());
+                                        map.put("ingNames", names);
+                                        map.put("type", actwType.getText().toString());
+                                        map.put("previewUrl", main.getUrl());
+                                        map.put("time", totalTime.getText().toString());
                                         db.collection("Recipes").document(getIntent().getStringExtra("recipeId"))
-                                                .set(mRecipe)
+                                                .set(map, SetOptions.merge())
                                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                     @Override
                                                     public void onSuccess(Void aVoid) {
@@ -444,7 +453,6 @@ public class CreateRecipe extends AppCompatActivity {
                                                     }
                                                 });
                                         Toast.makeText(CreateRecipe.this, R.string.done_editing, Toast.LENGTH_LONG).show();
-                                        setResult(RESULT_OK);
                                         finish();
                                     } else {
                                         //Aggiunge una nuova ricetta
@@ -464,7 +472,6 @@ public class CreateRecipe extends AppCompatActivity {
                                                     }
                                                 });
                                         Toast.makeText(CreateRecipe.this, R.string.done_sharing, Toast.LENGTH_LONG).show();
-                                        setResult(RESULT_OK);
                                         finish();
                                     }
                                 }

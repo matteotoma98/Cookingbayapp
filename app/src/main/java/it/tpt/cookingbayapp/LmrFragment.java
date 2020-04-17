@@ -14,13 +14,13 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -39,8 +39,6 @@ public class LmrFragment extends Fragment {
     private FirebaseUser currentUser;
     private View layout;
     private FirebaseFirestore db;
-    final static int CREATE_REQUEST = 129;
-    public final static int VIEW_REQUEST = 777;
 
     public LmrFragment() {
 
@@ -58,7 +56,7 @@ public class LmrFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
         //Essendo le chiamate a Firebase asincrone c'è il rischio che che l'utente clicchi su questo fragment prima ancora che sia terminato il login
-        if(currentUser!=null) uid = currentUser.getUid();
+        if (currentUser != null) uid = currentUser.getUid();
 
         downloadRecipes(); //Scarica le ricette e le assegna al recyclerView
 
@@ -68,29 +66,29 @@ public class LmrFragment extends Fragment {
     /**
      * Scarica fa Firebase le proprie ricette tramite query whereEqualTo
      * e le inserisce nel RecyclerView
+     * Inoltre è presente un eventListener per monitorare i cambiamenti effettuati
      */
     private void downloadRecipes() {
         db.collection("Recipes")
                 .whereEqualTo("authorId", uid)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            ArrayList<Recipe> recipeList = new ArrayList<>();
-                            ArrayList<String> recipeIds = new ArrayList<>();
-                            for (final QueryDocumentSnapshot document : task.getResult()) {
-                                Recipe recipe = document.toObject(Recipe.class);
-                                recipeIds.add(document.getId());
-                                recipeList.add(recipe);
-                            }
-                            recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1, GridLayoutManager.VERTICAL, false));
-                            adapter = new PersonalCardRecyclerViewAdapter(getActivity(), recipeList, recipeIds);
-                            recyclerView.setAdapter(adapter);
-                            Log.i("Redownload", "Recipes downloaded");
-                        } else {
-                            Log.d("TAG", "Error getting documents: ", task.getException());
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Log.w("TAG", "Listen failed.", e);
+                            return;
                         }
+                        ArrayList<Recipe> recipeList = new ArrayList<>();
+                        ArrayList<String> recipeIds = new ArrayList<>();
+                        for (QueryDocumentSnapshot doc : value) {
+                            Recipe recipe = doc.toObject(Recipe.class);
+                            recipeList.add(recipe);
+                            recipeIds.add(doc.getId());
+                        }
+                        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1, GridLayoutManager.VERTICAL, false));
+                        adapter = new PersonalCardRecyclerViewAdapter(getActivity(), recipeList, recipeIds);
+                        recyclerView.setAdapter(adapter);
+                        Log.i("FinishLMR", "Recipes downloaded");
                     }
                 });
     }
@@ -104,9 +102,9 @@ public class LmrFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                if(!user.isAnonymous()) {
+                if (!user.isAnonymous()) {
                     Intent i = new Intent(getActivity(), CreateRecipe.class);
-                    startActivityForResult(i, CREATE_REQUEST);
+                    startActivity(i);
                 } else Snackbar.make(layout, R.string.anonymous, Snackbar.LENGTH_LONG).show();
             }
         });
@@ -117,17 +115,5 @@ public class LmrFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == CREATE_REQUEST) {
-            if(resultCode == getActivity().RESULT_OK) {
-                downloadRecipes();
-            }
-        }
-        if (requestCode == VIEW_REQUEST) {
-            downloadRecipes();
-        }
-    }
 
 }
