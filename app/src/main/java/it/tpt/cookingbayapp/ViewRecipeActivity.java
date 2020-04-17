@@ -53,8 +53,10 @@ public class ViewRecipeActivity extends AppCompatActivity {
         recipeBundle.putSerializable("recipe", recipe);
         recipeBundle.putString("recipeId", recipeId);
         mVrFragment.setArguments(recipeBundle); //Passa la ricetta al fragment della visualizzazione della ricetta
+
         Bundle commentBundle = new Bundle();
         commentBundle.putSerializable("comments", recipe.getComments());
+        commentBundle.putString("recipeId", recipeId);
         mComFragment.setArguments(commentBundle); //Passa i commenti al fragment della visualizzazione dei commenti
 
         getSupportActionBar().setTitle(recipe.getTitle());

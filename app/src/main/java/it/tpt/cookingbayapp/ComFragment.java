@@ -11,6 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 
@@ -23,6 +26,9 @@ public class ComFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private CommentRecyclerAdapter mAdapter;
     private FloatingActionButton mFloatingComment;
+    private View layout;
+    private String recipeId;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,10 +39,12 @@ public class ComFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_com, container, false);
+        layout = view.findViewById(R.id.commentCoordinatorLayout);//Layout per lo SnackBar
 
-        //Ottieni i commenti passati dall'activity ViewRecipe
+        //Ottieni i commenti e l'Id della ricetta passati dall'activity ViewRecipe
         Bundle commentBundle = this.getArguments();
         ArrayList<Comment> comments = (ArrayList) commentBundle.getSerializable("comments");
+        recipeId = commentBundle.getString("recipeId");
         mRecyclerView = view.findViewById(R.id.comRecycler);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -48,8 +56,14 @@ public class ComFragment extends Fragment {
         mFloatingComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ComDialog commentDialog = new ComDialog();
-                commentDialog.show(getChildFragmentManager(),"custom");
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                if(!user.isAnonymous()) {
+                    ComDialog commentDialog = new ComDialog();
+                    commentDialog.setmAdapter(mAdapter); //Per passare l'adapter ed aggiungere il commento in locale
+                    commentDialog.setRecipeId(recipeId); //L'id della ricetta per aggiungere il commento su Firestore
+                    commentDialog.show(getChildFragmentManager(), "custom");
+                }
+                else Snackbar.make(layout, R.string.anonymous, Snackbar.LENGTH_LONG).show();
             }
         });
         return view;
