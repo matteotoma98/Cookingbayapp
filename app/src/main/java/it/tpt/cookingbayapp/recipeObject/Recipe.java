@@ -13,8 +13,9 @@ public class Recipe implements Serializable{
     private String authorId;
     private String authorName;
     private ArrayList<Ingredient> ingredients;
-    private ArrayList<String> ingNames;
+    private ArrayList<String> ingNames; //Field Ridondante per cercare le ricette in Ricerca
     private ArrayList<Section> sections;
+    private ArrayList<Comment> comments;
     private long date;
     private int likes;
     private int dislikes;
@@ -35,6 +36,14 @@ public class Recipe implements Serializable{
         this.date = date;
         this.likes = 0;
         this.dislikes = 0;
+    }
+
+    public ArrayList<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(ArrayList<Comment> comments) {
+        this.comments = comments;
     }
 
     public int getLikes() {
