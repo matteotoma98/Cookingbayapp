@@ -138,6 +138,7 @@ public class ProfileFragment extends Fragment {
                                                     if (task.isSuccessful()) {
                                                         // Sign in success, update UI with the signed-in user's information
                                                         Log.d("signin", "signInAnonymously:success");
+                                                        updateUI();
                                                         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Cooking Bay");
                                                         Snackbar.make(layout, R.string.logged_as_anonymous, Snackbar.LENGTH_SHORT).show();
                                                     } else {
@@ -245,7 +246,14 @@ public class ProfileFragment extends Fragment {
 
     public void updateUI(){
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user!=null && user.isAnonymous()) nome_utente.setText("Utente anonimo");
+        if (user!=null && user.isAnonymous()) {
+            nome_utente.setText("Utente anonimo");
+            Glide.with(getContext())
+                    .load(user.getPhotoUrl())
+                    .error(R.drawable.missingprofile)
+                    .centerCrop()
+                    .into(profilePic);
+        }
         else {
             nome_utente.setText(user.getDisplayName());
             Glide.with(getContext())
