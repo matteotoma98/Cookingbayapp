@@ -10,8 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
 import java.util.ArrayList;
 
 import it.tpt.cookingbayapp.CommentRecycler.CommentRecyclerAdapter;
@@ -22,7 +20,6 @@ public class ComFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
     private CommentRecyclerAdapter mAdapter;
-    private FloatingActionButton mFloatingComment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,16 +40,6 @@ public class ComFragment extends Fragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mAdapter = new CommentRecyclerAdapter(comments, getContext());
         mRecyclerView.setAdapter(mAdapter);
-
-        mFloatingComment = view.findViewById(R.id.comNewCommentBtn);
-
-        mFloatingComment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ComDialog commentDialog = new ComDialog();
-                commentDialog.show(getChildFragmentManager(),"custom");
-            }
-        });
         
         return view;
     }
