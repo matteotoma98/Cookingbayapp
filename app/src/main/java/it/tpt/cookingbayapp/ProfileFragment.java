@@ -32,9 +32,13 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class ProfileFragment extends Fragment {
@@ -193,6 +197,10 @@ public class ProfileFragment extends Fragment {
                                             }
                                         }
                                     });
+                            Map<String, Object> picUrl = new HashMap<>();
+                            picUrl.put("profilePicUrl", url);
+                            db.collection("Users").document(uid).set(picUrl, SetOptions.merge()); //Aggiungi l'url nel documento dell'utente
+                            //Aggiungi l'url in tutte le sue ricette per diminuire le call a Firestore nel feed
                             db.collection("Recipes")
                                     .whereEqualTo("authorId", uid)
                                     .get()

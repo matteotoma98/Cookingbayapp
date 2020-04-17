@@ -9,6 +9,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.List;
 
@@ -19,10 +23,12 @@ public class CommentRecyclerAdapter extends RecyclerView.Adapter<CommentViewHold
 
     private List<Comment> comments;
     private Context mContext;
+    FirebaseFirestore db;
 
     public CommentRecyclerAdapter(List<Comment> comments, Context context) {
         this.comments = comments;
         mContext = context;
+        db = FirebaseFirestore.getInstance();
     }
 
     @NonNull
@@ -34,14 +40,31 @@ public class CommentRecyclerAdapter extends RecyclerView.Adapter<CommentViewHold
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CommentViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final CommentViewHolder holder, final int position) {
         if(comments!=null && position < comments.size()) {
-            holder.username.setText(comments.get(position).getUsername());
+
             holder.content.setText(comments.get(position).getContent());
-            Glide.with(mContext)
-                    .load(comments.get(position).getUrl())
-                    .error(R.drawable.missingprofile)
-                    .into(holder.profilePic);
+
+            db.collection("Users").document(comments.get(position).getUserId())
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot document = task.getResult();
+                                if (document.exists()) {
+                                    holder.username.setText(document.getString("username"));
+                                    Glide.with(mContext)
+                                            .load(document.getString("profilePicUrl"))
+                                            .error(R.drawable.missingprofile)
+                                            .into(holder.profilePic);
+                                }
+                            } else {
+
+                            }
+                        }
+                    });
+
         }
     }
 
