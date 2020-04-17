@@ -53,7 +53,7 @@ public class ComDialog extends DialogFragment {
             public void onClick(View v) {
                 Log.i("publish", "Publish Pressed");
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                final Comment comment = new Comment(user.getUid(), user.getDisplayName(), getmTxtInsertComment(), user.getPhotoUrl());
+                final Comment comment = new Comment(user.getUid(), user.getDisplayName(), getmTxtInsertComment(), user.getPhotoUrl().toString());
                 if(!user.isAnonymous() && !getmTxtInsertComment().equals("")) { //Se non è anonimo
                     if(!getmTxtInsertComment().equals("")) { //Se il testo non è vuoto
                         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -71,7 +71,7 @@ public class ComDialog extends DialogFragment {
                 }
             }
         });
-        
+
         return view;
     }
 

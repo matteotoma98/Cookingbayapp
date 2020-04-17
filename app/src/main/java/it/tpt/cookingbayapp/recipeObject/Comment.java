@@ -11,13 +11,13 @@ public class Comment implements Serializable {
     private String userId;
     private String username;
     private String content;
-    private Uri url;
+    private String url;
 
     public Comment() {
 
     }
 
-    public Comment(String userId, String userName, String content, Uri url) {
+    public Comment(String userId, String userName, String content, String url) {
         this.userId = userId;
         this.username = userName;
         this.content = content;
@@ -48,11 +48,11 @@ public class Comment implements Serializable {
         this.content = content;
     }
 
-    public Uri getUrl() {
+    public String getUrl() {
         return url;
     }
 
-    public void setUrl(Uri url) {
+    public void setUrl(String url) {
         this.url = url;
     }
 }
