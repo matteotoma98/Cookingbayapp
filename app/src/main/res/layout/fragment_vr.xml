@@ -21,6 +21,7 @@
                 android:id="@+id/viewPreviewPic"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
+                android:contentDescription="@string/imgrecipe"
                 android:scaleType="centerCrop"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintDimensionRatio="H, 16:9"
@@ -42,24 +43,24 @@
                 android:layout_marginTop="10dp"
                 android:orientation="horizontal">
 
-                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/viewProfilePic"
                     android:layout_width="55dp"
                     android:layout_height="55dp"
-                    android:contentDescription="profilePic"
+                    android:contentDescription="@string/profilePic"
                     android:scaleType="centerCrop" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
                     android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/viewRecipeTitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Titolo"
+                        android:text="@string/titolo"
                         android:textColor="@color/primaryText"
                         android:textSize="25sp"
                         android:textStyle="bold" />
@@ -68,7 +69,7 @@
                         android:id="@+id/viewRecipeAuthor"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Autore" />
+                        android:text="@string/autore" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -77,7 +78,7 @@
                 android:layout_height="1dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="10dp"
-                android:background="@android:color/darker_gray"/>
+                android:background="@android:color/darker_gray" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -87,8 +88,8 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:gravity="center_vertical">
+                    android:gravity="center_vertical"
+                    android:orientation="vertical">
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -101,13 +102,14 @@
                             android:layout_height="20dp"
                             android:layout_gravity="end"
                             android:layout_marginEnd="5dp"
+                            android:contentDescription="@string/tipologia"
                             android:src="@drawable/ic_restaurant_black_24dp" />
 
                         <TextView
                             android:id="@+id/viewRecipeType"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Tipologia"
+                            android:text="@string/tipologia"
                             android:textAppearance="?attr/textAppearanceBody2"
                             android:textColor="?android:attr/textColorSecondary" />
                     </LinearLayout>
@@ -123,13 +125,14 @@
                             android:layout_height="20dp"
                             android:layout_gravity="end"
                             android:layout_marginEnd="5dp"
+                            android:contentDescription="@string/tempo"
                             android:src="@drawable/ic_av_timer_black_24dp" />
 
                         <TextView
                             android:id="@+id/viewRecipeTime"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Tempo"
+                            android:text="@string/tempo"
                             android:textAppearance="?attr/textAppearanceBody2"
                             android:textColor="?android:attr/textColorSecondary" />
                     </LinearLayout>
@@ -138,15 +141,16 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:gravity="right|center"
+                    android:gravity="end|center"
+                    android:orientation="horizontal"
+                    android:paddingLeft="10dp"
                     android:paddingEnd="10dp"
-
-                    android:orientation="horizontal">
+                    android:paddingRight="10dp">
 
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="30dp"
+                        android:layout_marginEnd="30dp"
                         android:gravity="center"
                         android:orientation="vertical">
 
@@ -154,14 +158,15 @@
                             android:id="@+id/likeBtn"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:contentDescription="@string/like"
                             android:src="@drawable/ic_thumb_up_black_24dp"
-                            android:tint="@color/likeDislikeNotClicked"/>
+                            android:tint="@color/likeDislikeNotClicked" />
 
                         <TextView
                             android:id="@+id/likeCounterText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="0" />
+                            android:text="@string/_0" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -174,23 +179,26 @@
                             android:id="@+id/dislikeBtn"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:contentDescription="@string/dislike"
                             android:src="@drawable/ic_thumb_down_black_24dp"
-                            android:tint="@color/likeDislikeNotClicked"/>
+                            android:tint="@color/likeDislikeNotClicked" />
 
                         <TextView
                             android:id="@+id/dislikeCounterText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="0" />
+                            android:text="@string/_0" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginTop="10dp"
 
-                android:background="@android:color/darker_gray"/>
+                android:background="@android:color/darker_gray" />
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -212,16 +220,18 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
             </androidx.core.widget.NestedScrollView>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
-                android:background="@android:color/darker_gray"/>
+                android:background="@android:color/darker_gray" />
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Procedimento"
+                android:text="@string/procedimento"
                 android:textColor="@color/colorPrimary"
                 android:textSize="20sp"
                 android:textStyle="bold" />

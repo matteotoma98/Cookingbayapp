@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card"
     android:layout_width="match_parent"
@@ -14,40 +13,39 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- Media -->
         <ImageView
             android:id="@+id/cardPreviewPic"
             android:layout_width="match_parent"
             android:layout_height="194dp"
-            android:scaleType="centerCrop"
-            android:contentDescription="ciao"
-            />
+            android:contentDescription="@string/imgrecipe"
+            android:scaleType="centerCrop" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="10dp">
+
             <de.hdodenhof.circleimageview.CircleImageView
-                xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/cardProfilePic"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:src="@drawable/missingprofile"
+                android:contentDescription="@string/profilepic"
                 android:scaleType="centerCrop"
-                android:contentDescription="profilePic"/>
+                android:src="@drawable/missingprofile" />
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:paddingLeft="10dp"
-                >
-                <!-- Title, secondary and supporting text -->
+                android:paddingRight="10dp">
+
                 <TextView
                     android:id="@+id/cardRecipeTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Titolo"
+                    android:text="@string/titolo"
                     android:textAppearance="?attr/textAppearanceHeadline6" />
 
                 <TextView
@@ -55,52 +53,61 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="1dp"
-                    android:text="Utente"
+                    android:text="@string/utente"
                     android:textAppearance="?attr/textAppearanceBody2"
-                    android:textColor="?android:attr/textColorSecondary"
-                    />
+                    android:textColor="?android:attr/textColorSecondary" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:gravity="right">
+                android:gravity="end"
+                android:orientation="vertical">
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
+
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
+                        android:layout_gravity="end"
                         android:layout_marginEnd="5dp"
-                        android:src="@drawable/ic_restaurant_black_24dp"
-                        android:layout_gravity="end" />
+                        android:contentDescription="@string/tipo_pietanza"
+                        android:src="@drawable/ic_restaurant_black_24dp" />
+
                     <TextView
                         android:id="@+id/cardRecipeType"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Pietanza"
+                        android:text="@string/pietanza"
                         android:textAppearance="?attr/textAppearanceBody2"
-                        android:textColor="?android:attr/textColorSecondary"/>
+                        android:textColor="?android:attr/textColorSecondary" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="5dp">
+                    android:layout_marginTop="5dp"
+                    android:orientation="horizontal">
+
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
+                        android:layout_gravity="end"
                         android:layout_marginEnd="5dp"
-                        android:src="@drawable/ic_av_timer_black_24dp"
-                        android:layout_gravity="end" />
+                        android:contentDescription="@string/tempo"
+                        android:src="@drawable/ic_av_timer_black_24dp" />
+
                     <TextView
                         android:id="@+id/cardRecipeTime"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Tempo"
+                        android:text="@string/tempo"
                         android:textAppearance="?attr/textAppearanceBody2"
-                        android:textColor="?android:attr/textColorSecondary"/>
+                        android:textColor="?android:attr/textColorSecondary" />
+
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

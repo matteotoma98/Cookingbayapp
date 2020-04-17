@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
     <LinearLayout
         android:id="@+id/createRecipeLinearLayout1"
         android:layout_width="match_parent"
@@ -18,6 +19,7 @@
                 android:id="@+id/imgAnteprima"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
+                android:contentDescription="@string/imganteprima"
                 android:scaleType="centerCrop"
                 android:src="@drawable/preview_dummy"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -33,7 +35,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
-            android:text="Informazioni generali"
+            android:text="@string/informazioni_generali"
             android:textColor="@color/colorAccent"
             android:textSize="17sp"
             android:textStyle="bold" />
@@ -45,7 +47,7 @@
             android:layout_gravity="center"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
-            android:hint="Inserisci il titolo"
+            android:hint="@string/inserisci_il_titolo"
             app:boxBackgroundColor="@android:color/white"
             app:counterEnabled="true"
             app:counterMaxLength="69">
@@ -69,7 +71,7 @@
                 android:layout_width="110dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:hint="Min"
+                android:hint="@string/min"
                 app:boxBackgroundColor="@android:color/white"
                 app:startIconContentDescription="timer"
                 app:startIconDrawable="@drawable/ic_av_timer_black_24dp">
@@ -88,7 +90,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:hint="Tipologia"
+                android:hint="@string/tipologia"
                 app:boxBackgroundColor="@android:color/white"
                 app:startIconContentDescription="type"
                 app:startIconDrawable="@drawable/ic_restaurant_black_24dp">
@@ -123,7 +125,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Ingredienti"
+                    android:text="@string/ingredienti"
                     android:textColor="@color/colorAccent"
                     android:textSize="17sp"
                     android:textStyle="bold" />
@@ -144,7 +146,7 @@
                         android:layout_gravity="center"
                         android:layout_marginStart="10dp"
                         android:layout_marginEnd="10dp"
-                        android:hint="Ingrediente"
+                        android:hint="@string/ingrediente"
                         app:boxBackgroundColor="@android:color/white">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -159,7 +161,7 @@
                         android:layout_gravity="center"
                         android:layout_marginStart="10dp"
                         android:layout_marginEnd="10dp"
-                        android:hint="QTA"
+                        android:hint="@string/qta"
                         app:boxBackgroundColor="@android:color/white">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -179,7 +181,7 @@
                         style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Aggiungi"
+                        android:text="@string/aggiungi"
                         android:textColor="@color/colorAccent"
                         app:icon="@drawable/ic_add_black_24dp"
                         app:iconTint="@color/colorAccent" />
@@ -189,7 +191,7 @@
                         style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Elimina"
+                        android:text="@string/elimina"
                         android:textColor="@color/colorAccent"
                         app:icon="@drawable/ic_delete_forever_black_24dp"
                         app:iconTint="@color/colorAccent" />
@@ -216,12 +218,13 @@
                         android:layout_height="match_parent" />
 
                 </LinearLayout>
+
                 <Button
                     android:id="@+id/addstep"
                     style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Aggiungi Step"
+                    android:text="@string/aggiungi_step"
                     android:textColor="@color/colorAccent"
                     app:icon="@drawable/ic_add_black_24dp"
                     app:iconTint="@color/colorAccent" />

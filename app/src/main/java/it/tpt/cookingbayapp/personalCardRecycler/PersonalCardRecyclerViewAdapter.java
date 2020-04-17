@@ -65,7 +65,7 @@ public class PersonalCardRecyclerViewAdapter extends RecyclerView.Adapter<Person
             public void onDeleteClickListener(View v, final int position) {
                 MaterialAlertDialogBuilder confirmDel = new MaterialAlertDialogBuilder(mContext);
                 confirmDel.setTitle("Attenzione");
-                confirmDel.setMessage("Sei sicuro di voler eliminare la ricetta?");
+                confirmDel.setMessage(R.string.delete_confirmation);
                 confirmDel.setIcon(R.drawable.ic_warning_black_24dp);
                 confirmDel.setPositiveButton("Elimina", new DialogInterface.OnClickListener() {
                     @Override
@@ -76,14 +76,14 @@ public class PersonalCardRecyclerViewAdapter extends RecyclerView.Adapter<Person
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
-                                        Toast.makeText(mContext, "Ricetta eliminata", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(mContext, R.string.recipe_deleted, Toast.LENGTH_LONG).show();
                                         Log.d("DELETEDOC", "DocumentSnapshot successfully deleted!");
                                     }
                                 })
                                 .addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
-                                        Toast.makeText(mContext, "Errore nell'eliminazione!", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(mContext, R.string.delete_error, Toast.LENGTH_LONG).show();
                                         Log.w("DELETEDOC", "Error deleting document", e);
                                     }
                                 });
@@ -154,7 +154,7 @@ public class PersonalCardRecyclerViewAdapter extends RecyclerView.Adapter<Person
 
             holder.title.setText(recipe.getTitle());
             holder.type.setText(recipe.getType());
-            holder.time.setText(recipe.getTime() + " min");
+            holder.time.setText(recipe.getTime() + "min");
 
             Glide.with(holder.preview.getContext()).load(recipe.getPreviewUrl()).into(holder.preview);
 
