@@ -67,7 +67,7 @@ public class ComDialog extends DialogFragment {
                                     }
                                 });
                         getDialog().dismiss();
-                    } else Toast.makeText(getContext(), "EMPTY", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
