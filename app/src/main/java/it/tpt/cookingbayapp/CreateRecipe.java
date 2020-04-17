@@ -433,7 +433,7 @@ public class CreateRecipe extends AppCompatActivity {
                                         //aggiorna la ricetta esistente con solo le informazioni modificate per evitare di sovrascrivere ad esempio like e dislike
                                         Map<String, Object> map = new HashMap<String, Object>();
                                         map.put("sections", sections);
-                                        map.put("ingrededients", iAdapter.getIngredients());
+                                        map.put("ingredients", iAdapter.getIngredients());
                                         map.put("ingNames", names);
                                         map.put("type", actwType.getText().toString());
                                         map.put("previewUrl", main.getUrl());
