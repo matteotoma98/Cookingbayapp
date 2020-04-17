@@ -9,7 +9,7 @@ import java.io.Serializable;
  */
 public class Comment implements Serializable {
     private String userId;
-    private String userName;
+    private String username;
     private String content;
     private Uri url;
 
@@ -19,7 +19,7 @@ public class Comment implements Serializable {
 
     public Comment(String userId, String userName, String content, Uri url) {
         this.userId = userId;
-        this.userName = userName;
+        this.username = userName;
         this.content = content;
         this.url = url;
     }
@@ -32,12 +32,12 @@ public class Comment implements Serializable {
         this.userId = userId;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getContent() {

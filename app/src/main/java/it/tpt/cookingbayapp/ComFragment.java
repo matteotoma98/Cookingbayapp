@@ -3,15 +3,23 @@ package it.tpt.cookingbayapp;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+
+import it.tpt.cookingbayapp.CommentRecycler.CommentRecyclerAdapter;
+import it.tpt.cookingbayapp.recipeObject.Comment;
 
 
 public class ComFragment extends Fragment {
 
+    private RecyclerView mRecyclerView;
+    private CommentRecyclerAdapter mAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -20,9 +28,19 @@ public class ComFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_com, container, false);
+        View view = inflater.inflate(R.layout.fragment_com, container, false);
+
+        //Ottieni i commenti passati dall'activity ViewRecipe
+        Bundle commentBundle = this.getArguments();
+        ArrayList<Comment> comments = (ArrayList) commentBundle.getSerializable("comments");
+        mRecyclerView = view.findViewById(R.id.comRecycler);
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mAdapter = new CommentRecyclerAdapter(comments, getContext());
+        mRecyclerView.setAdapter(mAdapter);
+        
+        return view;
     }
 }

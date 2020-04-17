@@ -32,35 +32,42 @@ public class ViewRecipeActivity extends AppCompatActivity {
     boolean iconset;
     boolean favouriteset;
 
-        @Override
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_recipe);
 
-        mViewPager=findViewById(R.id.view_pager);
-        mTabLayout=findViewById(R.id.tab_layout);
+        mViewPager = findViewById(R.id.view_pager);
+        mTabLayout = findViewById(R.id.tab_layout);
 
-        mVrFragment= new VrFragment();
-        mComFragment= new ComFragment();
-        iconset=false;
-        favouriteset=true;
-            Intent intent = getIntent();
-            Recipe recipe = (Recipe) intent.getSerializableExtra("recipe");
-            String recipeId = intent.getStringExtra("recipeId");
-            Bundle recipebundle = new Bundle();
-            recipebundle.putSerializable("recipe", recipe);
-            recipebundle.putString("recipeId", recipeId);
-            mVrFragment.setArguments(recipebundle);
-            getSupportActionBar().setTitle(recipe.getTitle());
+        mVrFragment = new VrFragment();
+        mComFragment = new ComFragment();
+        iconset = false;
+        favouriteset = true;
 
-            mTabLayout.setupWithViewPager(mViewPager);
+        //Ottieni la ricetta passata dallo startActivity
+        Intent intent = getIntent();
+        Recipe recipe = (Recipe) intent.getSerializableExtra("recipe");
+        String recipeId = intent.getStringExtra("recipeId");
+        Bundle recipeBundle = new Bundle();
+        recipeBundle.putSerializable("recipe", recipe);
+        recipeBundle.putString("recipeId", recipeId);
+        mVrFragment.setArguments(recipeBundle); //Passa la ricetta al fragment della visualizzazione della ricetta
+        Bundle commentBundle = new Bundle();
+        commentBundle.putSerializable("comments", recipe.getComments());
+        mComFragment.setArguments(commentBundle); //Passa i commenti al fragment della visualizzazione dei commenti
 
-        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(),0);
+        getSupportActionBar().setTitle(recipe.getTitle());
+
+        mTabLayout.setupWithViewPager(mViewPager);
+
+        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), 0);
         viewPagerAdapter.addFragment(mVrFragment, "Ricetta");
         viewPagerAdapter.addFragment(mComFragment, "Commenti");
-            mViewPager.setAdapter(viewPagerAdapter);
+        mViewPager.setAdapter(viewPagerAdapter);
 
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.vr_menu, menu);
@@ -71,11 +78,11 @@ public class ViewRecipeActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.addFavourite) {
-            if(favouriteset) {
+            if (favouriteset) {
                 if (iconset) {
                     item.setIcon(R.drawable.ic_favorite_border_black_24dp);
                     iconset = false;
-                  favouriteset=true;
+                    favouriteset = true;
                 } else {
                     item.setIcon(R.drawable.ic_favorite_black_24dp);
                     iconset = true;
@@ -83,21 +90,19 @@ public class ViewRecipeActivity extends AppCompatActivity {
                 }
             }
         }
-             return super.onOptionsItemSelected(item);
+        return super.onOptionsItemSelected(item);
     }
 
     private class ViewPagerAdapter extends FragmentPagerAdapter {
 
-            private List<Fragment> fragments= new ArrayList<>();
-            private List<String> fragmentTitle = new ArrayList<>();
-
-
+        private List<Fragment> fragments = new ArrayList<>();
+        private List<String> fragmentTitle = new ArrayList<>();
 
         public ViewPagerAdapter(@NonNull FragmentManager fm, int behavior) {
             super(fm, behavior);
         }
 
-        public void addFragment(Fragment fragment,String title){
+        public void addFragment(Fragment fragment, String title) {
             fragments.add(fragment);
             fragmentTitle.add(title);
 
