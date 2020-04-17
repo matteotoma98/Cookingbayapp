@@ -40,7 +40,7 @@ public class ComFragment extends Fragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mAdapter = new CommentRecyclerAdapter(comments, getContext());
         mRecyclerView.setAdapter(mAdapter);
-        
+
         return view;
     }
 }

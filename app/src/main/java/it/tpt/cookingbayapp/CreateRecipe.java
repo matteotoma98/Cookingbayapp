@@ -50,6 +50,7 @@ import java.util.List;
 import java.util.Map;
 
 import it.tpt.cookingbayapp.ingredientsRecycler.IngredientsRecyclerViewAdapter;
+import it.tpt.cookingbayapp.recipeObject.Comment;
 import it.tpt.cookingbayapp.recipeObject.Ingredient;
 import it.tpt.cookingbayapp.recipeObject.Recipe;
 import it.tpt.cookingbayapp.recipeObject.Section;
@@ -198,6 +199,7 @@ public class CreateRecipe extends AppCompatActivity {
             mRecipe.setAuthorName(currentUser.getDisplayName());
             mRecipe.setAuthorId(currentUser.getUid());
             mRecipe.setProfilePicUrl(currentUser.getPhotoUrl().toString());
+            mRecipe.setComments(new ArrayList<Comment>());
         }
 
         permissions.add(Manifest.permission.CAMERA);
