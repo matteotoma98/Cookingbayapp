@@ -45,7 +45,7 @@
                     android:id="@+id/cardRecipeTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/titolo"
+                    android:text="@string/title"
                     android:textAppearance="?attr/textAppearanceHeadline6" />
 
                 <TextView
@@ -53,7 +53,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="1dp"
-                    android:text="@string/utente"
+                    android:text="@string/user"
                     android:textAppearance="?attr/textAppearanceBody2"
                     android:textColor="?android:attr/textColorSecondary" />
             </LinearLayout>
@@ -74,14 +74,14 @@
                         android:layout_height="20dp"
                         android:layout_gravity="end"
                         android:layout_marginEnd="5dp"
-                        android:contentDescription="@string/tipo_pietanza"
+                        android:contentDescription="@string/dish_type"
                         android:src="@drawable/ic_restaurant_black_24dp" />
 
                     <TextView
                         android:id="@+id/cardRecipeType"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/pietanza"
+                        android:text="@string/dish"
                         android:textAppearance="?attr/textAppearanceBody2"
                         android:textColor="?android:attr/textColorSecondary" />
                 </LinearLayout>
@@ -97,14 +97,14 @@
                         android:layout_height="20dp"
                         android:layout_gravity="end"
                         android:layout_marginEnd="5dp"
-                        android:contentDescription="@string/tempo"
+                        android:contentDescription="@string/time"
                         android:src="@drawable/ic_av_timer_black_24dp" />
 
                     <TextView
                         android:id="@+id/cardRecipeTime"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/tempo"
+                        android:text="@string/time"
                         android:textAppearance="?attr/textAppearanceBody2"
                         android:textColor="?android:attr/textColorSecondary" />
 

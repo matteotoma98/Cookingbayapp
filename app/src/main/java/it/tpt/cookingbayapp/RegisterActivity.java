@@ -71,7 +71,7 @@ public class RegisterActivity extends AppCompatActivity {
                                     }
                                 });
                             } else
-                                Toast.makeText(RegisterActivity.this, getString(R.string.errorSignup), Toast.LENGTH_LONG).show();
+                                Toast.makeText(RegisterActivity.this, getString(R.string.error_signup), Toast.LENGTH_LONG).show();
                         }
                     });
 

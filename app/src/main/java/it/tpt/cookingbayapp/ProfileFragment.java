@@ -43,13 +43,12 @@ import java.util.Map;
 
 public class ProfileFragment extends Fragment {
 
-    private Button exit;
-    private Button switch_account;
+    private Button exit; //Bottone per uscire dall'account
+    private Button switch_account; //Bottone per cambiare account
     private FirebaseAuth mAuth;
-    private FirebaseUser currentUser;
-    private ImageView profilePic;
+    private ImageView profilePic; //Foto di profile
     private Uri profileUri;
-    private TextView nome_utente;
+    private TextView username;
     private View layout;
     private final static int PROPIC_REQUEST = 239;
     public static final int LOGIN_REQUEST = 101;
@@ -66,21 +65,13 @@ public class ProfileFragment extends Fragment {
         profilePic = view.findViewById(R.id.userProfilePic);
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
-        currentUser = mAuth.getCurrentUser();
-        if (currentUser != null) {
-            uid = currentUser.getUid();
-            Glide.with(getContext())
-                    .load(currentUser.getPhotoUrl())
-                    .error(R.drawable.missingprofile)
-                    .centerCrop()
-                    .into(profilePic);
-
-        }
 
         exit = view.findViewById(R.id.logout);
-        switch_account = view.findViewById(R.id.cambia_account);
-        nome_utente = view.findViewById(R.id.textUsername);
+        switch_account = view.findViewById(R.id.switch_account);
+        username = view.findViewById(R.id.profileUsername);
         layout = view.findViewById(R.id.profileCoordinatorLayout);
+
+        updateUI(); //Aggiorna l'ui con le informazioni dell'utente
         return view;
     }
 
@@ -91,9 +82,9 @@ public class ProfileFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
-        updateUI();
         super.onViewCreated(view, savedInstanceState);
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        //Click Listener dell'immagine di profilo
         profilePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -101,7 +92,7 @@ public class ProfileFragment extends Fragment {
                 if (!user.isAnonymous()) {
                     startActivityForResult(ImagePickActivity.getPickImageChooserIntent(getActivity(), "profile"), PROPIC_REQUEST);
                 } else
-                    Snackbar.make(layout, R.string.profilepicanonymous, Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(layout, R.string.profilepic_anonymous, Snackbar.LENGTH_LONG).show();
             }
         });
         //Click listener per cambiare account
@@ -127,7 +118,6 @@ public class ProfileFragment extends Fragment {
         exit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 if (user != null && !user.isAnonymous()) { //Evita che si crei un nuovo account anonimo se lo si è già
                     AuthUI.getInstance()
@@ -148,7 +138,7 @@ public class ProfileFragment extends Fragment {
                                                     } else {
                                                         // If sign in fails, display a message to the user.
                                                         Log.w("signinerror", "signInAnonymously:failure", task.getException());
-                                                        Toast.makeText((Context) getActivity(), R.string.exiterror, Toast.LENGTH_SHORT).show();
+                                                        Toast.makeText((Context) getActivity(), R.string.exit_error, Toast.LENGTH_SHORT).show();
                                                     }
                                                 }
                                             });
@@ -160,6 +150,9 @@ public class ProfileFragment extends Fragment {
         });
     }
 
+    /**
+     * Carica l'immagine di profilo in FirebaseStorage ed aggiorna dunque le info dell'utente con il nuovo url
+     */
     private void uploadPicAndUpdateRecipes() {
         try {
             if (profileUri != null) {
@@ -185,6 +178,7 @@ public class ProfileFragment extends Fragment {
                             final String url = task.getResult().toString();
                             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                             uid = user.getUid();
+                            //Aggiorna le info di FirebaseUser
                             UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                                     .setPhotoUri(Uri.parse(url))
                                     .build();
@@ -199,7 +193,8 @@ public class ProfileFragment extends Fragment {
                                     });
                             Map<String, Object> picUrl = new HashMap<>();
                             picUrl.put("profilePicUrl", url);
-                            db.collection("Users").document(uid).set(picUrl, SetOptions.merge()); //Aggiungi l'url nel documento dell'utente
+                            //Aggiungi l'url nel documento dell'utente per poterlo visualizzare anche nei commenti
+                            db.collection("Users").document(uid).set(picUrl, SetOptions.merge());
                             //Aggiungi l'url in tutte le sue ricette per diminuire le call a Firestore nel feed
                             db.collection("Recipes")
                                     .whereEqualTo("authorId", uid)
@@ -231,7 +226,6 @@ public class ProfileFragment extends Fragment {
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
-        updateUI();
         if (requestCode == PROPIC_REQUEST && resultCode == getActivity().RESULT_OK) {
             Log.i("PICUPLOADPROFILE", "RESULT OK");
             if (ImagePickActivity.getPickImageResultUri(getActivity(), intent, "profile") != null) {
@@ -252,18 +246,21 @@ public class ProfileFragment extends Fragment {
         }
     }
 
+    /**
+     * Aggiorna l'UI quando viene cambiato l'account e alla creazione del Fragment
+     */
     public void updateUI(){
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user!=null && user.isAnonymous()) {
-            nome_utente.setText("Utente anonimo");
+            username.setText("Utente anonimo");
             Glide.with(getContext())
                     .load(user.getPhotoUrl())
                     .error(R.drawable.missingprofile)
                     .centerCrop()
                     .into(profilePic);
         }
-        else {
-            nome_utente.setText(user.getDisplayName());
+        else if (user!= null && !user.isAnonymous()) {
+            username.setText(user.getDisplayName());
             Glide.with(getContext())
                     .load(user.getPhotoUrl())
                     .error(R.drawable.missingprofile)

@@ -8,7 +8,7 @@
         android:id="@+id/ingredient"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/ingrediente"
+        android:text="@string/ingredient"
         android:textColor="@color/primaryText" />
 
     <TextView
@@ -16,7 +16,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
-        android:text="@string/qta"
+        android:text="@string/quantity"
         android:textColor="@color/colorAccent"
         android:textStyle="bold" />
 </LinearLayout>

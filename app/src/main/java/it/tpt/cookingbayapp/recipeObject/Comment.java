@@ -8,20 +8,17 @@ import java.io.Serializable;
   Verrà utilizzata in una lista nella classe Recipe
  */
 public class Comment implements Serializable {
-    private String userId;
-    private String username;
-    private String content;
-    private String url;
+
+    private String userId; //Id dell'utente
+    private String content; //Testo del commento
 
     public Comment() {
 
     }
 
-    public Comment(String userId, String userName, String content, String url) {
+    public Comment(String userId, String content) {
         this.userId = userId;
-        this.username = userName;
         this.content = content;
-        this.url = url;
     }
 
     public String getUserId() {
@@ -32,14 +29,6 @@ public class Comment implements Serializable {
         this.userId = userId;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     public String getContent() {
         return content;
     }
@@ -48,11 +37,4 @@ public class Comment implements Serializable {
         this.content = content;
     }
 
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
 }

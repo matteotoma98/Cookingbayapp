@@ -60,7 +60,7 @@
                         android:id="@+id/viewRecipeTitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/titolo"
+                        android:text="@string/title"
                         android:textColor="@color/primaryText"
                         android:textSize="25sp"
                         android:textStyle="bold" />
@@ -69,7 +69,7 @@
                         android:id="@+id/viewRecipeAuthor"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/autore" />
+                        android:text="@string/author" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -102,14 +102,14 @@
                             android:layout_height="20dp"
                             android:layout_gravity="end"
                             android:layout_marginEnd="5dp"
-                            android:contentDescription="@string/tipologia"
+                            android:contentDescription="@string/type"
                             android:src="@drawable/ic_restaurant_black_24dp" />
 
                         <TextView
                             android:id="@+id/viewRecipeType"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/tipologia"
+                            android:text="@string/type"
                             android:textAppearance="?attr/textAppearanceBody2"
                             android:textColor="?android:attr/textColorSecondary" />
                     </LinearLayout>
@@ -125,14 +125,14 @@
                             android:layout_height="20dp"
                             android:layout_gravity="end"
                             android:layout_marginEnd="5dp"
-                            android:contentDescription="@string/tempo"
+                            android:contentDescription="@string/time"
                             android:src="@drawable/ic_av_timer_black_24dp" />
 
                         <TextView
                             android:id="@+id/viewRecipeTime"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/tempo"
+                            android:text="@string/time"
                             android:textAppearance="?attr/textAppearanceBody2"
                             android:textColor="?android:attr/textColorSecondary" />
                     </LinearLayout>
@@ -166,7 +166,7 @@
                             android:id="@+id/likeCounterText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/_0" />
+                            android:text="@string/zero" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -187,7 +187,7 @@
                             android:id="@+id/dislikeCounterText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/_0" />
+                            android:text="@string/zero" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
@@ -231,7 +231,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/procedimento"
+                android:text="@string/method"
                 android:textColor="@color/colorPrimary"
                 android:textSize="20sp"
                 android:textStyle="bold" />

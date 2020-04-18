@@ -41,7 +41,7 @@
                 android:layout_gravity="center"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
-                android:hint="@string/descrivi_questo_step"
+                android:hint="@string/describe_step"
                 app:boxBackgroundColor="@android:color/white">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -60,7 +60,7 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_marginEnd="5dp"
-                    android:contentDescription="@string/tempo"
+                    android:contentDescription="@string/time"
                     android:src="@drawable/ic_av_timer_black_24dp" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -80,7 +80,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="@string/ore" />
+                    android:text="@string/hours" />
 
                 <com.google.android.material.textfield.TextInputLayout
 
@@ -99,7 +99,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="@string/minuti" />
+                    android:text="@string/minutes" />
 
             </LinearLayout>
 
@@ -108,7 +108,7 @@
                 style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/elimina_step"
+                android:text="@string/delete_step"
                 android:textColor="@color/colorAccent"
                 app:icon="@drawable/ic_delete_forever_black_24dp"
                 app:iconTint="@color/colorAccent" />

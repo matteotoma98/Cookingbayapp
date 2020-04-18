@@ -19,7 +19,7 @@
                 android:id="@+id/imgAnteprima"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:contentDescription="@string/imganteprima"
+                android:contentDescription="@string/preview_pic"
                 android:scaleType="centerCrop"
                 android:src="@drawable/preview_dummy"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -35,7 +35,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
-            android:text="@string/informazioni_generali"
+            android:text="@string/general_info"
             android:textColor="@color/colorAccent"
             android:textSize="17sp"
             android:textStyle="bold" />
@@ -47,7 +47,7 @@
             android:layout_gravity="center"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
-            android:hint="@string/inserisci_il_titolo"
+            android:hint="@string/insert_title"
             app:boxBackgroundColor="@android:color/white"
             app:counterEnabled="true"
             app:counterMaxLength="69">
@@ -90,7 +90,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:hint="@string/tipologia"
+                android:hint="@string/type"
                 app:boxBackgroundColor="@android:color/white"
                 app:startIconContentDescription="type"
                 app:startIconDrawable="@drawable/ic_restaurant_black_24dp">
@@ -125,7 +125,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/ingredienti"
+                    android:text="@string/ingredients"
                     android:textColor="@color/colorAccent"
                     android:textSize="17sp"
                     android:textStyle="bold" />
@@ -146,7 +146,7 @@
                         android:layout_gravity="center"
                         android:layout_marginStart="10dp"
                         android:layout_marginEnd="10dp"
-                        android:hint="@string/ingrediente"
+                        android:hint="@string/ingredient"
                         app:boxBackgroundColor="@android:color/white">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -161,7 +161,7 @@
                         android:layout_gravity="center"
                         android:layout_marginStart="10dp"
                         android:layout_marginEnd="10dp"
-                        android:hint="@string/qta"
+                        android:hint="@string/quantity"
                         app:boxBackgroundColor="@android:color/white">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -181,7 +181,7 @@
                         style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/aggiungi"
+                        android:text="@string/add"
                         android:textColor="@color/colorAccent"
                         app:icon="@drawable/ic_add_black_24dp"
                         app:iconTint="@color/colorAccent" />
@@ -191,7 +191,7 @@
                         style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/elimina"
+                        android:text="@string/delete"
                         android:textColor="@color/colorAccent"
                         app:icon="@drawable/ic_delete_forever_black_24dp"
                         app:iconTint="@color/colorAccent" />
@@ -224,7 +224,7 @@
                     style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/aggiungi_step"
+                    android:text="@string/add_step"
                     android:textColor="@color/colorAccent"
                     app:icon="@drawable/ic_add_black_24dp"
                     app:iconTint="@color/colorAccent" />

@@ -38,7 +38,7 @@
                     android:paddingStart="10dp"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
-                    android:text="@string/titolo"
+                    android:text="@string/title"
                     android:textAppearance="?attr/textAppearanceHeadline6" />
 
                 <LinearLayout
@@ -51,7 +51,7 @@
                         style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
                         android:layout_width="wrap_content"
                         android:layout_height="35dp"
-                        android:text="@string/modifica"
+                        android:text="@string/edit"
                         android:textColor="@color/colorAccent"
                         app:icon="@drawable/ic_mode_edit_black_24dp"
                         app:iconTint="@color/colorAccent" />
@@ -61,7 +61,7 @@
                         style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
                         android:layout_width="wrap_content"
                         android:layout_height="35dp"
-                        android:text="@string/elimina"
+                        android:text="@string/delete"
                         android:textColor="@color/colorAccent"
                         app:icon="@drawable/ic_delete_forever_black_24dp"
                         app:iconTint="@color/colorAccent" />
@@ -84,14 +84,14 @@
                         android:layout_height="20dp"
                         android:layout_gravity="end"
                         android:layout_marginEnd="5dp"
-                        android:contentDescription="@string/pietanza"
+                        android:contentDescription="@string/dish"
                         android:src="@drawable/ic_restaurant_black_24dp" />
 
                     <TextView
                         android:id="@+id/myCardRecipeType"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/pietanza"
+                        android:text="@string/dish"
                         android:textAppearance="?attr/textAppearanceBody2"
                         android:textColor="?android:attr/textColorSecondary" />
                 </LinearLayout>
@@ -107,14 +107,14 @@
                         android:layout_height="20dp"
                         android:layout_gravity="end"
                         android:layout_marginEnd="5dp"
-                        android:contentDescription="@string/tempo"
+                        android:contentDescription="@string/time"
                         android:src="@drawable/ic_av_timer_black_24dp" />
 
                     <TextView
                         android:id="@+id/myCardRecipeTime"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/tempo"
+                        android:text="@string/time"
                         android:textAppearance="?attr/textAppearanceBody2"
                         android:textColor="?android:attr/textColorSecondary" />
                 </LinearLayout>

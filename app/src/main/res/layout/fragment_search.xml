@@ -12,7 +12,7 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/inserisci_il_testo_da_cercare">
+        android:hint="@string/insert_text_search">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/searchTitle"
@@ -30,13 +30,13 @@
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/primo_piatto" />
+            android:text="@string/first_course" />
 
         <com.google.android.material.chip.Chip
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/secondo_piatto" />
+            android:text="@string/second_course" />
 
         <com.google.android.material.chip.Chip
             style="@style/Widget.MaterialComponents.Chip.Choice"
@@ -48,25 +48,25 @@
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/antipasto" />
+            android:text="@string/starter" />
 
         <com.google.android.material.chip.Chip
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/contorno" />
+            android:text="@string/side_dish" />
 
         <com.google.android.material.chip.Chip
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/bevanda" />
+            android:text="@string/drink" />
 
         <com.google.android.material.chip.Chip
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/panino" />
+            android:text="@string/sandwich" />
     </com.google.android.material.chip.ChipGroup>
 
     <Button
@@ -74,7 +74,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="@string/cerca"
+        android:text="@string/search"
         app:icon="@drawable/ic_search_black_24dp" />
 
     <androidx.recyclerview.widget.RecyclerView

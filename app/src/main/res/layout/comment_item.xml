@@ -35,7 +35,7 @@
                 android:id="@+id/commentText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/commentcontent"
+                android:text="@string/comment_content"
                 android:textColor="@android:color/black"/>
 
         </LinearLayout>

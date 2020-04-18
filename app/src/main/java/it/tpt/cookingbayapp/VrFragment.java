@@ -161,7 +161,7 @@ public class VrFragment extends Fragment implements View.OnClickListener {
                     }
                     break;
             }
-        } else Snackbar.make(layout, R.string.likedislikeanonymous, Snackbar.LENGTH_LONG).show();
+        } else Snackbar.make(layout, R.string.like_dislike_anonymous, Snackbar.LENGTH_LONG).show();
     }
 }
 

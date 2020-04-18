@@ -274,7 +274,7 @@ public class CreateRecipe extends AppCompatActivity {
         int id = item.getItemId();
         if (id == R.id.exitNoSave) { //Esci senza salvare (stessa funzione del premere indietro)
             if (isUploading == false) { //Se è in corso l'upload evita che l'utente prema questa opzione
-                Toast.makeText(this, "Ricetta non salvata", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.recipe_not_saved, Toast.LENGTH_SHORT).show();
                 finish();
             }
         } else if (id == R.id.exitSave) { //Esegue l'upload e fa partire il task per la condivisione

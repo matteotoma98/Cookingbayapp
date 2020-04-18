@@ -102,7 +102,7 @@ public class LoginActivity extends AppCompatActivity {
                                                 } else {
                                                     // If sign in fails, display a message to the user.
                                                     Log.w("signinerror", "signInAnonymously:failure", task.getException());
-                                                    Toast.makeText(LoginActivity.this, R.string.exiterror, Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(LoginActivity.this, R.string.exit_error, Toast.LENGTH_SHORT).show();
                                                 }
                                             }
                                         });
