@@ -72,36 +72,6 @@ public class RdgFragment extends Fragment {
      * @param daysBefore quanti giorni indietro bisogna cercare, utilizzato nella query whereGreaterThanOrEqualTo
      */
     private void downloadRecipes(final int daysBefore) {
-        /*
-        db.collection("Recipes")
-                .whereGreaterThanOrEqualTo("date", getCurrentDayInSeconds() - daysBefore*24*60*60)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            ArrayList<Recipe> recipeList = new ArrayList<>();
-                            ArrayList<String> recipeIds = new ArrayList<>();
-                            int count = 0;
-                            for (final QueryDocumentSnapshot document : task.getResult()) {
-                                Recipe recipe = document.toObject(Recipe.class);
-                                recipeList.add(recipe);
-                                recipeIds.add(document.getId());
-                                count++;
-                            }
-                            if(count<3) downloadRecipes(daysBefore+1);
-                            else {
-                                recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1, GridLayoutManager.VERTICAL, false));
-                                RecipeCardRecyclerViewAdapter adapter = new RecipeCardRecyclerViewAdapter(getActivity(), recipeList, recipeIds);
-                                recyclerView.setAdapter(adapter);
-                                Log.i("Finish", "Recipes downloaded");
-                            }
-                        } else {
-                            Log.d("TAG", "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
-         */
         db.collection("Recipes")
                 .whereGreaterThanOrEqualTo("date", getCurrentDayInSeconds() - daysBefore*24*60*60)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {

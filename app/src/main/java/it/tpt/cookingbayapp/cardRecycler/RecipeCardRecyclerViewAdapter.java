@@ -59,6 +59,31 @@ public class RecipeCardRecyclerViewAdapter extends RecyclerView.Adapter<RecipeCa
         return holder;
     }
 
+    /**
+     * Aggiunge una ricetta e il suo Id alle rispettive liste
+     * @param recipe La ricetta
+     * @param id L'Id della ricetta
+     */
+    public void addRecipe(Recipe recipe, String id) {
+        recipeList.add(recipe);
+        recipeIds.add(id);
+        notifyDataSetChanged();
+        //notifyItemInserted(recipeList.size()-1);
+    }
+    public void updateRecipe(Recipe recipe, String id) {
+        int index = recipeIds.indexOf(id);
+        recipeList.set(index, recipe);
+        notifyItemChanged(index);
+    }
+
+    public List<Recipe> getRecipeList() {
+        return recipeList;
+    }
+
+    public List<String> getRecipeIds() {
+        return recipeIds;
+    }
+
     //Assegna le informazioni della ricetta dinamicamente alla card
     @Override
     public void onBindViewHolder(@NonNull RecipeCardViewHolder holder, int position) {

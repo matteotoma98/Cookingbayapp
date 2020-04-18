@@ -13,7 +13,15 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,8 +37,11 @@ public class ViewRecipeActivity extends AppCompatActivity {
     private VrFragment mVrFragment;
     private ComFragment mComFragment;
 
-    boolean iconset;
-    boolean favouriteset;
+    private MenuItem favMenuBtn;
+
+    private String recipeId;
+    private boolean iconset;
+    private boolean alreadyFavourite;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,12 +54,13 @@ public class ViewRecipeActivity extends AppCompatActivity {
         mVrFragment = new VrFragment();
         mComFragment = new ComFragment();
         iconset = false;
-        favouriteset = true;
+
+        alreadyFavourite = false;
 
         //Ottieni la ricetta passata dallo startActivity
         Intent intent = getIntent();
         Recipe recipe = (Recipe) intent.getSerializableExtra("recipe");
-        String recipeId = intent.getStringExtra("recipeId");
+        recipeId = intent.getStringExtra("recipeId");
         Bundle recipeBundle = new Bundle();
         recipeBundle.putSerializable("recipe", recipe);
         recipeBundle.putString("recipeId", recipeId);
@@ -71,28 +83,77 @@ public class ViewRecipeActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //Viene aggiunta o rimossa la ricetta dai preferiti solo al termine dell'activity per evitare continue call al database ad ogni click
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if(alreadyFavourite && !iconset) {//Se l'utente ha deciso di rimuoverlo dai preferiti
+            db.collection("Users").document(user.getUid())
+                    .update("favourites", FieldValue.arrayRemove(recipeId));
+        }
+        else if(iconset && !alreadyFavourite) { //Altrimenti se l'utente ha deciso di aggiungerlo ai preferiti e non è gia stato aggiunto
+            db.collection("Users").document(user.getUid())
+                    .update("favourites", FieldValue.arrayUnion(recipeId));
+        }
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.vr_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        favMenuBtn = menu.findItem(R.id.addFavourite);
+        checkIfAlreadyFavourite(); //Controlla e setta l'icona se è già nei preferiti
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.addFavourite) {
-            if (favouriteset) {
-                if (iconset) {
-                    item.setIcon(R.drawable.ic_favorite_border_black_24dp);
-                    iconset = false;
-                    favouriteset = true;
-                } else {
-                    item.setIcon(R.drawable.ic_favorite_black_24dp);
-                    iconset = true;
-                    favouriteset = false;
-                }
+            if (iconset) {
+                item.setIcon(R.drawable.ic_favorite_border_black_24dp);
+                iconset = false;
+            } else {
+                item.setIcon(R.drawable.ic_favorite_black_24dp);
+                iconset = true;
             }
+
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Controlla che l'utente abbia già aggiunto ai preferiti la ricetta
+     * Richiamato nell'onPrepareOptionMenu
+     */
+    private void checkIfAlreadyFavourite() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        db.collection("Users").document(user.getUid())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                ArrayList<String> favourites = (ArrayList<String>) document.get("favourites");
+                                if(favourites.contains(recipeId)) {
+                                    alreadyFavourite = true;
+                                    favMenuBtn.setIcon(R.drawable.ic_favorite_black_24dp);
+                                    iconset = true;
+                                }
+                            }
+                        } else {
+
+                        }
+                    }
+                });
     }
 
     private class ViewPagerAdapter extends FragmentPagerAdapter {
