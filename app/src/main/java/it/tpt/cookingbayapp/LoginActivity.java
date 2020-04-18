@@ -20,6 +20,12 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -118,16 +124,36 @@ public class LoginActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, intent);
         if (requestCode == REGISTER_REQUEST) {
             if (resultCode == RESULT_OK) {
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                writeUserToDb(user.getDisplayName(), user.getEmail(), user.getUid());
                 setResult(RESULT_OK);
                 finish();
             }
         }
     }
 
+    /**
+     * Scrive un nuovo utente registrato nel FirebaseFirestore
+     * @param username Nome utente
+     * @param email Email
+     * @param uid Id dell'utente
+     */
+    private void writeUserToDb(String username, String email, String uid) {
+        Map<String, Object> user = new HashMap<>();
+        user.put("username", username);
+        user.put("email", email);
+        user.put("favourites", new ArrayList<>());
+        user.put("liked", new ArrayList<>());
+        user.put("disliked", new ArrayList<>());
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("Users").document(uid).set(user, SetOptions.merge());
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        //Se l'utente preme indietro senza collegarsi per sicurezza ci si collega automaticamente come ospite
         if (user == null) FirebaseAuth.getInstance().signInAnonymously();
         SharedPreferences preferences = getSharedPreferences("login", MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();

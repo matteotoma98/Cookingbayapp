@@ -244,6 +244,9 @@ public class ProfileFragment extends Fragment {
                         .into(profilePic);
             }
         }
+        if (requestCode == LOGIN_REQUEST && resultCode == getActivity().RESULT_OK) {
+            updateUI();
+        }
     }
 
     /**
