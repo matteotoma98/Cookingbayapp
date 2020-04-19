@@ -2,6 +2,7 @@ package it.tpt.cookingbayapp;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -15,11 +16,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import it.tpt.cookingbayapp.ingredientsRecycler.IngredientsRecyclerViewAdapter;
@@ -28,6 +34,7 @@ import it.tpt.cookingbayapp.sectionRecycler.SectionAdapter;
 
 
 public class VrFragment extends Fragment implements View.OnClickListener {
+
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
     private TextView recipeTitle, recipeAuthor, recipeType, recipeTime;
@@ -41,6 +48,7 @@ public class VrFragment extends Fragment implements View.OnClickListener {
     //Booleani utilizzati per la logica del click su like e dislike
     private boolean likeClicked;
     private boolean dislikeClicked;
+    private boolean isAlreadyLiked, isAlreadyDisliked;
     private View layout;
     private String recipeId;
 
@@ -85,11 +93,16 @@ public class VrFragment extends Fragment implements View.OnClickListener {
         recipeAuthor.setText(recipe.getAuthorName());
         recipeTime.setText(recipe.getTime() + " min");
         recipeType.setText(recipe.getType());
+
         likeCounter = recipe.getLikes();
         dislikeCounter = recipe.getDislikes();
         likeCounterText.setText(String.valueOf(likeCounter));
         dislikeCounterText.setText(String.valueOf(dislikeCounter));
-        layout = view.findViewById(R.id.vrfragment_layout);
+        isAlreadyLiked = false;
+        isAlreadyDisliked = false;
+        checkIfAlreadyRated(); //Controlla se l'utente ha già messo mi piace o non mi piace
+
+        layout = view.findViewById(R.id.vrfragment_layout); //Layout per lo snackbar
         //Assegna la foto di profilo default se non è specificata nella ricetta
         if (recipe.getProfilePicUrl().equals("")) {
             profilePic.setImageResource(R.drawable.missingprofile);
@@ -113,15 +126,86 @@ public class VrFragment extends Fragment implements View.OnClickListener {
         return view;
     }
 
+    /**
+     * L'aggiornamento del like e del dislike counter su Firebase
+     * viene fatto solamente alla distruzione per evitare continue call
+     * al database al click ripetuto del like
+     */
     @Override
     public void onDestroy() {
         super.onDestroy();
         Log.i("VRFRAG", "On destroy called");
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        if (likeClicked) db.collection("Recipes").document(recipeId)
-                .update("likes", FieldValue.increment(1));
-        else if (dislikeClicked) db.collection("Recipes").document(recipeId)
-                .update("dislikes", FieldValue.increment(1));
+        if (likeClicked && !isAlreadyLiked) { //Se l'utente ha messo mi piace e non lo aveva già messo
+            db.collection("Users").document(currentUser.getUid()) //Aggiungi l'id della ricetta alla lista personale
+                    .update("liked", FieldValue.arrayUnion(recipeId));
+            db.collection("Recipes").document(recipeId) //Incrementa il contatore dei like della ricetta
+                    .update("likes", FieldValue.increment(1));
+        }
+        if (dislikeClicked && !isAlreadyDisliked) { //Se l'utente ha messo non mi piace e non lo aveva già messo
+            db.collection("Users").document(currentUser.getUid()) //Aggiungi l'id della ricetta alla lista personale
+                    .update("disliked", FieldValue.arrayUnion(recipeId));
+            db.collection("Recipes").document(recipeId) //Incrementa il contatore dei dislike della ricetta
+                    .update("dislikes", FieldValue.increment(1));
+        }
+        if (!likeClicked && isAlreadyLiked) { //Se l'utente ha deciso di togliere il mi piace
+            db.collection("Users").document(currentUser.getUid()) //Rimuovi l'Id della ricetta dalla lista personale
+                    .update("liked", FieldValue.arrayRemove(recipeId));
+            db.collection("Recipes").document(recipeId) //Decrementa il contatore
+                    .update("likes", FieldValue.increment(-1));
+        }
+        if (!dislikeClicked && isAlreadyDisliked) { //Se l'utente ha deciso di togliere il non mi piace
+            db.collection("Users").document(currentUser.getUid()) //Rimuovi l'Id della ricetta dalla lista personale
+                    .update("disliked", FieldValue.arrayRemove(recipeId));
+            db.collection("Recipes").document(recipeId) //Decrementa il contatore
+                    .update("dislikes", FieldValue.increment(-1));
+        }
+    }
+
+    /**
+     * Controlla che l'utente abbia già valutato la ricetta
+     * Richiamato nell'onCreate
+     */
+    private void checkIfAlreadyRated() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        db.collection("Users").document(user.getUid())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                //Liste delle ricette piaciute e non piaciute
+                                ArrayList<String> liked = (ArrayList<String>) document.get("liked");
+                                ArrayList<String> disliked = (ArrayList<String>) document.get("disliked");
+                                if(liked.contains(recipeId)) {
+                                    isAlreadyLiked = true;
+                                    like.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorAccent));
+                                    dislike.setColorFilter(ContextCompat.getColor(getContext(), R.color.likeDislikeNotClicked));
+                                    likeCounterText.setText(String.valueOf(likeCounter));
+                                    dislikeCounterText.setText(String.valueOf(dislikeCounter));
+                                    likeClicked = true;
+                                    dislikeClicked = false;
+                                    likeCounter--;
+                                }
+                                else if(disliked.contains(recipeId)) {
+                                    isAlreadyDisliked = true;
+                                    dislike.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorAccent));
+                                    like.setColorFilter(ContextCompat.getColor(getContext(), R.color.likeDislikeNotClicked));
+                                    dislikeCounterText.setText(String.valueOf(dislikeCounter));
+                                    likeCounterText.setText(String.valueOf(likeCounter));
+                                    dislikeClicked = true;
+                                    likeClicked = false;
+                                    dislikeCounter--;
+                                }
+                            }
+                        } else {
+
+                        }
+                    }
+                });
     }
 
     //Gestione del click del like e del dislike
@@ -131,12 +215,10 @@ public class VrFragment extends Fragment implements View.OnClickListener {
         if (!user.isAnonymous()) {
             switch (v.getId()) {
                 case R.id.likeBtn:
-
                     if (likeClicked) {
                         like.setColorFilter(ContextCompat.getColor(getContext(), R.color.likeDislikeNotClicked));
                         likeCounterText.setText(String.valueOf(likeCounter));
                         likeClicked = false;
-
                     } else {
                         like.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorAccent));
                         dislike.setColorFilter(ContextCompat.getColor(getContext(), R.color.likeDislikeNotClicked));
@@ -146,6 +228,7 @@ public class VrFragment extends Fragment implements View.OnClickListener {
                         dislikeClicked = false;
                     }
                     break;
+
                 case R.id.dislikeBtn:
                     if (dislikeClicked) {
                         dislike.setColorFilter(ContextCompat.getColor(getContext(), R.color.likeDislikeNotClicked));
