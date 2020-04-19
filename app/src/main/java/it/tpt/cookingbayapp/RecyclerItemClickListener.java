@@ -1,5 +1,5 @@
 package it.tpt.cookingbayapp;
 
-public interface StepClickListener {
+public interface RecyclerItemClickListener {
     void onItemClickListener(int position);
 }

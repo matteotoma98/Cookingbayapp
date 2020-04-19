@@ -12,30 +12,54 @@ import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.List;
 
 import it.tpt.cookingbayapp.R;
+import it.tpt.cookingbayapp.RecyclerItemClickListener;
 import it.tpt.cookingbayapp.recipeObject.Comment;
 
 public class CommentRecyclerAdapter extends RecyclerView.Adapter<CommentViewHolder> {
 
     private List<Comment> comments;
     private Context mContext;
+    private String userId, recipeId;
+    private boolean isOwnRecipe; //Per indicare che la ricetta è propria e quindi mostrare sempre il bottone per eliminare i commenti
     FirebaseFirestore db;
 
-    public CommentRecyclerAdapter(List<Comment> comments, Context context) {
+    public CommentRecyclerAdapter(List<Comment> comments, Context context, String recipeId, String userId, boolean isOwnRecipe) {
         this.comments = comments;
         mContext = context;
         db = FirebaseFirestore.getInstance();
+        this.recipeId = recipeId;
+        this.userId = userId;
+        this.isOwnRecipe = isOwnRecipe;
     }
 
     @NonNull
     @Override
     public CommentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.comment_item, parent, false);
-        CommentViewHolder holder = new CommentViewHolder(layoutView);
+        final CommentViewHolder holder = new CommentViewHolder(layoutView);
+        if(isOwnRecipe) {
+            holder.delete.setVisibility(View.VISIBLE);
+        }
+        else {
+            holder.delete.setVisibility(View.GONE);
+        }
+
+        holder.setDeleteListener(new RecyclerItemClickListener() {
+            @Override
+            public void onItemClickListener(int position) {
+                db.collection("Recipes").document(recipeId) //Rimuove il commento dal database
+                        .update("comments", FieldValue.arrayRemove(comments.get(position)));
+                comments.remove(position);
+                notifyItemRemoved(position);
+                //notifyItemRangeChanged(position, comments.size());
+            }
+        });
         return holder;
     }
 
@@ -44,6 +68,8 @@ public class CommentRecyclerAdapter extends RecyclerView.Adapter<CommentViewHold
         if(comments!=null && position < comments.size()) {
 
             holder.content.setText(comments.get(position).getContent());
+
+            if(comments.get(position).getUserId().equals(userId)) holder.delete.setVisibility(View.VISIBLE);
 
             db.collection("Users").document(comments.get(position).getUserId())
                     .get()

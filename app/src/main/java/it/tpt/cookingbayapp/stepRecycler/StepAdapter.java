@@ -20,7 +20,7 @@ import java.util.List;
 
 import it.tpt.cookingbayapp.ImagePickActivity;
 import it.tpt.cookingbayapp.R;
-import it.tpt.cookingbayapp.StepClickListener;
+import it.tpt.cookingbayapp.RecyclerItemClickListener;
 
 public class StepAdapter extends RecyclerView.Adapter<StepViewHolder> {
 
@@ -55,7 +55,7 @@ public class StepAdapter extends RecyclerView.Adapter<StepViewHolder> {
         if(viewType == 0) holder.delete.setVisibility(View.GONE); //Il primo step non può essere eliminato perciò il bottone elimina viene nascosto
 
         //Imposta il ClickListener per eliminare lo step
-        holder.setStepDeleteClickListener(new StepClickListener() {
+        holder.setStepDeleteClickListener(new RecyclerItemClickListener() {
             @Override
             public void onItemClickListener(int position) {
                 steps.remove(position);
@@ -64,7 +64,7 @@ public class StepAdapter extends RecyclerView.Adapter<StepViewHolder> {
             }
         });
 
-        holder.setPicAddClickListener(new StepClickListener() {
+        holder.setPicAddClickListener(new RecyclerItemClickListener() {
             @Override
             public void onItemClickListener(int position) {
                 setCurrentPicPosition(position);

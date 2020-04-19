@@ -45,10 +45,14 @@ public class ComFragment extends Fragment {
         Bundle commentBundle = this.getArguments();
         ArrayList<Comment> comments = (ArrayList) commentBundle.getSerializable("comments");
         recipeId = commentBundle.getString("recipeId");
+        String authorId = commentBundle.getString("authorId");
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
         mRecyclerView = view.findViewById(R.id.comRecycler);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mAdapter = new CommentRecyclerAdapter(comments, getContext());
+        boolean isOwnRecipe = userId.equals(authorId); //Verifica che la ricetta è personale
+        mAdapter = new CommentRecyclerAdapter(comments, getContext(), recipeId, userId, isOwnRecipe);
         mRecyclerView.setAdapter(mAdapter);
 
         mFloatingComment = view.findViewById(R.id.comNewCommentBtn);

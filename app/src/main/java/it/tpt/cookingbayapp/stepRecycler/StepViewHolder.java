@@ -11,7 +11,7 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import it.tpt.cookingbayapp.R;
-import it.tpt.cookingbayapp.StepClickListener;
+import it.tpt.cookingbayapp.RecyclerItemClickListener;
 
 public class StepViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
@@ -21,8 +21,8 @@ public class StepViewHolder extends RecyclerView.ViewHolder implements View.OnCl
     CircleImageView imgStep;
 
     //Interface object
-    StepClickListener stepDeleteClickListener;
-    StepClickListener picAddClickListener;
+    RecyclerItemClickListener stepDeleteClickListener;
+    RecyclerItemClickListener picAddClickListener;
 
     public StepViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -50,11 +50,11 @@ public class StepViewHolder extends RecyclerView.ViewHolder implements View.OnCl
 
     }
 
-    public void setPicAddClickListener(StepClickListener sc) {
+    public void setPicAddClickListener(RecyclerItemClickListener sc) {
         this.picAddClickListener = sc;
     }
 
-    public void setStepDeleteClickListener(StepClickListener sc) {
+    public void setStepDeleteClickListener(RecyclerItemClickListener sc) {
         this.stepDeleteClickListener = sc;
     }
 }

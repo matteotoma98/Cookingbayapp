@@ -156,8 +156,10 @@ public class ProfileFragment extends Fragment {
     private void uploadPicAndUpdateRecipes() {
         try {
             if (profileUri != null) {
-                final String nameOfimage = "profile_pic." + ImagePickActivity.getExtension(getContext(), profileUri);
+                final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                uid = user.getUid();
 
+                final String nameOfimage = "profile_pic." + ImagePickActivity.getExtension(getContext(), profileUri);
                 StorageReference objectStorageReference;
                 objectStorageReference = FirebaseStorage.getInstance().getReference("images/" + uid); // Create folder to Firebase Storage
                 final StorageReference imageRef = objectStorageReference.child(nameOfimage);
@@ -176,8 +178,6 @@ public class ProfileFragment extends Fragment {
                     public void onComplete(@NonNull Task<Uri> task) {
                         if (task.isSuccessful()) {
                             final String url = task.getResult().toString();
-                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                            uid = user.getUid();
                             //Aggiorna le info di FirebaseUser
                             UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                                     .setPhotoUri(Uri.parse(url))
