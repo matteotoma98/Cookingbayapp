@@ -1,6 +1,7 @@
 package it.tpt.cookingbayapp;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,10 +38,10 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
     private RecyclerView ingRecyclerView, recipeRecyclerView;
     private RecipeCardRecyclerViewAdapter recipeAdapter;
     private IngNamesAdapter ingAdapter;
-    private TextInputEditText ingName;
+    private TextInputEditText ingName, searchText;
     private ImageView addIng, delIng;
     private ChipGroup chipGroup;
-    private Button search;
+    private Button searchBtn;
     private FirebaseFirestore db;
     private CollectionReference recipes;
     private String selectedChip;
@@ -53,7 +54,8 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
         ingName = view.findViewById(R.id.txtIngNameSearch);
         addIng = view.findViewById(R.id.addIngName);
         delIng = view.findViewById(R.id.delIngName);
-        search = view.findViewById(R.id.btnSearch);
+        searchText = view.findViewById(R.id.searchTitle);
+        searchBtn = view.findViewById(R.id.btnSearch);
         chipGroup = view.findViewById(R.id.chipGroupType);
         selectedChip = "";
 
@@ -85,6 +87,11 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
             if(query!=null) query = query.whereArrayContainsAny("ingNames", ingAdapter.getIngredients());
             else query = recipes.whereArrayContainsAny("ingNames", ingAdapter.getIngredients());
         }
+        String trimmed = searchText.getText().toString().trim();
+        if(!trimmed.equals("")) {
+            if(query!=null) query = query.orderBy("title").startAt(trimmed).endAt("\uf8ff");
+            else query = recipes.orderBy("title").startAt(trimmed).endAt("\uf8ff");
+        }
         return query;
     }
 
@@ -93,7 +100,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
         super.onViewCreated(view, savedInstanceState);
         addIng.setOnClickListener(this);
         delIng.setOnClickListener(this);
-        search.setOnClickListener(this);
+        searchBtn.setOnClickListener(this);
         chipGroup.setOnCheckedChangeListener(new ChipGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(ChipGroup group, @IdRes int checkedId) {
