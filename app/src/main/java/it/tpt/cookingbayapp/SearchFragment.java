@@ -30,7 +30,6 @@ import java.util.ArrayList;
 
 import it.tpt.cookingbayapp.cardRecycler.RecipeCardRecyclerViewAdapter;
 import it.tpt.cookingbayapp.ingNamesRecyler.IngNamesAdapter;
-import it.tpt.cookingbayapp.personalCardRecycler.PersonalCardRecyclerViewAdapter;
 import it.tpt.cookingbayapp.recipeObject.Recipe;
 
 public class SearchFragment extends Fragment implements View.OnClickListener {
@@ -55,7 +54,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
         addIng = view.findViewById(R.id.addIngName);
         delIng = view.findViewById(R.id.delIngName);
         search = view.findViewById(R.id.btnSearch);
-        chipGroup = view.findViewById(R.id.chip_group);
+        chipGroup = view.findViewById(R.id.chipGroupType);
         selectedChip = "";
 
 
@@ -73,10 +72,18 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
         return view;
     }
 
+    /**
+     * Genera la query a seconda dei dati immessi dall'utente
+     * @return
+     */
     private Query generateQuery() {
         Query query = null;
         if(!selectedChip.equals("")) {
             query = recipes.whereEqualTo("type", selectedChip);
+        }
+        if(ingAdapter.getItemCount()!=0) {
+            if(query!=null) query = query.whereArrayContainsAny("ingNames", ingAdapter.getIngredients());
+            else query = recipes.whereArrayContainsAny("ingNames", ingAdapter.getIngredients());
         }
         return query;
     }
