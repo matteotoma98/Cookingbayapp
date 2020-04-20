@@ -92,10 +92,8 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
         }
         if(ingAdapter.getItemCount()!=0) {
             if(query!=null) query = query.whereArrayContainsAny("ingNames", ingAdapter.getIngredients());
-            else {
-                query = recipes.whereArrayContainsAny("ingNames", ingAdapter.getIngredients());
+            else query = recipes.whereArrayContainsAny("ingNames", ingAdapter.getIngredients());
 
-            }
         }
 
         return query;
