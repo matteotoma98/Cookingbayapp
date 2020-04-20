@@ -2,6 +2,7 @@ package it.tpt.cookingbayapp.recipeObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class Recipe implements Serializable{
@@ -14,7 +15,7 @@ public class Recipe implements Serializable{
     private String authorName;
     private ArrayList<Ingredient> ingredients;
     private ArrayList<String> ingNames; //Field Ridondante per cercare le ricette in Ricerca
-    private ArrayList<String> titleWords; //Field ridondante per cercare la ricetta
+    private List<String> titleWords; //Field ridondante per cercare la ricetta
     private ArrayList<Section> sections;
     private ArrayList<Comment> comments;
     private long date;
@@ -47,11 +48,11 @@ public class Recipe implements Serializable{
         this.comments = comments;
     }
 
-    public ArrayList<String> getTitleWords() {
+    public List<String> getTitleWords() {
         return titleWords;
     }
 
-    public void setTitleWords(ArrayList<String> titleWords) {
+    public void setTitleWords(List<String> titleWords) {
         this.titleWords = titleWords;
     }
 
