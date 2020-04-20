@@ -1,6 +1,7 @@
 package it.tpt.cookingbayapp;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,13 +19,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
 import it.tpt.cookingbayapp.cardRecycler.RecipeCardRecyclerViewAdapter;
 import it.tpt.cookingbayapp.ingNamesRecyler.IngNamesAdapter;
+import it.tpt.cookingbayapp.personalCardRecycler.PersonalCardRecyclerViewAdapter;
+import it.tpt.cookingbayapp.recipeObject.Recipe;
 
 public class SearchFragment extends Fragment implements View.OnClickListener {
 
@@ -53,7 +60,6 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
 
 
         recipeRecyclerView = view.findViewById(R.id.searchRecycler);
-        recipeRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1, GridLayoutManager.VERTICAL, false));
 
         ingRecyclerView = view.findViewById(R.id.ingNameRecycler);
         ingRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -68,8 +74,11 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
     }
 
     private Query generateQuery() {
-        Query query;
-        if()
+        Query query = null;
+        if(!selectedChip.equals("")) {
+            query = recipes.whereEqualTo("type", selectedChip);
+        }
+        return query;
     }
 
     @Override
@@ -82,13 +91,27 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onCheckedChanged(ChipGroup group, @IdRes int checkedId) {
                 switch (group.getCheckedChipId()) {
-                    case
-                    case
-                    case
-                    case
-                    case
-                    case
-                    case
+                    case R.id.chpPrimo:
+                        selectedChip="Primo Piatto";
+                        break;
+                    case R.id.chpSecondo:
+                        selectedChip="Secondo Piatto";
+                        break;
+                    case R.id.chpDessert:
+                        selectedChip="Dessert";
+                        break;
+                    case R.id.chpAntipasto:
+                        selectedChip="Antipasto";
+                        break;
+                    case R.id.chpContorno:
+                        selectedChip="Contorno";
+                        break;
+                    case R.id.chpBevanda:
+                        selectedChip="Bevanda";
+                        break;
+                    case R.id.chpPanino:
+                        selectedChip="Panino";
+                        break;
                     default:
                         selectedChip = "";
                         break;
@@ -110,7 +133,29 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
                 ingAdapter.delIngredient();
                 break;
             case R.id.btnSearch:
-
+                if(generateQuery()!=null) {
+                    generateQuery()
+                            .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                                @Override
+                                public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
+                                    if (e != null) {
+                                        Log.w("TAG", "Listen failed.", e);
+                                        return;
+                                    }
+                                    ArrayList<Recipe> recipeList = new ArrayList<>();
+                                    ArrayList<String> recipeIds = new ArrayList<>();
+                                    for (QueryDocumentSnapshot doc : value) {
+                                        Recipe recipe = doc.toObject(Recipe.class);
+                                        recipeList.add(recipe);
+                                        recipeIds.add(doc.getId());
+                                    }
+                                    recipeRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1, GridLayoutManager.VERTICAL, false));
+                                    recipeAdapter = new RecipeCardRecyclerViewAdapter(getActivity(), recipeList, recipeIds);
+                                    recipeRecyclerView.setAdapter(recipeAdapter);
+                                    Log.i("FinishLMR", "Recipes downloaded");
+                                }
+                            });
+                }
                 break;
         }
     }
