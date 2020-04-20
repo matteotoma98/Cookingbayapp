@@ -29,7 +29,8 @@ public class IngNamesAdapter extends RecyclerView.Adapter<IngNamesViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull IngNamesViewHolder holder, int position) {
         if (ingredients != null && position < ingredients.size()) {
-            holder.ingredient.setText(ingredients.get(position));
+            String name = ingredients.get(position);
+            holder.ingredient.setText(name.substring(0,1).toUpperCase() + name.substring(1));
         }
     }
 
