@@ -1,7 +1,6 @@
 package it.tpt.cookingbayapp;
 
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -80,18 +79,19 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
      */
     private Query generateQuery() {
         Query query = null;
+        String trimmed = searchText.getText().toString().trim();
+        if(!trimmed.equals("")) {
+            query = recipes.orderBy("title").startAt(trimmed).endAt(trimmed + "\uf8ff");
+        }
         if(!selectedChip.equals("")) {
-            query = recipes.whereEqualTo("type", selectedChip);
+            if(query!=null) query = query.whereEqualTo("type", selectedChip);
+            else query = recipes.whereEqualTo("type", selectedChip);
         }
         if(ingAdapter.getItemCount()!=0) {
             if(query!=null) query = query.whereArrayContainsAny("ingNames", ingAdapter.getIngredients());
             else query = recipes.whereArrayContainsAny("ingNames", ingAdapter.getIngredients());
         }
-        String trimmed = searchText.getText().toString().trim();
-        if(!trimmed.equals("")) {
-            if(query!=null) query = query.orderBy("title").startAt(trimmed).endAt("\uf8ff");
-            else query = recipes.orderBy("title").startAt(trimmed).endAt("\uf8ff");
-        }
+
         return query;
     }
 
