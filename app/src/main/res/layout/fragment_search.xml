@@ -90,7 +90,7 @@
         >
 
         <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="310dp"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:hint="@string/ingredient"
