@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
@@ -91,7 +92,10 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
         }
         if(ingAdapter.getItemCount()!=0) {
             if(query!=null) query = query.whereArrayContainsAny("ingNames", ingAdapter.getIngredients());
-            else query = recipes.whereArrayContainsAny("ingNames", ingAdapter.getIngredients());
+            else {
+                query = recipes.whereArrayContainsAny("ingNames", ingAdapter.getIngredients());
+
+            }
         }
 
         return query;
@@ -171,7 +175,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
                                     Log.i("FinishLMR", "Recipes downloaded");
                                 }
                             });
-                }
+                } else Toast.makeText(getContext(), R.string.norecipe, Toast.LENGTH_LONG).show();
                 break;
         }
     }

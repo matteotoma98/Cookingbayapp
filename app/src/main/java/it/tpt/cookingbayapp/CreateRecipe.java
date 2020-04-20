@@ -446,7 +446,7 @@ public class CreateRecipe extends AppCompatActivity {
                                         map.put("type", actwType.getText().toString());
                                         map.put("previewUrl", main.getUrl());
                                         map.put("time", totalTime.getText().toString());
-                                        map.put("titleWords", words);
+                                        map.put("titleWords", Arrays.asList(words));
                                         db.collection("Recipes").document(getIntent().getStringExtra("recipeId"))
                                                 .set(map, SetOptions.merge())
                                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
