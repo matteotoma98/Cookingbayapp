@@ -33,7 +33,7 @@
 
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/chipGroupType"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:singleSelection="true">
 
@@ -91,7 +91,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Ricerca per ingredienti"
+        android:text="@string/ricerca_per_ingredienti"
         android:textColor="@color/colorPrimary"
         android:textSize="17sp"
         android:textStyle="bold" />
@@ -125,15 +125,14 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginLeft="-80dp">
+            android:layout_marginStart="-80dp">
 
             <ImageView
                 android:id="@+id/addIngName"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_gravity="center"
-                android:layout_toRightOf="@+id/txtIngNameSearchLayout"
-                android:contentDescription="addIngredientOnSearch"
+                android:contentDescription="@string/addingredientonsearch"
                 android:src="@drawable/ic_add_black_24dp"
                 android:tint="@color/colorPrimary" />
 
@@ -142,8 +141,7 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_gravity="center"
-                android:layout_toRightOf="@+id/addIngName"
-                android:contentDescription="delIngredientOnSearch"
+                android:contentDescription="@string/delingredientonsearch"
                 android:src="@drawable/ic_delete_forever_black_24dp"
                 android:tint="@color/colorPrimary" />
         </LinearLayout>
