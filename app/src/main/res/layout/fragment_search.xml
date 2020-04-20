@@ -23,54 +23,64 @@
     <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-    <com.google.android.material.chip.ChipGroup
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:singleSelection="true">
 
-        <com.google.android.material.chip.Chip
-            style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:layout_width="wrap_content"
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chipGroupType"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/first_course" />
+            app:singleSelection="true">
 
-        <com.google.android.material.chip.Chip
-            style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/second_course" />
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chpPrimo"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/first_course" />
 
-        <com.google.android.material.chip.Chip
-            style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/dessert" />
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chpSecondo"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/second_course" />
 
-        <com.google.android.material.chip.Chip
-            style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/starter" />
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chpDessert"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/dessert" />
 
-        <com.google.android.material.chip.Chip
-            style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/side_dish" />
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chpAntipasto"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/starter" />
 
-        <com.google.android.material.chip.Chip
-            style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/drink" />
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chpContorno"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/side_dish" />
 
-        <com.google.android.material.chip.Chip
-            style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/sandwich" />
-    </com.google.android.material.chip.ChipGroup>
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chpBevanda"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/drink" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chpPanino"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/sandwich" />
+        </com.google.android.material.chip.ChipGroup>
     </HorizontalScrollView>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -83,49 +93,52 @@
         android:id="@+id/ingNameRecycler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
+        android:orientation="horizontal">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/txtIngNameSearchLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginEnd="80dp"
             android:hint="@string/ingredient"
-            app:boxBackgroundColor="@android:color/white"
-            android:layout_marginEnd="80dp">
+            app:boxBackgroundColor="@android:color/white">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/txtIngNameSearch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textCapSentences"/>
+                android:inputType="textCapSentences" />
         </com.google.android.material.textfield.TextInputLayout>
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginLeft="-80dp">
-        <ImageView
-            android:id="@+id/addIngName"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:contentDescription="addIngredientOnSearch"
-            android:src="@drawable/ic_add_black_24dp"
-            android:tint="@color/colorPrimary"
-            android:layout_gravity="center"
-            android:layout_toRightOf="@+id/txtIngNameSearchLayout"/>
-        <ImageView
-            android:id="@+id/delIngName"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:contentDescription="delIngredientOnSearch"
-            android:src="@drawable/ic_delete_forever_black_24dp"
-            android:tint="@color/colorPrimary"
-            android:layout_gravity="center"
-            android:layout_toRightOf="@+id/addIngName"/>
+
+            <ImageView
+                android:id="@+id/addIngName"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_toRightOf="@+id/txtIngNameSearchLayout"
+                android:contentDescription="addIngredientOnSearch"
+                android:src="@drawable/ic_add_black_24dp"
+                android:tint="@color/colorPrimary" />
+
+            <ImageView
+                android:id="@+id/delIngName"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_toRightOf="@+id/addIngName"
+                android:contentDescription="delIngredientOnSearch"
+                android:src="@drawable/ic_delete_forever_black_24dp"
+                android:tint="@color/colorPrimary" />
         </LinearLayout>
     </LinearLayout>
 
