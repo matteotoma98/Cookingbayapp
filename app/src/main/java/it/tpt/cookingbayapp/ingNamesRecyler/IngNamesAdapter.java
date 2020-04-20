@@ -22,7 +22,7 @@ public class IngNamesAdapter extends RecyclerView.Adapter<IngNamesViewHolder> {
     @NonNull
     @Override
     public IngNamesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.ingredient_layout, parent, false);
+        View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.ingname_item, parent, false);
         return new IngNamesViewHolder(layoutView);
     }
 

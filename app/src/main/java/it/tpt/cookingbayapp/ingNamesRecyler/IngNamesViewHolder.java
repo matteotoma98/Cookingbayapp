@@ -14,7 +14,7 @@ public class IngNamesViewHolder extends RecyclerView.ViewHolder {
 
     public IngNamesViewHolder(@NonNull View itemView) {
         super(itemView);
-        ingredient = itemView.findViewById(R.id.ingredient);
+        ingredient = itemView.findViewById(R.id.ingNameTxtView);
     }
 
 }

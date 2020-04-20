@@ -28,8 +28,8 @@ import it.tpt.cookingbayapp.recipeObject.Recipe;
 
 public class FavFragment extends Fragment {
 
-    private RecyclerView recyclerView;
-    private RecipeCardRecyclerViewAdapter mAdapter;
+    private RecyclerView recipeRecyclerView;
+    private RecipeCardRecyclerViewAdapter recipeAdapter;
     private FirebaseFirestore db;
 
     @Nullable
@@ -38,11 +38,11 @@ public class FavFragment extends Fragment {
         // Inflate the layout for this fragment with the ProductGrid theme
         View view = inflater.inflate(R.layout.fragment_fav, container, false);
         // Set up the RecyclerView
-        recyclerView = view.findViewById(R.id.myfavRecyclerView);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1, GridLayoutManager.VERTICAL, false));
-        mAdapter = new RecipeCardRecyclerViewAdapter(getActivity(), new ArrayList<Recipe>(), new ArrayList<String>());
-        recyclerView.setAdapter(mAdapter);
+        recipeRecyclerView = view.findViewById(R.id.myfavRecyclerView);
+        recipeRecyclerView.setHasFixedSize(true);
+        recipeRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1, GridLayoutManager.VERTICAL, false));
+        recipeAdapter = new RecipeCardRecyclerViewAdapter(getActivity(), new ArrayList<Recipe>(), new ArrayList<String>());
+        recipeRecyclerView.setAdapter(recipeAdapter);
 
         db = FirebaseFirestore.getInstance();
         downloadRecipes(); //Scarica le ricette
@@ -75,8 +75,8 @@ public class FavFragment extends Fragment {
                                                         return;
                                                     }
                                                     String docId = documentSnapshot.getId();
-                                                    if(!mAdapter.getRecipeIds().contains(docId)) mAdapter.addRecipe(documentSnapshot.toObject(Recipe.class), docId);
-                                                    else mAdapter.updateRecipe(documentSnapshot.toObject(Recipe.class), docId);
+                                                    if(!recipeAdapter.getRecipeIds().contains(docId)) recipeAdapter.addRecipe(documentSnapshot.toObject(Recipe.class), docId);
+                                                    else recipeAdapter.updateRecipe(documentSnapshot.toObject(Recipe.class), docId);
                                                 }
                                             });
                                 }
