@@ -45,6 +45,7 @@ import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -409,16 +410,21 @@ public class CreateRecipe extends AppCompatActivity {
                                 @Override
                                 public void onClick(View v) {
                                     //Authorid e AuthorName in onCreate()
-                                    mRecipe.setTitle(title.getText().toString().trim());
-                                    mRecipe.setType(actwType.getText().toString());
-                                    mRecipe.setPreviewUrl(main.getUrl());
-                                    mRecipe.setIngredients(iAdapter.getIngredients());
+                                    String titleString = title.getText().toString().trim();
+                                    mRecipe.setTitle(titleString); //Imposta il titolo
+                                    //Suddividi il titolo per poter effettuare la ricerca
+                                    String[] words = titleString.toLowerCase().split(" ");
+                                    mRecipe.setTitleWords((ArrayList<String>) Arrays.asList(words));
+                                    mRecipe.setType(actwType.getText().toString()); //Imposta il tipo di pietanza
+                                    mRecipe.setPreviewUrl(main.getUrl()); //Imposta l'url dell'immagine di anteprima
+                                    mRecipe.setIngredients(iAdapter.getIngredients()); //Imposta gli ingredienti
+                                    //Aggiungi solo i nomi degli ingredienti in minuscolo per effettuare la ricerca
                                     ArrayList<String> names = new ArrayList<>();
                                     for(int i = 0; i < iAdapter.getItemCount(); i++) {
                                         names.add(iAdapter.getIngredients().get(i).getName().toLowerCase());
                                     }
                                     mRecipe.setIngNames(names);
-                                    mRecipe.setTime(totalTime.getText().toString());
+                                    mRecipe.setTime(totalTime.getText().toString()); //Imposta il tempo
 
                                     //Aggiunge alla lista di oggetti Section gli step dell'editor con i rispettivi URL e il timer convertito in secondi
                                     ArrayList<Section> sections = new ArrayList<>();
@@ -440,6 +446,7 @@ public class CreateRecipe extends AppCompatActivity {
                                         map.put("type", actwType.getText().toString());
                                         map.put("previewUrl", main.getUrl());
                                         map.put("time", totalTime.getText().toString());
+                                        map.put("titleWords", words);
                                         db.collection("Recipes").document(getIntent().getStringExtra("recipeId"))
                                                 .set(map, SetOptions.merge())
                                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -456,8 +463,8 @@ public class CreateRecipe extends AppCompatActivity {
                                                 });
                                         Toast.makeText(CreateRecipe.this, R.string.done_editing, Toast.LENGTH_LONG).show();
                                         finish();
-                                    } else {
-                                        //Aggiunge una nuova ricetta
+                                    }
+                                    else { //Aggiunge una nuova ricetta
                                         mRecipe.setDate(Timestamp.now().getSeconds());
                                         db.collection("Recipes")
                                                 .add(mRecipe)

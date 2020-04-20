@@ -14,6 +14,7 @@ public class Recipe implements Serializable{
     private String authorName;
     private ArrayList<Ingredient> ingredients;
     private ArrayList<String> ingNames; //Field Ridondante per cercare le ricette in Ricerca
+    private ArrayList<String> titleWords; //Field ridondante per cercare la ricetta
     private ArrayList<Section> sections;
     private ArrayList<Comment> comments;
     private long date;
@@ -44,6 +45,14 @@ public class Recipe implements Serializable{
 
     public void setComments(ArrayList<Comment> comments) {
         this.comments = comments;
+    }
+
+    public ArrayList<String> getTitleWords() {
+        return titleWords;
+    }
+
+    public void setTitleWords(ArrayList<String> titleWords) {
+        this.titleWords = titleWords;
     }
 
     public int getLikes() {

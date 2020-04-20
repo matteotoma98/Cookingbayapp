@@ -27,6 +27,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import it.tpt.cookingbayapp.cardRecycler.RecipeCardRecyclerViewAdapter;
 import it.tpt.cookingbayapp.ingNamesRecyler.IngNamesAdapter;
@@ -81,7 +82,8 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
         Query query = null;
         String trimmed = searchText.getText().toString().trim();
         if(!trimmed.equals("")) {
-            query = recipes.orderBy("title").startAt(trimmed).endAt(trimmed + "\uf8ff");
+            String[] words = trimmed.split(" ");
+            query = recipes.whereArrayContainsAny("titleWords", Arrays.asList(words));
         }
         if(!selectedChip.equals("")) {
             if(query!=null) query = query.whereEqualTo("type", selectedChip);
