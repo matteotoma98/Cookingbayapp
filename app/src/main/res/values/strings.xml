@@ -83,4 +83,20 @@
     <string name="user">Utente</string>
     <string name="username">Username</string>
     <string name="zero">0</string>
+    <string name="norecipe">La ricerca non ha apportato nessun risultato</string>
+    <string name="ricerca_per_ingredienti">Ricerca per ingredienti</string>
+    <string name="addingredientonsearch">addIngredientOnSearch</string>
+    <string name="delingredientonsearch">delIngredientOnSearch</string>
+    <string name="non_possiedi_un_account">Non possiedi un account?</string>
+    <string name="oppure">Oppure</string>
+    <string name="accedi_come_ospite">Accedi come ospite</string>
+    <string name="accedi">Accedi</string>
+    <string name="pubblica_commento">Pubblica commento</string>
+    <string name="inserisci_commento">Inserisci commento</string>
+    <string name="elimina">Elimina</string>
+    <string name="pubblica">Pubblica</string>
+    <string name="delete_comment">Commento eliminato</string>
+    <string name="activity_splash">Splash Activity</string>
+    <string name="registrati">Registrati</string>
+    <string name="possiedi_gi_un_account">Possiedi già un account?</string>
 </resources>

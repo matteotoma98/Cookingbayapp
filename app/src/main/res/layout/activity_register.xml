@@ -11,7 +11,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Registrati"
+        android:text="@string/registrati"
         android:textColor="@color/colorAccent"
         android:textSize="40sp"
         android:textStyle="bold" />
@@ -80,14 +80,14 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Possiedi già un account?" />
+            android:text="@string/possiedi_gi_un_account" />
 
         <Button
             android:id="@+id/loginfromregister"
             style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Accedi"
+            android:text="@string/accedi"
             android:textColor="@color/colorAccent"
             app:iconTint="@color/colorAccent" />
     </LinearLayout>
