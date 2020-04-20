@@ -414,7 +414,7 @@ public class CreateRecipe extends AppCompatActivity {
                                     mRecipe.setTitle(titleString); //Imposta il titolo
                                     //Suddividi il titolo per poter effettuare la ricerca
                                     String[] words = titleString.toLowerCase().split(" ");
-                                    mRecipe.setTitleWords((ArrayList<String>) Arrays.asList(words));
+                                    mRecipe.setTitleWords(Arrays.asList(words));
                                     mRecipe.setType(actwType.getText().toString()); //Imposta il tipo di pietanza
                                     mRecipe.setPreviewUrl(main.getUrl()); //Imposta l'url dell'immagine di anteprima
                                     mRecipe.setIngredients(iAdapter.getIngredients()); //Imposta gli ingredienti
