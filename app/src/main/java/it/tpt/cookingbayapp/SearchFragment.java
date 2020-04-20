@@ -11,6 +11,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.textfield.TextInputEditText;
+
 import java.util.ArrayList;
 
 import it.tpt.cookingbayapp.ingNamesRecyler.IngNamesAdapter;
@@ -19,13 +21,16 @@ public class SearchFragment extends Fragment {
 
     private RecyclerView ingRecyclerView;
     private IngNamesAdapter ingAdapter;
+    private TextInputEditText ingName;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search,container,false);
 
-        ingRecyclerView = view.findViewById();
+        ingName = view.findViewById(R.id.ingNameTxtView);
+
+        ingRecyclerView = view.findViewById(R.id.ingNameRecycler);
         ingRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         ingAdapter = new IngNamesAdapter(new ArrayList<String>());
 
