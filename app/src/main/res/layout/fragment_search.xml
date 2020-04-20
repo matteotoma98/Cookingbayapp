@@ -24,47 +24,55 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
     <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chipGroupType"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:singleSelection="true">
 
         <com.google.android.material.chip.Chip
+            android:id="@+id/chpPrimo"
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/first_course" />
 
         <com.google.android.material.chip.Chip
+            android:id="@+id/chpSecondo"
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/second_course" />
 
         <com.google.android.material.chip.Chip
+            android:id="@+id/chpDessert"
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/dessert" />
 
         <com.google.android.material.chip.Chip
+            android:id="@+id/chpAntipasto"
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/starter" />
 
         <com.google.android.material.chip.Chip
+            android:id="@+id/chpContorno"
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/side_dish" />
 
         <com.google.android.material.chip.Chip
+            android:id="@+id/chpBevanda"
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/drink" />
 
         <com.google.android.material.chip.Chip
+            android:id="@+id/chpPanino"
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
