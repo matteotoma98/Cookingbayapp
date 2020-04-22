@@ -58,7 +58,7 @@
     <string name="menuFile"/>
     <string name="method">Procedimento</string>
     <string name="min">Min</string>
-    <string name="minimum_info_required">Informazioni principali mancanti o titolo già utilizzato da una tua ricetta!</string>
+    <string name="minimum_info_required">Informazioni principali mancanti!</string>
     <string name="minutes">m</string>
     <string name="no_recipe">La ricerca non ha apportato nessun risultato</string>
     <string name="password">Password</string>
