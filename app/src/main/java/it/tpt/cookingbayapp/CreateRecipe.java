@@ -343,7 +343,9 @@ public class CreateRecipe extends AppCompatActivity {
         }
     }
 
-    //Disabilita l'editing dopo l'upload
+    /**
+     * Disabilita l'editing all'inizio dell'upload
+     */
     private void disableEditing() {
         imgPreview.setEnabled(false);
         title.setEnabled(false);
@@ -358,7 +360,10 @@ public class CreateRecipe extends AppCompatActivity {
         mAdapter.notifyDataSetChanged();
     }
 
-    //Funzione per controllare che l'utente abbia inserito tutti le informazioni generali
+    /**
+     * Funzione per controllare che l'utente abbia inserito tutti le informazioni generali
+     * @return risultato booleano del controllo, true se non completo
+     */
     private boolean checkInfoNotComplete() {
         boolean preview = (previewUri == null && !isEditing); //Se non è in corso la modifica l'utente deve caricare obbligatoriamente l'immagine di anteprima
         boolean t = TextUtils.isEmpty(title.getText());

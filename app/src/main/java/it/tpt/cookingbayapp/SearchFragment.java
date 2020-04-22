@@ -173,7 +173,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
                                     Log.i("FinishLMR", "Recipes downloaded");
                                 }
                             });
-                } else Toast.makeText(getContext(), R.string.norecipe, Toast.LENGTH_LONG).show();
+                } else Toast.makeText(getContext(), R.string.no_recipe, Toast.LENGTH_LONG).show();
                 break;
         }
     }

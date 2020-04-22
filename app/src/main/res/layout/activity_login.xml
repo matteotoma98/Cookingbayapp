@@ -11,7 +11,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/accedi"
+        android:text="@string/login"
         android:textColor="@color/colorAccent"
         android:textSize="40sp"
         android:textStyle="bold" />
@@ -67,14 +67,14 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/non_possiedi_un_account" />
+            android:text="@string/dont_have_an_account" />
 
         <Button
             android:id="@+id/register"
             style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/registrati"
+            android:text="@string/signup"
             android:textColor="@color/colorAccent"
             app:iconTint="@color/colorAccent" />
     </LinearLayout>
@@ -89,14 +89,14 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/oppure" />
+            android:text="@string/else_string" />
 
         <Button
             android:id="@+id/anonymous_button"
             style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/accedi_come_ospite"
+            android:text="@string/login_as_guest"
             android:textColor="@color/colorAccent"
             app:iconTint="@color/colorAccent" />
     </LinearLayout>

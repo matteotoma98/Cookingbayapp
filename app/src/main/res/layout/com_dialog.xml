@@ -9,7 +9,7 @@
     <TextView
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:text="@string/pubblica_commento"
+        android:text="@string/share_comment"
         android:textColor="@color/primaryText"
         android:textSize="15sp"/>
     
@@ -18,7 +18,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:hint="@string/inserisci_commento"
+    android:hint="@string/insert_comment"
     app:boxBackgroundColor="@android:color/white"
     app:counterEnabled="true"
     app:counterMaxLength="240">
@@ -39,14 +39,14 @@
         style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/elimina"
+        android:text="@string/delete"
         android:textColor="@color/colorAccent" />
     <Button
         android:id="@+id/btnPublishComment"
         style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/pubblica"
+        android:text="@string/publish"
         android:textColor="@color/colorAccent" />
 </LinearLayout>
 </LinearLayout>
