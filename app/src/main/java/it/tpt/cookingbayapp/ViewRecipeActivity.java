@@ -73,8 +73,8 @@ public class ViewRecipeActivity extends AppCompatActivity {
 
         getSupportActionBar().setTitle(recipe.getTitle());
 
+        //View pager per le Tab "RICETTA" e "COMMENTI"
         mTabLayout.setupWithViewPager(mViewPager);
-
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), 0);
         viewPagerAdapter.addFragment(mVrFragment, "Ricetta");
         viewPagerAdapter.addFragment(mComFragment, "Commenti");

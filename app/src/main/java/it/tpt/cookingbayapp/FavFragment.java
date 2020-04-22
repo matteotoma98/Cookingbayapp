@@ -74,9 +74,11 @@ public class FavFragment extends Fragment {
                                                         Log.w("TAG", "Listen failed.", e);
                                                         return;
                                                     }
-                                                    String docId = documentSnapshot.getId();
-                                                    if(!recipeAdapter.getRecipeIds().contains(docId)) recipeAdapter.addRecipe(documentSnapshot.toObject(Recipe.class), docId);
-                                                    else recipeAdapter.updateRecipe(documentSnapshot.toObject(Recipe.class), docId);
+                                                    if(documentSnapshot.exists()) {
+                                                        String docId = documentSnapshot.getId();
+                                                        if (!recipeAdapter.getRecipeIds().contains(docId)) recipeAdapter.addRecipe(documentSnapshot.toObject(Recipe.class), docId);
+                                                        else recipeAdapter.updateRecipe(documentSnapshot.toObject(Recipe.class), docId);
+                                                    }
                                                 }
                                             });
                                 }

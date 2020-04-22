@@ -145,7 +145,6 @@ public class LoginActivity extends AppCompatActivity {
         user.put("favourites", new ArrayList<>());
         user.put("liked", new ArrayList<>());
         user.put("disliked", new ArrayList<>());
-        user.put("personalRecipes", new ArrayList<>());
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("Users").document(uid).set(user, SetOptions.merge());
     }

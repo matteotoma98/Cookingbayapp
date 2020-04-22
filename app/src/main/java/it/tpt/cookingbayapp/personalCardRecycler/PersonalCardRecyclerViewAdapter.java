@@ -90,7 +90,7 @@ public class PersonalCardRecyclerViewAdapter extends RecyclerView.Adapter<Person
 
                         FirebaseAuth mAuth = FirebaseAuth.getInstance();
                         FirebaseUser currentUser = mAuth.getCurrentUser();
-                        String deletePath = "images/" + currentUser.getUid() + "/" + recipeList.get(position).getTitle();
+                        String deletePath = "images/" + currentUser.getUid() + "/" + recipeIds.get(position);
                         Log.i("path", deletePath);
                         recipeList.remove(position);
                         recipeIds.remove(position);

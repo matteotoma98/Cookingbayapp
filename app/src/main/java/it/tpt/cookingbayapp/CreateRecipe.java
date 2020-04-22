@@ -29,8 +29,10 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -38,6 +40,7 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
@@ -60,19 +63,21 @@ import it.tpt.cookingbayapp.stepRecycler.StepAdapter;
 
 /**
  * Activity utilizzata per creare o modificare le ricette esistenti
- * Se si sta modificando la ricetta non si può modificare il titolo o aggiungere ed eliminare step
+ * Se si sta modificando la ricetta non si può aggiungere ed eliminare step
  * per limitazioni dovute a Firebase
  */
 public class CreateRecipe extends AppCompatActivity {
 
     private ImageView imgPreview;
     private TextInputEditText title, totalTime, ingName, ingQuantity;
-    private TextInputLayout titleLayout;
     private TextInputLayout ddType;
     private AutoCompleteTextView actwType;
     private Button btnAddStep, btnAddIng, btnDelIng;
     boolean isUploading; //Utilizzato per evitare che l'utente clicchi nuovamente il pulsante SALVA (Che effettua l'upload)
     boolean isEditing; //Controlla se l'activity è stata avviata da modifica piuttosto che crea ricetta
+    private String folder;
+    private String recipeId; //Id della ricetta esistente (in modifica)
+    private String generatedId; //Id generato in modo random all'atto della creazione di una nuova ricetta
 
     //Questo oggetto step serve per comodità, solo i metodi setUrl() e getUrl() vengono utilizzati all'interno di ImagePickActivity
     private Step main;
@@ -99,9 +104,8 @@ public class CreateRecipe extends AppCompatActivity {
 
     private CheckUploadTask mCheckUploadTask; //AsyncTask utilizzato per tenere traccia del completamento di tutti gli upload
 
-    FirebaseUser currentUser;
-    FirebaseFirestore db;
-    String folder;
+    private FirebaseUser currentUser;
+    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,7 +130,6 @@ public class CreateRecipe extends AppCompatActivity {
 
         //Assegnazioni degli oggetti Java ai corrispettivi elementi XML
         title = findViewById(R.id.createRecipeTitle);
-        titleLayout = findViewById(R.id.createRecipeTitleLayout);
         totalTime = findViewById(R.id.recipeTime);
         imgPreview = findViewById(R.id.imgAnteprima);
         ingName = findViewById(R.id.txtIngredient);
@@ -137,7 +140,6 @@ public class CreateRecipe extends AppCompatActivity {
 
         isUploading = false; //Ovviamente falso all'atto di creazione dell'activity
         isEditing = getIntent().getBooleanExtra("edit", false); //Per controllare se è in corso una modifica o una nuova ricetta
-        title.setEnabled(!isEditing); //Disabilita la modifica del titolo
         main = new Step("", previewUri);
 
         //Inizializzo Firebase
@@ -153,7 +155,7 @@ public class CreateRecipe extends AppCompatActivity {
         Intent intent = getIntent();
         if (isEditing) { //Se è in corso una modifica
             getSupportActionBar().setTitle("Modifica ricetta");
-            titleLayout.setHint(getString(R.string.title_not_editable));
+            recipeId = getIntent().getStringExtra("recipeId");
             btnAddStep.setVisibility(View.GONE); //Nascondi il bottone aggiungi step
 
             Recipe editRecipe = (Recipe) intent.getSerializableExtra("recipeToEdit"); //Ottieni la ricetta passata tramite lo StartActivityForResult da PersonalCardAdapter
@@ -222,9 +224,7 @@ public class CreateRecipe extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //Controlla che il testo non sia vuoto o contenga solo spazi
-                if (TextUtils.isEmpty(ingName.getText()) || TextUtils.isEmpty(ingQuantity.getText())
-                        || ingName.getText().toString().trim().equals("")
-                        || ingQuantity.getText().toString().trim().equals("")) {
+                if (ingName.getText().toString().trim().equals("") || ingQuantity.getText().toString().trim().equals("")) {
                     Toast.makeText(CreateRecipe.this, R.string.ing_required, Toast.LENGTH_LONG).show();
                 } else {  //Metodo per aggiungere un ingrediente alla recycler view
                     iAdapter.addIngredient(new Ingredient(ingName.getText().toString().trim(), ingQuantity.getText().toString().trim()));
@@ -284,7 +284,9 @@ public class CreateRecipe extends AppCompatActivity {
                 Snackbar.make(view, R.string.minimum_info_required, Snackbar.LENGTH_LONG).show();
             } else {
                 if (isUploading == false) {
-                    folder = currentUser.getUid() + "/" + title.getText();
+                    generatedId = randomAlphaNumeric();
+                    if(isEditing) folder = currentUser.getUid() + "/" + recipeId;
+                    else folder = currentUser.getUid() + "/" + generatedId;
                     if (previewUri != null) {
                         main.setUrl("");
                         ImagePickActivity.uploadToStorage(this, previewUri, folder, "preview", main);
@@ -365,21 +367,33 @@ public class CreateRecipe extends AppCompatActivity {
      * @return risultato booleano del controllo, true se non completo
      */
     private boolean checkInfoNotComplete() {
+
         boolean preview = (previewUri == null && !isEditing); //Se non è in corso la modifica l'utente deve caricare obbligatoriamente l'immagine di anteprima
-        boolean t = TextUtils.isEmpty(title.getText());
-        String trimmed;
-        if (!t) {
-            trimmed = title.getText().toString().trim(); //Controlla che l'utente non abbia inserito solo spazi
-            t = t || trimmed.equals("");
-        }
+
+        String trimmed = title.getText().toString().trim(); //Controlla che l'utente non abbia inserito solo spazi
+        boolean t = trimmed.equals("");
+
         //Check del primo step di cui la descrizione è obbligatoria
-        boolean s = TextUtils.isEmpty(mAdapter.getSteps().get(0).getText());
-        if (!s) {
-            trimmed = mAdapter.getSteps().get(0).getText().toString().trim(); //Controlla che l'utente non abbia inserito solo spazi
-            s = s || trimmed.equals("");
-        }
+        trimmed = mAdapter.getSteps().get(0).getText().toString().trim(); //Controlla che l'utente non abbia inserito solo spazi
+        boolean s = trimmed.equals("");
+
         //Oltre ai booleani precedenti controlla inoltre che ci sia almeno un ingrediente e sia selezionato il tipo di pietanza
         return preview || t || s || TextUtils.isEmpty(totalTime.getText()) || TextUtils.isEmpty(actwType.getText()) || iAdapter.getItemCount() == 0;
+    }
+
+    /**
+     * Genera una stringa alfanumerica random per l'id della ricetta
+     * @return stringa alfanumerica
+     */
+    public static String randomAlphaNumeric() {
+        String ALPHA_NUMERIC_STRING = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        StringBuilder builder = new StringBuilder();
+        int count = 20;
+        while (count-- != 0) {
+            int character = (int)(Math.random()*ALPHA_NUMERIC_STRING.length());
+            builder.append(ALPHA_NUMERIC_STRING.charAt(character));
+        }
+        return builder.toString();
     }
 
     /**
@@ -445,6 +459,7 @@ public class CreateRecipe extends AppCompatActivity {
                                     if (isEditing) {
                                         //aggiorna la ricetta esistente con solo le informazioni modificate per evitare di sovrascrivere ad esempio like e dislike
                                         Map<String, Object> map = new HashMap<String, Object>();
+                                        map.put("title", titleString);
                                         map.put("sections", sections);
                                         map.put("ingredients", iAdapter.getIngredients());
                                         map.put("ingNames", names);
@@ -452,7 +467,7 @@ public class CreateRecipe extends AppCompatActivity {
                                         map.put("previewUrl", main.getUrl());
                                         map.put("time", totalTime.getText().toString());
                                         map.put("titleWords", Arrays.asList(words));
-                                        db.collection("Recipes").document(getIntent().getStringExtra("recipeId"))
+                                        db.collection("Recipes").document(recipeId)
                                                 .set(map, SetOptions.merge())
                                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                     @Override
@@ -471,12 +486,12 @@ public class CreateRecipe extends AppCompatActivity {
                                     }
                                     else { //Aggiunge una nuova ricetta
                                         mRecipe.setDate(Timestamp.now().getSeconds());
-                                        db.collection("Recipes")
-                                                .add(mRecipe)
-                                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                        db.collection("Recipes").document(generatedId)
+                                                .set(mRecipe)
+                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                     @Override
-                                                    public void onSuccess(DocumentReference documentReference) {
-                                                        Log.d("Firestore up", "DocumentSnapshot written with ID: " + documentReference.getId());
+                                                    public void onSuccess(Void aVoid) {
+                                                        Log.d("Firestore up", "DocumentSnapshot written with ID: " + generatedId);
                                                     }
                                                 })
                                                 .addOnFailureListener(new OnFailureListener() {

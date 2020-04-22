@@ -95,7 +95,7 @@ public class RdgFragment extends Fragment {
                             recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1, GridLayoutManager.VERTICAL, false));
                             RecipeCardRecyclerViewAdapter adapter = new RecipeCardRecyclerViewAdapter(getActivity(), recipeList, recipeIds);
                             recyclerView.setAdapter(adapter);
-                            Log.i("Finish", "Recipes downloaded");
+                            Log.i("RDGFinish", "Recipes downloaded");
                         }
 
                     }

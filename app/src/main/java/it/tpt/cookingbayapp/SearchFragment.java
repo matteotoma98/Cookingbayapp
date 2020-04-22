@@ -77,11 +77,11 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
 
     /**
      * Genera la query a seconda dei dati immessi dall'utente
-     * @return
+     * @return query Firebase
      */
     private Query generateQuery() {
         Query query = null;
-        String trimmed = searchText.getText().toString().trim();
+        String trimmed = searchText.getText().toString().toLowerCase().trim();
         if(!trimmed.equals("")) {
             String[] words = trimmed.split(" ");
             query = recipes.whereArrayContainsAny("titleWords", Arrays.asList(words));
