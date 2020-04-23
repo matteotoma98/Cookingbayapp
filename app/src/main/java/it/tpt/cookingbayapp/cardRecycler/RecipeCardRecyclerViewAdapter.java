@@ -70,10 +70,27 @@ public class RecipeCardRecyclerViewAdapter extends RecyclerView.Adapter<RecipeCa
         notifyDataSetChanged();
         //notifyItemInserted(recipeList.size()-1);
     }
+    /**
+     * Aggiorna una ricetta
+     * @param recipe La ricetta
+     * @param id L'id della ricetta per trovare l'indice
+     */
     public void updateRecipe(Recipe recipe, String id) {
         int index = recipeIds.indexOf(id);
         recipeList.set(index, recipe);
         notifyItemChanged(index);
+    }
+    /**
+     * Elimina una ricetta
+     * @param recipe La ricetta
+     * @param id L'id della ricetta per trovare l'indice
+     */
+    public void deleteRecipe(Recipe recipe, String id) {
+        int index = recipeIds.indexOf(id);
+        recipeList.remove(index);
+        recipeIds.remove(index);
+        notifyItemRemoved(index);
+        notifyItemRangeChanged(index, getItemCount());
     }
 
     public List<Recipe> getRecipeList() {

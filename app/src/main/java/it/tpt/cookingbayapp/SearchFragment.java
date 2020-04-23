@@ -82,7 +82,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
     private Query generateQuery() {
         Query query = null;
         String trimmed = searchText.getText().toString().toLowerCase().trim();
-        if(!trimmed.equals("")) {
+        if(!trimmed.equals("") && searchText.isEnabled()) {
             String[] words = trimmed.split(" ");
             query = recipes.whereArrayContainsAny("titleWords", Arrays.asList(words));
         }
@@ -145,10 +145,12 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
                 String ing = ingName.getText().toString().trim();
                 if (!ing.equals("")) {
                     ingAdapter.addIngredient(ing.toLowerCase());
+                    searchText.setEnabled(false);
                 }
                 break;
             case R.id.delIngName:
                 ingAdapter.delIngredient();
+                if(ingAdapter.getItemCount()==0) searchText.setEnabled(true);
                 break;
             case R.id.btnSearch:
                 if(generateQuery()!=null) {

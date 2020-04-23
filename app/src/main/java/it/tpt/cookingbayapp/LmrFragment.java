@@ -18,9 +18,11 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -39,9 +41,16 @@ public class LmrFragment extends Fragment {
     private FirebaseUser currentUser;
     private View layout;
     private FirebaseFirestore db;
+    private ListenerRegistration registration; //Serve per tenere traccia degli SnapshotListener di firebase ed eliminarli quando non servono
+    private boolean firstDownload; //Per eseguire il download di tutte le ricette solo una volta all'atto dell'onCreate
 
     public LmrFragment() {
 
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
     }
 
     @Nullable
@@ -58,6 +67,7 @@ public class LmrFragment extends Fragment {
         //Essendo le chiamate a Firebase asincrone c'è il rischio che che l'utente clicchi su questo fragment prima ancora che sia terminato il login
         if (currentUser != null) uid = currentUser.getUid();
 
+        firstDownload = true;
         downloadRecipes(); //Scarica le ricette e le assegna al recyclerView
 
         return view;
@@ -69,7 +79,8 @@ public class LmrFragment extends Fragment {
      * Inoltre è presente un eventListener per monitorare i cambiamenti effettuati
      */
     private void downloadRecipes() {
-        db.collection("Recipes")
+        if(registration!=null) registration.remove(); //Rimuovi i precedenti listener
+        registration = db.collection("Recipes")
                 .whereEqualTo("authorId", uid)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
@@ -78,17 +89,33 @@ public class LmrFragment extends Fragment {
                             Log.w("TAG", "Listen failed.", e);
                             return;
                         }
-                        ArrayList<Recipe> recipeList = new ArrayList<>();
-                        ArrayList<String> recipeIds = new ArrayList<>();
-                        for (QueryDocumentSnapshot doc : value) {
-                            Recipe recipe = doc.toObject(Recipe.class);
-                            recipeList.add(recipe);
-                            recipeIds.add(doc.getId());
+                        if(firstDownload) { //Per eseguire il download solo una volta all'atto dell'OnCreate
+                            ArrayList<Recipe> recipeList = new ArrayList<>();
+                            ArrayList<String> recipeIds = new ArrayList<>();
+                            for (QueryDocumentSnapshot doc : value) {
+                                Recipe recipe = doc.toObject(Recipe.class);
+                                recipeList.add(recipe);
+                                recipeIds.add(doc.getId());
+                            }
+                            recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1, GridLayoutManager.VERTICAL, false));
+                            adapter = new PersonalCardRecyclerViewAdapter(getActivity(), recipeList, recipeIds);
+                            recyclerView.setAdapter(adapter);
+                            firstDownload = false;
+                            Log.i("FinishLMR", "Recipes downloaded");
                         }
-                        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1, GridLayoutManager.VERTICAL, false));
-                        adapter = new PersonalCardRecyclerViewAdapter(getActivity(), recipeList, recipeIds);
-                        recyclerView.setAdapter(adapter);
-                        Log.i("FinishLMR", "Recipes downloaded");
+                        else { //Aggiornamenti singoli
+                            for (DocumentChange dc : value.getDocumentChanges()) {
+                                switch (dc.getType()) {
+                                    case ADDED:
+                                        adapter.addRecipe(dc.getDocument().toObject(Recipe.class), dc.getDocument().getId());
+                                        break;
+                                    case MODIFIED:
+                                        adapter.updateRecipe(dc.getDocument().toObject(Recipe.class), dc.getDocument().getId());
+                                        break;
+                                }
+                            }
+                            Log.i("FinishLMR", "Recipes updated");
+                        }
                     }
                 });
     }
@@ -111,9 +138,8 @@ public class LmrFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onDestroy() {
+        super.onDestroy();
+        if(registration!=null) registration.remove();
     }
-
-
 }

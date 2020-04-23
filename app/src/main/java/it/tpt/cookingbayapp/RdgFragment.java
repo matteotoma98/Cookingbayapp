@@ -14,11 +14,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -36,6 +36,9 @@ public class RdgFragment extends Fragment {
 
     private FirebaseFirestore db;
     private RecyclerView recyclerView;
+    private ListenerRegistration registration; //Serve per tenere traccia degli SnapshotListener di firebase ed eliminarli quando non servono
+    RecipeCardRecyclerViewAdapter adapter;
+    private boolean firstDownload; //Per eseguire il download di tutte le ricette solo una volta all'atto dell'onCreate
 
     public RdgFragment() {
         // Required empty public constructor
@@ -57,6 +60,7 @@ public class RdgFragment extends Fragment {
 
         db = FirebaseFirestore.getInstance();
 
+        firstDownload = true;
         downloadRecipes(0); //Scarica le ricette
 
         //int largePadding = getResources().getDimensionPixelSize(R.dimen.shr_product_grid_spacing);
@@ -72,7 +76,8 @@ public class RdgFragment extends Fragment {
      * @param daysBefore quanti giorni indietro bisogna cercare, utilizzato nella query whereGreaterThanOrEqualTo
      */
     private void downloadRecipes(final int daysBefore) {
-        db.collection("Recipes")
+        if(registration!=null) registration.remove();
+        registration = db.collection("Recipes")
                 .whereGreaterThanOrEqualTo("date", getCurrentDayInSeconds() - daysBefore*24*60*60)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
@@ -81,21 +86,40 @@ public class RdgFragment extends Fragment {
                             Log.w("TAG", "Listen failed.", e);
                             return;
                         }
-                        ArrayList<Recipe> recipeList = new ArrayList<>();
-                        ArrayList<String> recipeIds = new ArrayList<>();
-                        int count = 0;
-                        for (QueryDocumentSnapshot doc : value) {
-                            Recipe recipe = doc.toObject(Recipe.class);
-                            recipeList.add(recipe);
-                            recipeIds.add(doc.getId());
-                            count++;
+                        if(firstDownload) {
+                            ArrayList<Recipe> recipeList = new ArrayList<>();
+                            ArrayList<String> recipeIds = new ArrayList<>();
+                            int count = 0;
+                            for (QueryDocumentSnapshot doc : value) {
+                                Recipe recipe = doc.toObject(Recipe.class);
+                                recipeList.add(recipe);
+                                recipeIds.add(doc.getId());
+                                count++;
+                            }
+                            if (count < 3) downloadRecipes(daysBefore + 1);
+                            else {
+                                recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1, GridLayoutManager.VERTICAL, false));
+                                adapter = new RecipeCardRecyclerViewAdapter(getActivity(), recipeList, recipeIds);
+                                recyclerView.setAdapter(adapter);
+                                firstDownload=false;
+                                Log.i("FinishRDG", "Recipes downloaded");
+                            }
                         }
-                        if(count<3) downloadRecipes(daysBefore+1);
-                        else {
-                            recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1, GridLayoutManager.VERTICAL, false));
-                            RecipeCardRecyclerViewAdapter adapter = new RecipeCardRecyclerViewAdapter(getActivity(), recipeList, recipeIds);
-                            recyclerView.setAdapter(adapter);
-                            Log.i("RDGFinish", "Recipes downloaded");
+                        else { //Aggiornamenti singoli
+                            for (DocumentChange dc : value.getDocumentChanges()) {
+                                switch (dc.getType()) {
+                                    case ADDED:
+                                        adapter.addRecipe(dc.getDocument().toObject(Recipe.class), dc.getDocument().getId());
+                                        break;
+                                    case MODIFIED:
+                                        adapter.updateRecipe(dc.getDocument().toObject(Recipe.class), dc.getDocument().getId());
+                                        break;
+                                    case REMOVED:
+                                        adapter.deleteRecipe(dc.getDocument().toObject(Recipe.class), dc.getDocument().getId());
+                                        break;
+                                }
+                            }
+                            Log.i("FinishRDG", "Recipes updated");
                         }
 
                     }
@@ -116,6 +140,12 @@ public class RdgFragment extends Fragment {
         long now = c.getTimeInMillis();
         long secondsPassed = now / 1000;
         return secondsPassed;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(registration!=null) registration.remove();
     }
 
     @Override
