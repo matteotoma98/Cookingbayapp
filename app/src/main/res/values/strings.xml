@@ -76,6 +76,8 @@
     <string name="save_publish">Salva e pubblica</string>
     <string name="search">Cerca</string>
     <string name="search_by_ingredients">Ricerca per ingredienti</string>
+    <string name="search_by_text_not_possible">La ricerca tramite testo non è disponibile</string>
+    <string name="search_by_time">Tempo di preparazione \u003C </string>
     <string name="second_course">Secondo Piatto</string>
     <string name="section">Section</string>
     <string name="set_timer">Imposta un timer</string>

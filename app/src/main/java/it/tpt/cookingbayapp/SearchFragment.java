@@ -1,6 +1,7 @@
 package it.tpt.cookingbayapp;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,7 +40,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
     private RecyclerView ingRecyclerView, recipeRecyclerView;
     private RecipeCardRecyclerViewAdapter recipeAdapter;
     private IngNamesAdapter ingAdapter;
-    private TextInputEditText ingName, searchText;
+    private TextInputEditText ingName, searchText, searchTime;
     private ImageView addIng, delIng;
     private ChipGroup chipGroup;
     private Button searchBtn;
@@ -56,6 +57,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
         addIng = view.findViewById(R.id.addIngName);
         delIng = view.findViewById(R.id.delIngName);
         searchText = view.findViewById(R.id.searchTitle);
+        searchTime = view.findViewById(R.id.searchTime);
         searchBtn = view.findViewById(R.id.btnSearch);
         chipGroup = view.findViewById(R.id.chipGroupType);
         selectedChip = "";
@@ -94,6 +96,11 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
             if(query!=null) query = query.whereArrayContainsAny("ingNames", ingAdapter.getIngredients());
             else query = recipes.whereArrayContainsAny("ingNames", ingAdapter.getIngredients());
 
+        }
+        if(!TextUtils.isEmpty(searchTime.getText())) {
+            int timeToSearch = Integer.parseInt(searchTime.getText().toString());
+            if(query!=null) query = query.whereLessThanOrEqualTo("time", timeToSearch);
+            else query = recipes.whereLessThanOrEqualTo("time", timeToSearch);
         }
 
         return query;
@@ -146,11 +153,15 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
                 if (!ing.equals("")) {
                     ingAdapter.addIngredient(ing.toLowerCase());
                     searchText.setEnabled(false);
+                    searchText.setText(R.string.search_by_text_not_possible);
                 }
                 break;
             case R.id.delIngName:
                 ingAdapter.delIngredient();
-                if(ingAdapter.getItemCount()==0) searchText.setEnabled(true);
+                if(ingAdapter.getItemCount()==0) {
+                    searchText.setEnabled(true);
+                    searchText.clearComposingText();
+                }
                 break;
             case R.id.btnSearch:
                 if(generateQuery()!=null) {
