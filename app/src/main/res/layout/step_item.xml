@@ -55,7 +55,13 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:paddingTop="10dp">
-
+                <TextView
+                    android:layout_marginRight="14dp"
+                    android:layout_width="210dp"
+                    android:layout_height="match_parent"
+                    android:gravity="right"
+                    android:text="@string/set_timer"
+                    />
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
