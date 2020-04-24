@@ -54,12 +54,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:layout_gravity="right"
                 android:paddingTop="10dp">
                 <TextView
                     android:layout_marginRight="14dp"
-                    android:layout_width="210dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:gravity="right"
                     android:text="@string/set_timer"
                     />
                 <ImageView
@@ -80,7 +80,8 @@
                         android:id="@+id/stepHours"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:inputType="number" />
+                        android:inputType="number"
+                        android:maxLength="1"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
@@ -99,7 +100,8 @@
                         android:id="@+id/stepMinutes"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:inputType="number" />
+                        android:inputType="number"
+                        android:maxLength="2"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView

@@ -50,13 +50,13 @@
             android:hint="@string/insert_title"
             app:boxBackgroundColor="@android:color/white"
             app:counterEnabled="true"
-            app:counterMaxLength="69">
+            app:counterMaxLength="60">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/createRecipeTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:maxLength="69" />
+                android:maxLength="60" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <LinearLayout
