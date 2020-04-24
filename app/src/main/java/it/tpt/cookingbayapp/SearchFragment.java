@@ -160,7 +160,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
                 ingAdapter.delIngredient();
                 if(ingAdapter.getItemCount()==0) {
                     searchText.setEnabled(true);
-                    searchText.clearComposingText();
+                    searchText.setText("");
                 }
                 break;
             case R.id.btnSearch:
