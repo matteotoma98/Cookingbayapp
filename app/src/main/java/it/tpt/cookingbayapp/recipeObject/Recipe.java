@@ -9,7 +9,7 @@ public class Recipe implements Serializable{
     private String title;
     private String previewUrl;
     private String profilePicUrl;
-    private String time;
+    private int time;
     private String type;
     private String authorId;
     private String authorName;
@@ -25,7 +25,7 @@ public class Recipe implements Serializable{
     //Per le classi da utilizzare con FireStore serve sempre un costruttore senza argomenti disponibile
     public Recipe(){ }
 
-    public Recipe(String title, String previewUrl, String profilePicUrl, String time, String type, String authorId, String authorName, ArrayList<Ingredient> ingredients, ArrayList<Section> sections, long date) {
+    public Recipe(String title, String previewUrl, String profilePicUrl, int time, String type, String authorId, String authorName, ArrayList<Ingredient> ingredients, ArrayList<Section> sections, long date) {
         this.title = title;
         this.previewUrl = previewUrl;
         this.profilePicUrl = profilePicUrl;
@@ -136,11 +136,11 @@ public class Recipe implements Serializable{
         this.title = title;
     }
 
-    public String getTime() {
+    public int getTime() {
         return time;
     }
 
-    public void setTime(String time) {
+    public void setTime(int time) {
         this.time = time;
     }
 

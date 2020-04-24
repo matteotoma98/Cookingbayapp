@@ -174,7 +174,7 @@ public class PersonalCardRecyclerViewAdapter extends RecyclerView.Adapter<Person
 
             holder.title.setText(recipe.getTitle());
             holder.type.setText(recipe.getType());
-            holder.time.setText(recipe.getTime() + "min");
+            holder.time.setText(String.valueOf(recipe.getTime()) + " min");
 
             Glide.with(holder.preview.getContext()).load(recipe.getPreviewUrl()).into(holder.preview);
 

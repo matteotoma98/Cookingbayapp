@@ -110,7 +110,7 @@ public class RecipeCardRecyclerViewAdapter extends RecyclerView.Adapter<RecipeCa
             holder.title.setText(recipe.getTitle());
             holder.user.setText(recipe.getAuthorName());
             holder.type.setText(recipe.getType());
-            holder.time.setText(recipe.getTime() + " min");
+            holder.time.setText(String.valueOf(recipe.getTime()) + " min");
             if(!recipe.getProfilePicUrl().equals("missingprofile"))
                 Glide.with(holder.profilePic.getContext()).load(recipe.getProfilePicUrl()).error(R.drawable.missingprofile).into(holder.profilePic);
             else  Glide.with(holder.profilePic.getContext()).load(R.drawable.missingprofile).into(holder.profilePic);

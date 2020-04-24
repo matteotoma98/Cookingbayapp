@@ -161,7 +161,7 @@ public class CreateRecipe extends AppCompatActivity {
             Recipe editRecipe = (Recipe) intent.getSerializableExtra("recipeToEdit"); //Ottieni la ricetta passata tramite lo StartActivityForResult da PersonalCardAdapter
             main.setUrl(editRecipe.getPreviewUrl());
             title.setText(editRecipe.getTitle());
-            totalTime.setText(editRecipe.getTime());
+            totalTime.setText(String.valueOf(editRecipe.getTime()));
             actwType.setText(editRecipe.getType(), false); //Il filtro va messo su falso , altrimenti il menu a tendina mostra solo l'elemento impostato tramite questa istruzione
 
             //Popola la lista degli step con le sezioni estratte dall'oggetto editRecipe
@@ -443,7 +443,7 @@ public class CreateRecipe extends AppCompatActivity {
                                         names.add(iAdapter.getIngredients().get(i).getName().toLowerCase());
                                     }
                                     mRecipe.setIngNames(names);
-                                    mRecipe.setTime(totalTime.getText().toString()); //Imposta il tempo
+                                    mRecipe.setTime(Integer.parseInt(totalTime.getText().toString())); //Imposta il tempo
 
                                     //Aggiunge alla lista di oggetti Section gli step dell'editor con i rispettivi URL e il timer convertito in secondi
                                     ArrayList<Section> sections = new ArrayList<>();
@@ -465,7 +465,7 @@ public class CreateRecipe extends AppCompatActivity {
                                         map.put("ingNames", names);
                                         map.put("type", actwType.getText().toString());
                                         map.put("previewUrl", main.getUrl());
-                                        map.put("time", totalTime.getText().toString());
+                                        map.put("time", Integer.parseInt(totalTime.getText().toString()));
                                         map.put("titleWords", Arrays.asList(words));
                                         db.collection("Recipes").document(recipeId)
                                                 .set(map, SetOptions.merge())
