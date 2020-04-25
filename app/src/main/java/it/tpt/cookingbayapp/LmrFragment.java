@@ -133,7 +133,7 @@ public class LmrFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         //Bottone per creare una ricetta
-        btnCrea = (FloatingActionButton) getView().findViewById(R.id.floating_action_button);
+        btnCrea = getView().findViewById(R.id.floating_action_button);
         btnCrea.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -100,8 +100,6 @@ public class CreateRecipe extends AppCompatActivity {
 
     //Uri utilizzati per caricare sul FirebaseStorage l'immagine di anteprima e del primo step
     private Uri previewUri;
-    private Uri stepUri;
-
     private CheckUploadTask mCheckUploadTask; //AsyncTask utilizzato per tenere traccia del completamento di tutti gli upload
 
     private FirebaseUser currentUser;
