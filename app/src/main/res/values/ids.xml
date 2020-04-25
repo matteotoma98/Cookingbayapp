@@ -3,4 +3,5 @@
     <item name="exitNoSave" type="id" />
     <item name="exitSave" type="id" />
     <item name="addFavourite" type="id" />
+    <item name="change_username" type="id"/>
 </resources>

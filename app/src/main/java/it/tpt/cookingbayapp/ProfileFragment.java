@@ -10,7 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,10 +47,15 @@ public class ProfileFragment extends Fragment {
 
     private Button exit; //Bottone per uscire dall'account
     private Button switch_account; //Bottone per cambiare account
+    private Button cambia_nome_utente; //Bottone per modificare l'username dell'utente
     private FirebaseAuth mAuth;
     private ImageView profilePic; //Foto di profile
+    private ImageView saveUsername;
+    private ImageView undoUsername;
     private Uri profileUri;
     private TextView username;
+    private EditText editTextUsername;
+    private LinearLayout UsernameLayout;
     private View layout;
     private final static int PROPIC_REQUEST = 239;
     public static final int LOGIN_REQUEST = 101;
@@ -65,11 +72,16 @@ public class ProfileFragment extends Fragment {
         profilePic = view.findViewById(R.id.userProfilePic);
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
-
+        cambia_nome_utente = view.findViewById(R.id.change_username);
         exit = view.findViewById(R.id.logout);
         switch_account = view.findViewById(R.id.switch_account);
         username = view.findViewById(R.id.profileUsername);
         layout = view.findViewById(R.id.profileCoordinatorLayout);
+        editTextUsername = view.findViewById(R.id.editTextUsername);
+        saveUsername = view.findViewById(R.id.saveUsername);
+        undoUsername = view.findViewById(R.id.undoUsername);
+        UsernameLayout = view.findViewById(R.id.modifyusername);
+        UsernameLayout.setVisibility(View.GONE);
 
         updateUI(); //Aggiorna l'ui con le informazioni dell'utente
         return view;
@@ -83,6 +95,55 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        saveUsername.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                final String usernameText = editTextUsername.getText().toString().trim();
+                if (!usernameText.equals("")) {
+                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                            .setDisplayName(usernameText)
+                            .build();
+                    user.updateProfile(profileUpdates)
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        Log.d("TEXTUSERNAME", "username changed.");
+                                    }
+                                }
+                            });
+                    Map<String, Object> name = new HashMap<>();
+                    name.put("username", usernameText);
+                    //Aggiungi l'username nel documento dell'utente per poterlo visualizzare anche nei commenti
+                    db.collection("Users").document(uid).set(name, SetOptions.merge());
+                    //Aggiungi l'username tutte le sue ricette per diminuire le call a Firestore nel feed
+                    db.collection("Recipes")
+                            .whereEqualTo("authorId", uid)
+                            .get()
+                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        for (final QueryDocumentSnapshot document : task.getResult()) {
+                                            document.getReference().update("authorName", usernameText);
+                                        }
+
+                                    } else {
+                                        Log.d("TAG", "Error getting documents: ", task.getException());
+                                    }
+                                }
+                            });
+                }
+            }
+        });
+        undoUsername.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UsernameLayout.setVisibility(View.GONE);
+                username.setVisibility(View.VISIBLE);
+            }
+        });
 
         //Click Listener dell'immagine di profilo
         profilePic.setOnClickListener(new View.OnClickListener() {
@@ -145,9 +206,22 @@ public class ProfileFragment extends Fragment {
                                 }
                             });
                 } else
-                    Snackbar.make(layout, R.string.already_anonymous, Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(layout, R.string.user, Snackbar.LENGTH_SHORT).show();
             }
         });
+        cambia_nome_utente.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                if (user != null && !user.isAnonymous()) {
+                    username.setVisibility(View.GONE);
+                    UsernameLayout.setVisibility(View.VISIBLE);
+                    editTextUsername.setText(username.getText().toString());
+                } else
+                    Snackbar.make(layout, R.string.username_anonymous, Snackbar.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     /**
@@ -252,17 +326,16 @@ public class ProfileFragment extends Fragment {
     /**
      * Aggiorna l'UI quando viene cambiato l'account e alla creazione del Fragment
      */
-    public void updateUI(){
+    public void updateUI() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user!=null && user.isAnonymous()) {
+        if (user != null && user.isAnonymous()) {
             username.setText("Utente anonimo");
             Glide.with(getContext())
                     .load(user.getPhotoUrl())
                     .error(R.drawable.missingprofile)
                     .centerCrop()
                     .into(profilePic);
-        }
-        else if (user!= null && !user.isAnonymous()) {
+        } else if (user != null && !user.isAnonymous()) {
             username.setText(user.getDisplayName());
             Glide.with(getContext())
                     .load(user.getPhotoUrl())
