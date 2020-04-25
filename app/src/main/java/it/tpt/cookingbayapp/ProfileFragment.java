@@ -99,6 +99,7 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                uid = user.getUid();
                 final String usernameText = editTextUsername.getText().toString().trim();
                 if (!usernameText.equals("")) {
                     UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
@@ -109,6 +110,10 @@ public class ProfileFragment extends Fragment {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {
+                                        UsernameLayout.setVisibility(View.GONE);
+                                        username.setText(usernameText);
+                                        username.setVisibility(View.VISIBLE);
+                                        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(usernameText);
                                         Log.d("TEXTUSERNAME", "username changed.");
                                     }
                                 }
