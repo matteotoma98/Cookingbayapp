@@ -40,7 +40,6 @@ public class RdgFragment extends Fragment {
     private RecyclerView recyclerView;
     private ListenerRegistration registration; //Serve per tenere traccia degli SnapshotListener di firebase ed eliminarli quando non servono
     RecipeCardRecyclerViewAdapter adapter;
-    private boolean firstDownload; //Per eseguire il download di tutte le ricette solo una volta all'atto dell'onCreate
 
     public RdgFragment() {
         // Required empty public constructor
@@ -62,7 +61,6 @@ public class RdgFragment extends Fragment {
 
         db = FirebaseFirestore.getInstance();
         FirebaseAuth.getInstance();
-        firstDownload = true;
         Log.i("sec", String.valueOf(getCurrentDayInSeconds()));
         downloadRecipes(0); //Scarica le ricette
 
@@ -76,66 +74,64 @@ public class RdgFragment extends Fragment {
     /**
      * Scarica le ricette giornaliere da Firestore e le assegna al recyclerView
      * E' una funzione ricorsiva. Se ci sono meno di tre ricette giornaliere scarica tutte le ricette dal giorno precedente e cosi via
+     *
      * @param daysBefore quanti giorni indietro bisogna cercare, utilizzato nella query whereGreaterThanOrEqualTo
      */
     private void downloadRecipes(final int daysBefore) {
         if (registration != null) registration.remove();
-        if (firstDownload) { //Scarica le ricette giornaliere
-            db.collection("Recipes")
-                    .whereGreaterThanOrEqualTo("date", getCurrentDayInSeconds() - daysBefore * 24 * 60 * 60)
-                    .get()
-                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if (task.isSuccessful()) {
-                                ArrayList<Recipe> recipeList = new ArrayList<>();
-                                ArrayList<String> recipeIds = new ArrayList<>();
-                                int count = 0;
-                                for (QueryDocumentSnapshot document : task.getResult()) {
-                                    Recipe recipe = document.toObject(Recipe.class);
-                                    recipeList.add(recipe);
-                                    recipeIds.add(document.getId());
-                                    count++;
-                                }
-                                Log.i("giorni", String.valueOf(daysBefore) + " Count= " + count);
-                                if (count < 3) downloadRecipes(daysBefore + 1);
-                                else {
-                                    recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1, GridLayoutManager.VERTICAL, false));
-                                    adapter = new RecipeCardRecyclerViewAdapter(getActivity(), recipeList, recipeIds);
-                                    recyclerView.setAdapter(adapter);
-                                    firstDownload = false;
-                                    Log.i("FinishRDG", "Recipes downloaded");
-                                }
+        //Scarica le ricette giornaliere
+        db.collection("Recipes")
+                .whereGreaterThanOrEqualTo("date", getCurrentDayInSeconds() - daysBefore * 24 * 60 * 60)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            ArrayList<Recipe> recipeList = new ArrayList<>();
+                            ArrayList<String> recipeIds = new ArrayList<>();
+                            int count = 0;
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Recipe recipe = document.toObject(Recipe.class);
+                                recipeList.add(recipe);
+                                recipeIds.add(document.getId());
+                                count++;
+                            }
+                            Log.i("giorni", String.valueOf(daysBefore) + " Count= " + count);
+                            if (count < 3) downloadRecipes(daysBefore + 1);
+                            else {
+                                recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1, GridLayoutManager.VERTICAL, false));
+                                adapter = new RecipeCardRecyclerViewAdapter(getActivity(), recipeList, recipeIds);
+                                recyclerView.setAdapter(adapter);
+                                registration = db.collection("Recipes")
+                                        .whereGreaterThanOrEqualTo("date", getCurrentDayInSeconds() - daysBefore * 24 * 60 * 60)
+                                        .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                                            @Override
+                                            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
+                                                if (e != null) {
+                                                    Log.w("TAG", "Listen failed.", e);
+                                                    return;
+                                                }
+                                                for (DocumentChange dc : value.getDocumentChanges()) {
+                                                    switch (dc.getType()) {
+                                                        case ADDED:
+                                                            adapter.addRecipe(dc.getDocument().toObject(Recipe.class), dc.getDocument().getId());
+                                                            break;
+                                                        case MODIFIED:
+                                                            adapter.updateRecipe(dc.getDocument().toObject(Recipe.class), dc.getDocument().getId());
+                                                            break;
+                                                        case REMOVED:
+                                                            adapter.deleteRecipe(dc.getDocument().toObject(Recipe.class), dc.getDocument().getId());
+                                                            break;
+                                                    }
+                                                }
+                                                Log.i("FinishRDG", "Recipes updated");
+                                            }
+                                        });
+                                Log.i("FinishRDG", "Recipes downloaded");
                             }
                         }
-                    });
-        } else { //Aggiornamenti singoli
-            registration = db.collection("Recipes")
-                    .whereGreaterThanOrEqualTo("date", getCurrentDayInSeconds() - daysBefore * 24 * 60 * 60)
-                    .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                        @Override
-                        public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
-                            if (e != null) {
-                                Log.w("TAG", "Listen failed.", e);
-                                return;
-                            }
-                            for (DocumentChange dc : value.getDocumentChanges()) {
-                                switch (dc.getType()) {
-                                    case ADDED:
-                                        adapter.addRecipe(dc.getDocument().toObject(Recipe.class), dc.getDocument().getId());
-                                        break;
-                                    case MODIFIED:
-                                        adapter.updateRecipe(dc.getDocument().toObject(Recipe.class), dc.getDocument().getId());
-                                        break;
-                                    case REMOVED:
-                                        adapter.deleteRecipe(dc.getDocument().toObject(Recipe.class), dc.getDocument().getId());
-                                        break;
-                                }
-                            }
-                            Log.i("FinishRDG", "Recipes updated");
-                        }
-                    });
-        }
+                    }
+                });
     }
 
 
