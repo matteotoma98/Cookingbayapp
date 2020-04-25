@@ -52,8 +52,10 @@ public class StepAdapter extends RecyclerView.Adapter<StepViewHolder> {
         View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.step_item, parent, false);
         final StepViewHolder holder = new StepViewHolder(layoutView);
 
-        if(viewType == 0) holder.delete.setVisibility(View.GONE); //Il primo step non può essere eliminato perciò il bottone elimina viene nascosto
-
+        if(viewType == 0) {
+            holder.delete.setVisibility(View.GONE); //Il primo step non può essere eliminato perciò il bottone elimina viene nascosto
+            holder.stepstar.setVisibility(View.VISIBLE);
+        }
         //Imposta il ClickListener per eliminare lo step
         holder.setStepDeleteClickListener(new RecyclerItemClickListener() {
             @Override

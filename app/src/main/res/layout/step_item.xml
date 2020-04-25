@@ -33,13 +33,26 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingStart="10dp">
+                <TextView
+                    android:id="@+id/starStepDesc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
 
+                    android:text="*"
+                    android:textColor="@color/alert"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/stepContent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 android:hint="@string/describe_step"
                 app:boxBackgroundColor="@android:color/white">
@@ -49,7 +62,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </com.google.android.material.textfield.TextInputLayout>
-
+            </LinearLayout>
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

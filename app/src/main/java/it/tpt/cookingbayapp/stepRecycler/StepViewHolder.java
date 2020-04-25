@@ -15,10 +15,11 @@ import it.tpt.cookingbayapp.RecyclerItemClickListener;
 
 public class StepViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-    TextView stepnumber;
+    TextView stepnumber, stepstar;
     Button delete;
     TextInputEditText steptext, stepHours, stepMinutes;
     CircleImageView imgStep;
+
 
     //Interface object
     RecyclerItemClickListener stepDeleteClickListener;
@@ -34,6 +35,8 @@ public class StepViewHolder extends RecyclerView.ViewHolder implements View.OnCl
         stepMinutes = itemView.findViewById(R.id.stepMinutes);
         imgStep = itemView.findViewById(R.id.imgStepN);
         imgStep.setOnClickListener(this);
+        stepstar = itemView.findViewById(R.id.starStepDesc);
+        stepstar.setVisibility(View.GONE);
 
     }
 
