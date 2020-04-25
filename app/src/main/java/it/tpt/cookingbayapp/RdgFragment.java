@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -60,7 +59,6 @@ public class RdgFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
 
         db = FirebaseFirestore.getInstance();
-        FirebaseAuth.getInstance();
         Log.i("sec", String.valueOf(getCurrentDayInSeconds()));
         downloadRecipes(0); //Scarica le ricette
 
