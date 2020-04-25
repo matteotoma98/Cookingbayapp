@@ -138,7 +138,7 @@ public class ImagePickActivity {
             ContentResolver objectContentResolver = context.getContentResolver();
             MimeTypeMap objectMimeTypeMap = MimeTypeMap.getSingleton();
             String extension = objectMimeTypeMap.getExtensionFromMimeType(objectContentResolver.getType(uri));
-            if(extension.equals("null")) return "jpg";
+            if(extension == null) return "jpg";
             else return extension;
 
         } catch (Exception e) {
