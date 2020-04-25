@@ -43,11 +43,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class ProfileFragment extends Fragment {
+public class ProfileFragment extends Fragment implements View.OnClickListener{
 
     private Button exit; //Bottone per uscire dall'account
     private Button switch_account; //Bottone per cambiare account
-    private Button cambia_nome_utente; //Bottone per modificare l'username dell'utente
+    private Button change_username; //Bottone per modificare l'username dell'utente
     private FirebaseAuth mAuth;
     private ImageView profilePic; //Foto di profile
     private ImageView saveUsername;
@@ -55,7 +55,7 @@ public class ProfileFragment extends Fragment {
     private Uri profileUri;
     private TextView username;
     private EditText editTextUsername;
-    private LinearLayout UsernameLayout;
+    private LinearLayout usernameLayout;
     private View layout;
     private final static int PROPIC_REQUEST = 239;
     public static final int LOGIN_REQUEST = 101;
@@ -69,10 +69,10 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
-        profilePic = view.findViewById(R.id.userProfilePic);
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
-        cambia_nome_utente = view.findViewById(R.id.change_username);
+        profilePic = view.findViewById(R.id.userProfilePic);
+        change_username = view.findViewById(R.id.change_username);
         exit = view.findViewById(R.id.logout);
         switch_account = view.findViewById(R.id.switch_account);
         username = view.findViewById(R.id.profileUsername);
@@ -80,8 +80,8 @@ public class ProfileFragment extends Fragment {
         editTextUsername = view.findViewById(R.id.editTextUsername);
         saveUsername = view.findViewById(R.id.saveUsername);
         undoUsername = view.findViewById(R.id.undoUsername);
-        UsernameLayout = view.findViewById(R.id.modifyusername);
-        UsernameLayout.setVisibility(View.GONE);
+        usernameLayout = view.findViewById(R.id.modifyusername);
+        usernameLayout.setVisibility(View.GONE);
 
         updateUI(); //Aggiorna l'ui con le informazioni dell'utente
         return view;
@@ -95,137 +95,19 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        saveUsername.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                uid = user.getUid();
-                final String usernameText = editTextUsername.getText().toString().trim();
-                if (!usernameText.equals("")) {
-                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                            .setDisplayName(usernameText)
-                            .build();
-                    user.updateProfile(profileUpdates)
-                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if (task.isSuccessful()) {
-                                        UsernameLayout.setVisibility(View.GONE);
-                                        username.setText(usernameText);
-                                        username.setVisibility(View.VISIBLE);
-                                        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(usernameText);
-                                        Log.d("TEXTUSERNAME", "username changed.");
-                                    }
-                                }
-                            });
-                    Map<String, Object> name = new HashMap<>();
-                    name.put("username", usernameText);
-                    //Aggiungi l'username nel documento dell'utente per poterlo visualizzare anche nei commenti
-                    db.collection("Users").document(uid).set(name, SetOptions.merge());
-                    //Aggiungi l'username tutte le sue ricette per diminuire le call a Firestore nel feed
-                    db.collection("Recipes")
-                            .whereEqualTo("authorId", uid)
-                            .get()
-                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                    if (task.isSuccessful()) {
-                                        for (final QueryDocumentSnapshot document : task.getResult()) {
-                                            document.getReference().update("authorName", usernameText);
-                                        }
 
-                                    } else {
-                                        Log.d("TAG", "Error getting documents: ", task.getException());
-                                    }
-                                }
-                            });
-                }
-            }
-        });
-        undoUsername.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                UsernameLayout.setVisibility(View.GONE);
-                username.setVisibility(View.VISIBLE);
-            }
-        });
-
+        //Click Listener della conferma del nuovo nome utente
+        saveUsername.setOnClickListener(this);
+        //Click Listener dell'annulla modifiche al nome utente
+        undoUsername.setOnClickListener(this);
         //Click Listener dell'immagine di profilo
-        profilePic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                if (!user.isAnonymous()) {
-                    startActivityForResult(ImagePickActivity.getPickImageChooserIntent(getActivity(), "profile"), PROPIC_REQUEST);
-                } else
-                    Snackbar.make(layout, R.string.profilepic_anonymous, Snackbar.LENGTH_LONG).show();
-            }
-        });
+        profilePic.setOnClickListener(this);
         //Click listener per cambiare account
-        switch_account.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                if (user != null && user.isAnonymous()) { //Se si è correntemente connessi come ospite si elimina prima l'account, altrimenti Firebase si riempe di account anonimi
-                    user.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            Intent intent = new Intent(getActivity(), LoginActivity.class);
-                            getActivity().startActivityForResult(intent, LOGIN_REQUEST);
-                        }
-                    });
-                } else { //Se con si è connessi come ospite
-                    Intent intent = new Intent(getActivity(), LoginActivity.class);
-                    getActivity().startActivityForResult(intent, LOGIN_REQUEST);
-                }
-            }
-        });
+        switch_account.setOnClickListener(this);
         //Click listener per uscire (e connettersi dunque come ospite)
-        exit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                if (user != null && !user.isAnonymous()) { //Evita che si crei un nuovo account anonimo se lo si è già
-                    AuthUI.getInstance()
-                            .signOut(getActivity())
-                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    mAuth.signInAnonymously()
-                                            .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<AuthResult> task) {
-                                                    if (task.isSuccessful()) {
-                                                        // Sign in success, update UI with the signed-in user's information
-                                                        Log.d("signin", "signInAnonymously:success");
-                                                        updateUI();
-                                                        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Cooking Bay");
-                                                        Snackbar.make(layout, R.string.logged_as_anonymous, Snackbar.LENGTH_SHORT).show();
-                                                    } else {
-                                                        // If sign in fails, display a message to the user.
-                                                        Log.w("signinerror", "signInAnonymously:failure", task.getException());
-                                                        Toast.makeText((Context) getActivity(), R.string.exit_error, Toast.LENGTH_SHORT).show();
-                                                    }
-                                                }
-                                            });
-                                }
-                            });
-                } else
-                    Snackbar.make(layout, R.string.user, Snackbar.LENGTH_SHORT).show();
-            }
-        });
-        cambia_nome_utente.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                if (user != null && !user.isAnonymous()) {
-                    username.setVisibility(View.GONE);
-                    UsernameLayout.setVisibility(View.VISIBLE);
-                    editTextUsername.setText(username.getText().toString());
-                } else
-                    Snackbar.make(layout, R.string.username_anonymous, Snackbar.LENGTH_SHORT).show();
-            }
-        });
+        exit.setOnClickListener(this);
+        //Click Listener per cambiare username
+        change_username.setOnClickListener(this);
 
     }
 
@@ -347,6 +229,119 @@ public class ProfileFragment extends Fragment {
                     .error(R.drawable.missingprofile)
                     .centerCrop()
                     .into(profilePic);
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        uid = user.getUid();
+        switch (v.getId()) {
+            case R.id.change_username: //Cambia username
+                if (user != null && !user.isAnonymous()) {
+                    username.setVisibility(View.GONE);
+                    usernameLayout.setVisibility(View.VISIBLE);
+                    editTextUsername.setText(username.getText().toString());
+                } else
+                    Snackbar.make(layout, R.string.username_anonymous, Snackbar.LENGTH_SHORT).show();
+                break;
+
+            case R.id.saveUsername: //Conferma il nuovo username
+                final String usernameText = editTextUsername.getText().toString().trim();
+                if (!usernameText.equals("")) {
+                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                            .setDisplayName(usernameText)
+                            .build();
+                    user.updateProfile(profileUpdates)
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        usernameLayout.setVisibility(View.GONE);
+                                        username.setText(usernameText);
+                                        username.setVisibility(View.VISIBLE);
+                                        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(usernameText);
+                                        Log.d("TEXTUSERNAME", "username changed.");
+                                    }
+                                }
+                            });
+                    Map<String, Object> name = new HashMap<>();
+                    name.put("username", usernameText);
+                    //Aggiungi l'username nel documento dell'utente per poterlo visualizzare anche nei commenti
+                    db.collection("Users").document(uid).set(name, SetOptions.merge());
+                    //Aggiungi l'username tutte le sue ricette per diminuire le call a Firestore nel feed
+                    db.collection("Recipes")
+                            .whereEqualTo("authorId", uid)
+                            .get()
+                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        for (final QueryDocumentSnapshot document : task.getResult()) {
+                                            document.getReference().update("authorName", usernameText);
+                                        }
+
+                                    } else {
+                                        Log.d("TAG", "Error getting documents: ", task.getException());
+                                    }
+                                }
+                            });
+                }
+                break;
+
+            case R.id.undoUsername: //Annulla la modifica dell'username
+                usernameLayout.setVisibility(View.GONE);
+                username.setVisibility(View.VISIBLE);
+                break;
+
+            case R.id.userProfilePic: //Cambia immagine di profilo
+                if (!user.isAnonymous()) startActivityForResult(ImagePickActivity.getPickImageChooserIntent(getActivity(), "profile"), PROPIC_REQUEST);
+                else Snackbar.make(layout, R.string.profilepic_anonymous, Snackbar.LENGTH_LONG).show();
+                break;
+
+            case R.id.switch_account: //Cambia account
+                if (user != null && user.isAnonymous()) { //Se si è correntemente connessi come ospite si elimina prima l'account, altrimenti Firebase si riempe di account anonimi
+                    user.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            Intent intent = new Intent(getActivity(), LoginActivity.class);
+                            getActivity().startActivityForResult(intent, LOGIN_REQUEST);
+                        }
+                    });
+                } else { //Se con si è connessi come ospite
+                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                    getActivity().startActivityForResult(intent, LOGIN_REQUEST);
+                }
+                break;
+
+            case R.id.logout: //Esci e accedi come ospite
+                if (user != null && !user.isAnonymous()) { //Evita che si crei un nuovo account anonimo se lo si è già
+                    AuthUI.getInstance()
+                            .signOut(getActivity())
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    mAuth.signInAnonymously()
+                                            .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                                    if (task.isSuccessful()) {
+                                                        // Sign in success, update UI with the signed-in user's information
+                                                        Log.d("signin", "signInAnonymously:success");
+                                                        updateUI();
+                                                        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Cooking Bay");
+                                                        Snackbar.make(layout, R.string.logged_as_anonymous, Snackbar.LENGTH_SHORT).show();
+                                                    } else {
+                                                        // If sign in fails, display a message to the user.
+                                                        Log.w("signinerror", "signInAnonymously:failure", task.getException());
+                                                        Toast.makeText((Context) getActivity(), R.string.exit_error, Toast.LENGTH_SHORT).show();
+                                                    }
+                                                }
+                                            });
+                                }
+                            });
+                } else Snackbar.make(layout, R.string.user, Snackbar.LENGTH_SHORT).show();
+                break;
         }
     }
 }
