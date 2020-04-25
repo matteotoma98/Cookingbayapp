@@ -14,6 +14,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
@@ -30,7 +32,6 @@ import java.util.Calendar;
 
 import it.tpt.cookingbayapp.cardRecycler.RecipeCardRecyclerViewAdapter;
 import it.tpt.cookingbayapp.recipeObject.Recipe;
-
 
 
 public class RdgFragment extends Fragment {
@@ -78,38 +79,46 @@ public class RdgFragment extends Fragment {
      * @param daysBefore quanti giorni indietro bisogna cercare, utilizzato nella query whereGreaterThanOrEqualTo
      */
     private void downloadRecipes(final int daysBefore) {
-        if(registration!=null) registration.remove();
-        registration = db.collection("Recipes")
-                .whereGreaterThanOrEqualTo("date", getCurrentDayInSeconds() - daysBefore*24*60*60)
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
-                        if (e != null) {
-                            Log.w("TAG", "Listen failed.", e);
-                            return;
-                        }
-                        if(firstDownload) {
-
-                            ArrayList<Recipe> recipeList = new ArrayList<>();
-                            ArrayList<String> recipeIds = new ArrayList<>();
-                            int count = 0;
-                            for (QueryDocumentSnapshot doc : value) {
-                                Recipe recipe = doc.toObject(Recipe.class);
-                                recipeList.add(recipe);
-                                recipeIds.add(doc.getId());
-                                count++;
-                            }
-                            Log.i("giorni", String.valueOf(daysBefore)+" Count= "+count);
-                            if (count < 3) downloadRecipes(daysBefore + 1);
-                            else {
-                                recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1, GridLayoutManager.VERTICAL, false));
-                                adapter = new RecipeCardRecyclerViewAdapter(getActivity(), recipeList, recipeIds);
-                                recyclerView.setAdapter(adapter);
-                                firstDownload=false;
-                                Log.i("FinishRDG", "Recipes downloaded");
+        if (registration != null) registration.remove();
+        if (firstDownload) { //Scarica le ricette giornaliere
+            db.collection("Recipes")
+                    .whereGreaterThanOrEqualTo("date", getCurrentDayInSeconds() - daysBefore * 24 * 60 * 60)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                ArrayList<Recipe> recipeList = new ArrayList<>();
+                                ArrayList<String> recipeIds = new ArrayList<>();
+                                int count = 0;
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    Recipe recipe = document.toObject(Recipe.class);
+                                    recipeList.add(recipe);
+                                    recipeIds.add(document.getId());
+                                    count++;
+                                }
+                                Log.i("giorni", String.valueOf(daysBefore) + " Count= " + count);
+                                if (count < 3) downloadRecipes(daysBefore + 1);
+                                else {
+                                    recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1, GridLayoutManager.VERTICAL, false));
+                                    adapter = new RecipeCardRecyclerViewAdapter(getActivity(), recipeList, recipeIds);
+                                    recyclerView.setAdapter(adapter);
+                                    firstDownload = false;
+                                    Log.i("FinishRDG", "Recipes downloaded");
+                                }
                             }
                         }
-                        else { //Aggiornamenti singoli
+                    });
+        } else { //Aggiornamenti singoli
+            registration = db.collection("Recipes")
+                    .whereGreaterThanOrEqualTo("date", getCurrentDayInSeconds() - daysBefore * 24 * 60 * 60)
+                    .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                        @Override
+                        public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
+                            if (e != null) {
+                                Log.w("TAG", "Listen failed.", e);
+                                return;
+                            }
                             for (DocumentChange dc : value.getDocumentChanges()) {
                                 switch (dc.getType()) {
                                     case ADDED:
@@ -125,14 +134,15 @@ public class RdgFragment extends Fragment {
                             }
                             Log.i("FinishRDG", "Recipes updated");
                         }
-
-                    }
-                });
+                    });
+        }
     }
+
 
     /**
      * Ottiene i secondi passati dal 1970 alle ore 0:00 del giorno corrente
      * Si utilizzano i secondi perché Timestamp non é serializable mentre Date non é Parceable
+     *
      * @return Secondi
      */
     public long getCurrentDayInSeconds() {
@@ -149,7 +159,7 @@ public class RdgFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(registration!=null) registration.remove();
+        if (registration != null) registration.remove();
     }
 
     @Override
