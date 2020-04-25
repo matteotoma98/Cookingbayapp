@@ -113,9 +113,6 @@ public class RdgFragment extends Fragment {
                                                 }
                                                 for (DocumentChange dc : value.getDocumentChanges()) {
                                                     switch (dc.getType()) {
-                                                        case ADDED:
-                                                            adapter.addRecipe(dc.getDocument().toObject(Recipe.class), dc.getDocument().getId());
-                                                            break;
                                                         case MODIFIED:
                                                             adapter.updateRecipe(dc.getDocument().toObject(Recipe.class), dc.getDocument().getId());
                                                             break;
