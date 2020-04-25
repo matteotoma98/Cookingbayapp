@@ -35,18 +35,22 @@
                 android:src="@drawable/missingprofile" />
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_width="170dp"
+                android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingLeft="10dp"
-                android:paddingRight="10dp">
+                >
 
                 <TextView
                     android:id="@+id/cardRecipeTitle"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/title"
-                    android:textAppearance="?attr/textAppearanceHeadline6" />
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:textSize="17sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/primaryText"/>
 
                 <TextView
                     android:id="@+id/cardRecipeAuthor"
@@ -62,6 +66,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="end"
+                android:paddingTop="2dp"
                 android:orientation="vertical">
 
                 <LinearLayout

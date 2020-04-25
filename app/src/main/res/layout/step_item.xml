@@ -107,7 +107,7 @@
                         android:padding="0dp"
                         android:inputType="number"
                         android:textSize="17sp"
-                        android:maxLength="3"/>
+                        android:maxLength="2"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
