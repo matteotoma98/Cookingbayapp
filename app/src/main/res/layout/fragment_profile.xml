@@ -37,15 +37,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
+
             <EditText
                 android:id="@+id/editTextUsername"
-                android:digits="1234567890aàbcdeèéfghiìjklmnoòpqrstuùvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_&amp;-.' "
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="80dp"
+                android:digits="1234567890aàbcdeèéfghiìjklmnoòpqrstuùvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_&amp;-.' "
+                android:maxLength="25"
                 android:paddingStart="10dp"
                 android:paddingTop="5dp"
                 android:paddingEnd="0dp"
-                android:layout_marginEnd="80dp"
                 android:text="Modifica nome utente"
                 android:textAlignment="center"
                 android:textColor="@color/primaryText"
@@ -55,8 +57,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="right"
                 android:layout_marginStart="-80dp"
+                android:gravity="right"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -76,33 +78,6 @@
             </LinearLayout>
         </LinearLayout>
 
-        <Button
-            android:id="@+id/logout"
-            style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/exit"
-            android:textColor="@color/colorAccent"
-            app:icon="@drawable/ic_exit_to_app_black_24dp"
-            app:iconTint="@color/colorAccent" />
-
-        <Button
-            android:id="@+id/switch_account"
-            style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/switch_account"
-            android:textColor="@color/colorAccent"
-            app:icon="@drawable/ic_people_outline_black_24dp"
-            app:iconTint="@color/colorAccent" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginBottom="2dp"
-            android:background="@android:color/darker_gray" />
 
         <Button
             android:id="@id/change_username"
@@ -123,6 +98,34 @@
             android:text="@string/edit_password"
             android:textColor="@color/colorAccent"
             app:icon="@drawable/ic_lock_outline_black_24dp"
+            app:iconTint="@color/colorAccent" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="2dp"
+            android:background="@android:color/darker_gray" />
+
+        <Button
+            android:id="@+id/switch_account"
+            style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/switch_account"
+            android:textColor="@color/colorAccent"
+            app:icon="@drawable/ic_people_outline_black_24dp"
+            app:iconTint="@color/colorAccent" />
+
+        <Button
+            android:id="@+id/logout"
+            style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/exit"
+            android:textColor="@color/colorAccent"
+            app:icon="@drawable/ic_exit_to_app_black_24dp"
             app:iconTint="@color/colorAccent" />
     </LinearLayout>
 
