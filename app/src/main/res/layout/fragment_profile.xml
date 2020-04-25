@@ -48,17 +48,19 @@
                 android:paddingStart="10dp"
                 android:paddingTop="5dp"
                 android:paddingEnd="0dp"
-                android:text="Modifica nome utente"
+                android:text="@string/modifica_nome_utente"
                 android:textAlignment="center"
                 android:textColor="@color/primaryText"
                 android:textSize="25sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:inputType="text"
+                android:autofillHints="" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="-80dp"
-                android:gravity="right"
+                android:gravity="end"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -66,7 +68,8 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:src="@drawable/ic_save_black_24dp"
-                    android:tint="@color/colorAccent" />
+                    android:tint="@color/colorAccent"
+                    android:contentDescription="@string/saveusername" />
 
                 <ImageView
                     android:id="@+id/undoUsername"
@@ -74,7 +77,8 @@
                     android:layout_height="40dp"
                     android:layout_gravity="right"
                     android:src="@drawable/ic_undo_black_24dp"
-                    android:tint="@color/colorAccent" />
+                    android:tint="@color/colorAccent"
+                    android:contentDescription="@string/string_undo" />
             </LinearLayout>
         </LinearLayout>
 

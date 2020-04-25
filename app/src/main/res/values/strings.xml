@@ -100,4 +100,8 @@
     <string name="username">Username</string>
     <string name="zero">0</string>
     <string name="username_anonymous">Non puoi cambiare il nome utente se non sei registrato!</string>
+    <string name="modifica_nome_utente">Modifica nome utente</string>
+    <string name="undo">undousername</string>
+    <string name="string_undo" />
+    <string name="saveusername">saveusername</string>
 </resources>
