@@ -39,6 +39,7 @@
             android:orientation="horizontal">
             <EditText
                 android:id="@+id/editTextUsername"
+                android:digits="1234567890aàbcdeèéfghiìjklmnoòpqrstuùvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_&amp;-.' "
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingStart="10dp"
