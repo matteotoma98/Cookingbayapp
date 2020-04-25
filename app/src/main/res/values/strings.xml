@@ -40,7 +40,7 @@
     <string name="general_info">Informazioni generali</string>
     <string name="have_an_account">Possiedi già un account?</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="hours">h</string>
+    <string name="hours"> h</string>
     <string name="imgrecipe">immagine ricetta</string>
     <string name="imgstep">imgstep</string>
     <string name="ing_required">Perfavore inserisci il nome e la quantità dell\'ingrediente</string>
@@ -59,7 +59,7 @@
     <string name="method">Procedimento</string>
     <string name="min">Min</string>
     <string name="minimum_info_required">Informazioni principali mancanti!</string>
-    <string name="minutes">m</string>
+    <string name="minutes"> m</string>
     <string name="no_recipe">La ricerca non ha apportato nessun risultato</string>
     <string name="password">Password</string>
     <string name="preview_pic">imganteprima</string>

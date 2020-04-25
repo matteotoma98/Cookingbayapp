@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -59,8 +60,9 @@ public class RdgFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
 
         db = FirebaseFirestore.getInstance();
-
+        FirebaseAuth.getInstance();
         firstDownload = true;
+        Log.i("sec", String.valueOf(getCurrentDayInSeconds()));
         downloadRecipes(0); //Scarica le ricette
 
         //int largePadding = getResources().getDimensionPixelSize(R.dimen.shr_product_grid_spacing);
@@ -87,6 +89,7 @@ public class RdgFragment extends Fragment {
                             return;
                         }
                         if(firstDownload) {
+
                             ArrayList<Recipe> recipeList = new ArrayList<>();
                             ArrayList<String> recipeIds = new ArrayList<>();
                             int count = 0;
@@ -96,6 +99,7 @@ public class RdgFragment extends Fragment {
                                 recipeIds.add(doc.getId());
                                 count++;
                             }
+                            Log.i("giorni", String.valueOf(daysBefore)+" Count= "+count);
                             if (count < 3) downloadRecipes(daysBefore + 1);
                             else {
                                 recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1, GridLayoutManager.VERTICAL, false));
