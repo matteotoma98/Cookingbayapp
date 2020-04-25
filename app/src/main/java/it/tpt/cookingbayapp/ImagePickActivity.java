@@ -137,8 +137,9 @@ public class ImagePickActivity {
         try {
             ContentResolver objectContentResolver = context.getContentResolver();
             MimeTypeMap objectMimeTypeMap = MimeTypeMap.getSingleton();
-
-            return objectMimeTypeMap.getExtensionFromMimeType(objectContentResolver.getType(uri));
+            String extension = objectMimeTypeMap.getExtensionFromMimeType(objectContentResolver.getType(uri));
+            if(extension.equals(null)) return "jpg";
+            else return extension;
 
         } catch (Exception e) {
             Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
