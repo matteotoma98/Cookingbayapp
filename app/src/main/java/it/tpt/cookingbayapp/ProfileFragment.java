@@ -48,6 +48,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
     private Button exit; //Bottone per uscire dall'account
     private Button switch_account; //Bottone per cambiare account
     private Button change_username; //Bottone per modificare l'username dell'utente
+    private Button change_password; // Bottone per modificare la password dell'utente
     private FirebaseAuth mAuth;
     private ImageView profilePic; //Foto di profile
     private ImageView saveUsername;
@@ -82,8 +83,21 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         undoUsername = view.findViewById(R.id.undoUsername);
         usernameLayout = view.findViewById(R.id.modifyusername);
         usernameLayout.setVisibility(View.GONE);
-
+        change_password = view.findViewById(R.id.profileChangePsw);
         updateUI(); //Aggiorna l'ui con le informazioni dell'utente
+
+        change_password.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PswDialog passwordDialog = new PswDialog();
+
+                passwordDialog.show(getChildFragmentManager(), "custom");
+            }
+        });
+
+
+
+
         return view;
     }
 
