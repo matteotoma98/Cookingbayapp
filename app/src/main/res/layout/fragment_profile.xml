@@ -43,18 +43,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="80dp"
+                android:autofillHints=""
                 android:digits="1234567890aàbcdeèéfghiìjklmnoòpqrstuùvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_&amp;-.' "
+                android:inputType="text"
+                android:labelFor="@+id/editTextUsername"
                 android:maxLength="25"
                 android:paddingStart="10dp"
                 android:paddingTop="5dp"
                 android:paddingEnd="0dp"
-                android:text="@string/modifica_nome_utente"
+                android:text="@string/user_modify"
                 android:textAlignment="center"
                 android:textColor="@color/primaryText"
                 android:textSize="25sp"
-                android:textStyle="bold"
-                android:inputType="text"
-                android:autofillHints="" />
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -67,18 +68,18 @@
                     android:id="@+id/saveUsername"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
+                    android:contentDescription="@string/saveusername"
                     android:src="@drawable/ic_save_black_24dp"
-                    android:tint="@color/colorAccent"
-                    android:contentDescription="@string/saveusername" />
+                    android:tint="@color/colorAccent" />
 
                 <ImageView
                     android:id="@+id/undoUsername"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:layout_gravity="right"
+                    android:layout_gravity="end"
+                    android:contentDescription="@string/string_undo"
                     android:src="@drawable/ic_undo_black_24dp"
-                    android:tint="@color/colorAccent"
-                    android:contentDescription="@string/string_undo" />
+                    android:tint="@color/colorAccent" />
             </LinearLayout>
         </LinearLayout>
 

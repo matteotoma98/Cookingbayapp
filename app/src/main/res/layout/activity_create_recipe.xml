@@ -53,23 +53,23 @@
                 android:textColor="@color/alert"
                 android:textSize="20sp"
                 android:textStyle="bold" />
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/createRecipeTitleLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-
-            android:layout_marginEnd="10dp"
-            android:hint="@string/insert_title"
-            app:boxBackgroundColor="@android:color/white"
-            app:counterEnabled="true"
-            app:counterMaxLength="60">
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/createRecipeTitle"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/createRecipeTitleLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:maxLength="60" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_gravity="center"
+
+                android:layout_marginEnd="10dp"
+                android:hint="@string/insert_title"
+                app:boxBackgroundColor="@android:color/white"
+                app:counterEnabled="true"
+                app:counterMaxLength="60">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/createRecipeTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLength="60" />
+            </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -91,59 +91,59 @@
                     android:textColor="@color/alert"
                     android:textSize="20sp"
                     android:textStyle="bold" />
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="110dp"
-                android:layout_height="wrap_content"
-
-                android:layout_gravity="center"
-                android:hint="@string/min"
-                app:boxBackgroundColor="@android:color/white"
-                app:startIconContentDescription="timer"
-                app:startIconDrawable="@drawable/ic_av_timer_black_24dp">
-
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/recipeTime"
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="110dp"
                     android:layout_height="wrap_content"
-                    android:inputType="number" />
-            </com.google.android.material.textfield.TextInputLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginStart="-10dp">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginStart="10dp"
-                    android:text="*"
-                    android:textColor="@color/alert"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
+                    android:layout_gravity="center"
+                    android:hint="@string/min"
+                    app:boxBackgroundColor="@android:color/white"
+                    app:startIconContentDescription="timer"
+                    app:startIconDrawable="@drawable/ic_av_timer_black_24dp">
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/dropdownType"
-                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
 
-                android:hint="@string/type"
-                app:boxBackgroundColor="@android:color/white"
-                app:startIconContentDescription="type"
-                app:startIconDrawable="@drawable/ic_restaurant_black_24dp">
-                <AutoCompleteTextView
-                    android:id="@+id/actw"
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/recipeTime"
+                        android:layout_width="110dp"
+                        android:layout_height="wrap_content"
+                        android:inputType="number" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="bottom"
-                    android:focusable="false"
-                    android:inputType="none" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginStart="-10dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginStart="10dp"
+                        android:text="*"
+                        android:textColor="@color/alert"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/dropdownType"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+
+                        android:hint="@string/type"
+                        app:boxBackgroundColor="@android:color/white"
+                        app:startIconContentDescription="type"
+                        app:startIconDrawable="@drawable/ic_restaurant_black_24dp">
+                        <AutoCompleteTextView
+                            android:id="@+id/actw"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="bottom"
+                            android:focusable="false"
+                            android:inputType="none" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -171,13 +171,13 @@
                         android:textColor="@color/alert"
                         android:textSize="20sp"
                         android:textStyle="bold" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="@string/ingredients"
-                    android:textColor="@color/colorAccent"
-                    android:textSize="17sp"
-                    android:textStyle="bold" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="@string/ingredients"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/ingDisplay_recycler"

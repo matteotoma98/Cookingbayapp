@@ -54,8 +54,8 @@
     <string name="logged_as_anonymous">Sei ora connesso come ospite</string>
     <string name="login">Accedi</string>
     <string name="login_as_guest">Accedi come ospite</string>
-    <string name="menuExit"/>
-    <string name="menuFile"/>
+    <string name="menuExit" />
+    <string name="menuFile" />
     <string name="method">Procedimento</string>
     <string name="min">Min</string>
     <string name="minimum_info_required">Informazioni obbligatorie o immagine di anteprima mancanti!</string>
@@ -103,8 +103,16 @@
     <string name="username">Username</string>
     <string name="zero">0</string>
     <string name="username_anonymous">Non puoi cambiare il nome utente se non sei registrato!</string>
-    <string name="modifica_nome_utente">Modifica nome utente</string>
+    <string name="user_modify">Modifica nome utente</string>
     <string name="undo">undousername</string>
     <string name="string_undo" />
     <string name="saveusername">saveusername</string>
+    <string name="mandatory">*</string>
+    <string name="too_many_ing">Non puoi inserire più di 10 ingredienti!</string>
+    <string name="old_password"> Inserisci vecchia password </string>
+    <string name="change_password">Cambia password</string>
+    <string name="new_password">Inserisci nuova password</string>
+    <string name="new_password_confirm">Conferma nuova password</string>
+    <string name="password_cancel">Annulla</string>
+    <string name="password_confirm">Conferma</string>
 </resources>

@@ -4,9 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-
-    >
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/stepNumber"
@@ -33,48 +31,53 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingStart="10dp">
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp">
+
                 <TextView
                     android:id="@+id/starStepDesc"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginTop="10dp"
-
-                    android:text="*"
+                    android:text="@string/mandatory"
                     android:textColor="@color/alert"
                     android:textSize="20sp"
                     android:textStyle="bold" />
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/stepContent"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginEnd="10dp"
-                android:hint="@string/describe_step"
-                app:boxBackgroundColor="@android:color/white">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/steptext"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/stepContent"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="10dp"
+                    android:hint="@string/describe_step"
+                    app:boxBackgroundColor="@android:color/white">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/steptext"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="end"
                 android:orientation="horizontal"
-                android:layout_gravity="right"
                 android:paddingTop="5dp">
+
                 <TextView
-                    android:layout_marginRight="14dp"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="@string/set_timer"
-                    />
+                    android:layout_marginEnd="14dp"
+                    android:text="@string/set_timer" />
+
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
@@ -93,17 +96,17 @@
                         android:id="@+id/stepHours"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="0dp"
                         android:inputType="number"
-                        android:textSize="17sp"
-                        android:maxLength="1"/>
+                        android:maxLength="1"
+                        android:padding="0dp"
+                        android:textSize="17sp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
-                    android:paddingStart="5dp"
-                    android:paddingEnd="5dp"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:paddingStart="5dp"
+                    android:paddingEnd="5dp"
                     android:text="@string/hours" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -117,16 +120,16 @@
                         android:id="@+id/stepMinutes"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="0dp"
                         android:inputType="number"
-                        android:textSize="17sp"
-                        android:maxLength="2"/>
+                        android:maxLength="2"
+                        android:padding="0dp"
+                        android:textSize="17sp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
-                    android:paddingStart="5dp"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:paddingStart="5dp"
                     android:text="@string/minutes" />
 
             </LinearLayout>

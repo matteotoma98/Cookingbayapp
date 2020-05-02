@@ -1,89 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="15dp">
 
     <TextView
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:text="Cambia password"
+        android:text="@string/change_password"
         android:textColor="@color/primaryText"
-        android:textSize="15sp"/>
+        android:textSize="15sp" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/psw_old"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:hint="Inserisci vecchia password"
+        android:hint="@string/old_password"
         app:boxBackgroundColor="@android:color/white"
-        
+
         app:counterMaxLength="25"
         app:endIconMode="password_toggle">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/txt_psw_old"
-            android:inputType="textPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxLength="25"/>
+            android:inputType="textPassword"
+            android:maxLength="25" />
     </com.google.android.material.textfield.TextInputLayout>
+
     <com.google.android.material.textfield.TextInputLayout
-        android:layout_marginTop="20dp"
         android:id="@+id/psw_new"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:hint="Inserisci nuova password"
+        android:layout_marginTop="20dp"
+        android:hint="@string/new_password"
         app:boxBackgroundColor="@android:color/white"
         app:counterEnabled="true"
         app:counterMaxLength="25">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/txt_psw_new"
-            android:inputType="textPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxLength="25"/>
+            android:inputType="textPassword"
+            android:maxLength="25" />
     </com.google.android.material.textfield.TextInputLayout>
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/psw_newConfirm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:hint="Conferma nuova password"
+        android:hint="@string/new_password_confirm"
         app:boxBackgroundColor="@android:color/white"
         app:counterEnabled="true"
         app:counterMaxLength="25">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/txt_psw_newConfirm"
-            android:inputType="textPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxLength="25"/>
+            android:inputType="textPassword"
+            android:maxLength="25" />
     </com.google.android.material.textfield.TextInputLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="end">
+        android:gravity="end"
+        android:orientation="horizontal">
+
         <Button
             android:id="@+id/btnDiscardPswChange"
             style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Annulla"
+            android:text="@string/password_cancel"
             android:textColor="@color/colorAccent" />
+
         <Button
             android:id="@+id/btnConfirmPswChange"
             style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Conferma"
+            android:text="@string/password_confirm"
             android:textColor="@color/colorAccent" />
     </LinearLayout>
 </LinearLayout>
