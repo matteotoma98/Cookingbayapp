@@ -89,14 +89,10 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         change_password.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PswDialog passwordDialog = new PswDialog();
-
+                PswDialog passwordDialog = new PswDialog(); //Custom dialog per il cambio della password
                 passwordDialog.show(getChildFragmentManager(), "custom");
             }
         });
-
-
-
 
         return view;
     }
