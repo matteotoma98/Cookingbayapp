@@ -249,7 +249,6 @@ public class CreateRecipe extends AppCompatActivity {
                 } else {
                     startActivityForResult(ImagePickActivity.getPickImageChooserIntent(CreateRecipe.this, "preview"), PREVIEW_REQUEST);
                 }
-
             }
         });
     }
@@ -258,7 +257,7 @@ public class CreateRecipe extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         //Termina l'asyncTask alla distruzione dell'activity (se non nullo)
-        if(mCheckUploadTask != null) mCheckUploadTask.cancel(true);
+        if (mCheckUploadTask != null) mCheckUploadTask.cancel(true);
     }
 
     @Override
@@ -283,7 +282,7 @@ public class CreateRecipe extends AppCompatActivity {
             } else {
                 if (isUploading == false) {
                     generatedId = randomAlphaNumeric();
-                    if(isEditing) folder = currentUser.getUid() + "/" + recipeId;
+                    if (isEditing) folder = currentUser.getUid() + "/" + recipeId;
                     else folder = currentUser.getUid() + "/" + generatedId;
                     if (previewUri != null) {
                         main.setUrl("");
@@ -362,6 +361,7 @@ public class CreateRecipe extends AppCompatActivity {
 
     /**
      * Funzione per controllare che l'utente abbia inserito tutti le informazioni generali
+     *
      * @return risultato booleano del controllo, true se non completo
      */
     private boolean checkInfoNotComplete() {
@@ -381,6 +381,7 @@ public class CreateRecipe extends AppCompatActivity {
 
     /**
      * Genera una stringa alfanumerica random per l'id della ricetta
+     *
      * @return stringa alfanumerica
      */
     public static String randomAlphaNumeric() {
@@ -388,7 +389,7 @@ public class CreateRecipe extends AppCompatActivity {
         StringBuilder builder = new StringBuilder();
         int count = 20;
         while (count-- != 0) {
-            int character = (int)(Math.random()*ALPHA_NUMERIC_STRING.length());
+            int character = (int) (Math.random() * ALPHA_NUMERIC_STRING.length());
             builder.append(ALPHA_NUMERIC_STRING.charAt(character));
         }
         return builder.toString();
@@ -403,8 +404,8 @@ public class CreateRecipe extends AppCompatActivity {
         protected Long doInBackground(Void... voids) {
             boolean finishedUploading = false;
             long totalSize = 0;
-            while(!finishedUploading) {
-                if(isCancelled()) break;
+            while (!finishedUploading) {
+                if (isCancelled()) break;
                 if (!main.getUrl().equals("")) {
                     finishedUploading = true;
                     for (int i = 0; i < mAdapter.getItemCount(); i++) {
@@ -420,122 +421,112 @@ public class CreateRecipe extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Long result) {
-            View view = findViewById(R.id.createRecipeLinearLayout1);
-            Snackbar snackbar =
-                    Snackbar.make(view, R.string.done_uploading, Snackbar.LENGTH_INDEFINITE)
-                            .setAction("CONDIVIDI", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    //Authorid e AuthorName in onCreate()
-                                    String titleString = title.getText().toString().trim();
-                                    mRecipe.setTitle(titleString); //Imposta il titolo
-                                    //Suddividi il titolo per poter effettuare la ricerca
-                                    String[] words = titleString.toLowerCase().split(" ");
-                                    mRecipe.setTitleWords(Arrays.asList(words));
-                                    mRecipe.setType(actwType.getText().toString()); //Imposta il tipo di pietanza
-                                    mRecipe.setPreviewUrl(main.getUrl()); //Imposta l'url dell'immagine di anteprima
-                                    mRecipe.setIngredients(iAdapter.getIngredients()); //Imposta gli ingredienti
-                                    //Aggiungi solo i nomi degli ingredienti in minuscolo per effettuare la ricerca
-                                    ArrayList<String> names = new ArrayList<>();
-                                    for(int i = 0; i < iAdapter.getItemCount(); i++) {
-                                        names.add(iAdapter.getIngredients().get(i).getName().toLowerCase());
-                                    }
-                                    mRecipe.setIngNames(names);
-                                    mRecipe.setTime(Integer.parseInt(totalTime.getText().toString())); //Imposta il tempo
+            //Authorid e AuthorName in onCreate()
+            String titleString = title.getText().toString().trim();
+            mRecipe.setTitle(titleString); //Imposta il titolo
+            //Suddividi il titolo per poter effettuare la ricerca
+            String[] words = titleString.toLowerCase().split(" ");
+            mRecipe.setTitleWords(Arrays.asList(words));
+            mRecipe.setType(actwType.getText().toString()); //Imposta il tipo di pietanza
+            mRecipe.setPreviewUrl(main.getUrl()); //Imposta l'url dell'immagine di anteprima
+            mRecipe.setIngredients(iAdapter.getIngredients()); //Imposta gli ingredienti
+            //Aggiungi solo i nomi degli ingredienti in minuscolo per effettuare la ricerca
+            ArrayList<String> names = new ArrayList<>();
+            for (int i = 0; i < iAdapter.getItemCount(); i++) {
+                names.add(iAdapter.getIngredients().get(i).getName().toLowerCase());
+            }
+            mRecipe.setIngNames(names);
+            mRecipe.setTime(Integer.parseInt(totalTime.getText().toString())); //Imposta il tempo
 
-                                    //Aggiunge alla lista di oggetti Section gli step dell'editor con i rispettivi URL e il timer convertito in secondi
-                                    ArrayList<Section> sections = new ArrayList<>();
-                                    List<Step> templist = mAdapter.getSteps();
-                                    for (int i = 0; i < mAdapter.getItemCount(); i++) {
-                                        int hours = (TextUtils.isEmpty(templist.get(i).getHours())) ? 0 : Integer.parseInt(templist.get(i).getHours());
-                                        int minutes = (TextUtils.isEmpty(templist.get(i).getMinutes())) ? 0 : Integer.parseInt(templist.get(i).getMinutes());
-                                        int time = hours * 3600 + minutes * 60;
-                                        sections.add(new Section(templist.get(i).getText().trim(), templist.get(i).getUrl(), time));
-                                    }
-                                    mRecipe.setSections(sections);
+            //Aggiunge alla lista di oggetti Section gli step dell'editor con i rispettivi URL e il timer convertito in secondi
+            ArrayList<Section> sections = new ArrayList<>();
+            List<Step> templist = mAdapter.getSteps();
+            for (int i = 0; i < mAdapter.getItemCount(); i++) {
+                int hours = (TextUtils.isEmpty(templist.get(i).getHours())) ? 0 : Integer.parseInt(templist.get(i).getHours());
+                int minutes = (TextUtils.isEmpty(templist.get(i).getMinutes())) ? 0 : Integer.parseInt(templist.get(i).getMinutes());
+                int time = hours * 3600 + minutes * 60;
+                sections.add(new Section(templist.get(i).getText().trim(), templist.get(i).getUrl(), time));
+            }
+            mRecipe.setSections(sections);
 
-                                    if (isEditing) {
-                                        //aggiorna la ricetta esistente con solo le informazioni modificate per evitare di sovrascrivere ad esempio like e dislike
-                                        Map<String, Object> map = new HashMap<String, Object>();
-                                        map.put("title", titleString);
-                                        map.put("sections", sections);
-                                        map.put("ingredients", iAdapter.getIngredients());
-                                        map.put("ingNames", names);
-                                        map.put("type", actwType.getText().toString());
-                                        map.put("previewUrl", main.getUrl());
-                                        map.put("time", Integer.parseInt(totalTime.getText().toString()));
-                                        map.put("titleWords", Arrays.asList(words));
-                                        db.collection("Recipes").document(recipeId)
-                                                .set(map, SetOptions.merge())
-                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                    @Override
-                                                    public void onSuccess(Void aVoid) {
-                                                        Log.d("TAG", "DocumentSnapshot successfully written!");
-                                                    }
-                                                })
-                                                .addOnFailureListener(new OnFailureListener() {
-                                                    @Override
-                                                    public void onFailure(@NonNull Exception e) {
-                                                        Log.w("TAG", "Error writing document", e);
-                                                    }
-                                                });
-                                        Toast.makeText(CreateRecipe.this, R.string.done_editing, Toast.LENGTH_LONG).show();
-                                        finish();
-                                    }
-                                    else { //Aggiunge una nuova ricetta
-                                        mRecipe.setDate(Timestamp.now().getSeconds());
-                                        db.collection("Recipes").document(generatedId)
-                                                .set(mRecipe)
-                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                    @Override
-                                                    public void onSuccess(Void aVoid) {
-                                                        Log.d("Firestore up", "DocumentSnapshot written with ID: " + generatedId);
-                                                    }
-                                                })
-                                                .addOnFailureListener(new OnFailureListener() {
-                                                    @Override
-                                                    public void onFailure(@NonNull Exception e) {
-                                                        Log.w("Firestore up", "Error adding document", e);
-                                                    }
-                                                });
-                                        Toast.makeText(CreateRecipe.this, R.string.done_sharing, Toast.LENGTH_LONG).show();
-                                        finish();
-                                    }
-                                }
-                            });
-            snackbar.setActionTextColor(getResources().getColor(R.color.colorAccent, getTheme()));
-            snackbar.show();
+            if (isEditing) {
+                //aggiorna la ricetta esistente con solo le informazioni modificate per evitare di sovrascrivere ad esempio like e dislike
+                Map<String, Object> map = new HashMap<String, Object>();
+                map.put("title", titleString);
+                map.put("sections", sections);
+                map.put("ingredients", iAdapter.getIngredients());
+                map.put("ingNames", names);
+                map.put("type", actwType.getText().toString());
+                map.put("previewUrl", main.getUrl());
+                map.put("time", Integer.parseInt(totalTime.getText().toString()));
+                map.put("titleWords", Arrays.asList(words));
+                db.collection("Recipes").document(recipeId)
+                        .set(map, SetOptions.merge())
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d("TAG", "DocumentSnapshot successfully written!");
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w("TAG", "Error writing document", e);
+                            }
+                        });
+                Toast.makeText(CreateRecipe.this, R.string.done_editing, Toast.LENGTH_LONG).show();
+                finish();
+            } else { //Aggiunge una nuova ricetta
+                mRecipe.setDate(Timestamp.now().getSeconds());
+                db.collection("Recipes").document(generatedId)
+                        .set(mRecipe)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d("Firestore up", "DocumentSnapshot written with ID: " + generatedId);
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w("Firestore up", "Error adding document", e);
+                            }
+                        });
+                Toast.makeText(CreateRecipe.this, R.string.done_sharing, Toast.LENGTH_LONG).show();
+                finish();
+            }
         }
 
-        @Override
-        protected void onCancelled() { //Nel caso l'activity venga chiusa prima del completamento elimina i file caricati
-            super.onCancelled();
-            String deletePath = "images/" + currentUser.getUid() + "/" + title.getText().toString().trim();
-            FirebaseStorage storage = FirebaseStorage.getInstance();
-            StorageReference listRef = storage.getReference().child(deletePath);
-            //Elimina tutti i file della cartella specificata (La cartella in se viene eliminata da Firebase automaticamente se non contiene più file)
-            //Eliminare direttamente la cartella al momento non è possibile
-            listRef.listAll()
-                    .addOnSuccessListener(new OnSuccessListener<ListResult>() {
-                        @Override
-                        public void onSuccess(ListResult listResult) {
-                            for (StorageReference prefix : listResult.getPrefixes()) {
-                                //Prefixes sono le cartelle
-                            }
+    @Override
+    protected void onCancelled() { //Nel caso l'activity venga chiusa prima del completamento elimina i file caricati
+        super.onCancelled();
+        String deletePath = "images/" + currentUser.getUid() + "/" + title.getText().toString().trim();
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference listRef = storage.getReference().child(deletePath);
+        //Elimina tutti i file della cartella specificata (La cartella in se viene eliminata da Firebase automaticamente se non contiene più file)
+        //Eliminare direttamente la cartella al momento non è possibile
+        listRef.listAll()
+                .addOnSuccessListener(new OnSuccessListener<ListResult>() {
+                    @Override
+                    public void onSuccess(ListResult listResult) {
+                        for (StorageReference prefix : listResult.getPrefixes()) {
+                            //Prefixes sono le cartelle
+                        }
 
-                            for (StorageReference item : listResult.getItems()) {
-                                item.delete();
-                            }
+                        for (StorageReference item : listResult.getItems()) {
+                            item.delete();
                         }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.i("AsyncTask", "error");
-                        }
-                    });
-        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.i("AsyncTask", "error");
+                    }
+                });
     }
+
+}
 
     private ArrayList findUnaskedPermissions(ArrayList<String> wanted) {
         ArrayList<String> result = new ArrayList<>();

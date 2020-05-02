@@ -60,9 +60,11 @@ public class StepAdapter extends RecyclerView.Adapter<StepViewHolder> {
         holder.setStepDeleteClickListener(new RecyclerItemClickListener() {
             @Override
             public void onItemClickListener(int position) {
+                holder.delete.setEnabled(false);
                 steps.remove(position);
                 notifyItemRemoved(position);
                 notifyItemRangeChanged(position, getItemCount());
+                holder.delete.setEnabled(true);
             }
         });
 
