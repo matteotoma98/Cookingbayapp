@@ -96,7 +96,7 @@ public class CommentRecyclerAdapter extends RecyclerView.Adapter<CommentViewHold
 
     public void addComment(Comment comment) {
         comments.add(comment);
-        notifyDataSetChanged();
+        notifyItemInserted(getItemCount()-1);
     }
 
     @Override

@@ -185,13 +185,16 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
                                         recipeList.add(recipe);
                                         recipeIds.add(doc.getId());
                                     }
-                                    recipeRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1, GridLayoutManager.VERTICAL, false));
-                                    recipeAdapter = new RecipeCardRecyclerViewAdapter(getActivity(), recipeList, recipeIds);
-                                    recipeRecyclerView.setAdapter(recipeAdapter);
-                                    Log.i("FinishLMR", "Recipes downloaded");
+                                    if(recipeList.isEmpty()) Toast.makeText(getContext(), R.string.no_recipe, Toast.LENGTH_LONG).show();
+                                    else {
+                                        recipeRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1, GridLayoutManager.VERTICAL, false));
+                                        recipeAdapter = new RecipeCardRecyclerViewAdapter(getActivity(), recipeList, recipeIds);
+                                        recipeRecyclerView.setAdapter(recipeAdapter);
+                                        Log.i("FinishLMR", "Recipes downloaded");
+                                    }
                                 }
                             });
-                } else Toast.makeText(getContext(), R.string.no_recipe, Toast.LENGTH_LONG).show();
+                }
                 break;
         }
     }
