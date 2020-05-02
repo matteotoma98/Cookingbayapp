@@ -7,7 +7,7 @@
         android:title="Feed"/>
     <item
         android:id="@+id/nav_favourites"
-        android:icon="@drawable/ic_star_black_24dp"
+        android:icon="@drawable/ic_favorite_black_24dp"
         android:title="Preferiti"/>
     <item
         android:id="@+id/nav_search"
