@@ -28,12 +28,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener{
 
     private TextInputEditText textEmail, textPassword;
-    private Button btnRegistrati;
-    private Button btnAccedi;
+    private Button btnRegister;
+    private Button btnLogin;
     private Button btnAnonymous;
+    private Button btnResetPsw;
     private FirebaseAuth mAuth;
     public static final int REGISTER_REQUEST = 102;
 
@@ -44,16 +45,38 @@ public class LoginActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         textEmail = findViewById(R.id.loginEmail);
         textPassword = findViewById(R.id.loginPassword);
-        btnRegistrati = findViewById(R.id.register);
-        btnAccedi = findViewById(R.id.loginButton);
+        btnRegister = findViewById(R.id.register);
+        btnLogin = findViewById(R.id.loginButton);
         btnAnonymous = findViewById(R.id.anonymous_button);
+        btnResetPsw = findViewById(R.id.resetPsw);
 
-        //Click listener per accedere e terminare l'activity
-        btnAccedi.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        //Click listeners dei vari bottoni
+        btnLogin.setOnClickListener(this);
+        btnRegister.setOnClickListener(this);
+        btnAnonymous.setOnClickListener(this);
+        btnResetPsw.setOnClickListener(this);
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        if (requestCode == REGISTER_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                writeUserToDb(user.getDisplayName(), user.getEmail(), user.getUid());
+                setResult(RESULT_OK);
+                finish();
+            }
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.loginButton: //Bottone accedi
                 try {
-                    mAuth.signInWithEmailAndPassword(textEmail.getText().toString(), textPassword.getText().toString())
+                    mAuth.signInWithEmailAndPassword(textEmail.getText().toString().trim(), textPassword.getText().toString())
                             .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
@@ -77,20 +100,14 @@ public class LoginActivity extends AppCompatActivity {
                 } catch (NullPointerException e) {
                     Toast.makeText(LoginActivity.this, getString(R.string.required), Toast.LENGTH_LONG).show();
                 }
-            }
-        });
-        //Click listener per avviare l'attività di registrazione
-        btnRegistrati.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                break;
+
+            case R.id.register: //Passa a registrati
                 Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivityForResult(intent, REGISTER_REQUEST);
-            }
-        });
-        //Click listener per accedere come ospite
-        btnAnonymous.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                break;
+
+            case R.id.anonymous_button: //Bottone per accedere come ospite
                 AuthUI.getInstance()
                         .signOut(LoginActivity.this)
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -114,21 +131,24 @@ public class LoginActivity extends AppCompatActivity {
                                         });
                             }
                         });
-            }
+                break;
 
-        });
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent intent) {
-        super.onActivityResult(requestCode, resultCode, intent);
-        if (requestCode == REGISTER_REQUEST) {
-            if (resultCode == RESULT_OK) {
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                writeUserToDb(user.getDisplayName(), user.getEmail(), user.getUid());
-                setResult(RESULT_OK);
-                finish();
-            }
+            case R.id.resetPsw:
+                String email = textEmail.getText().toString().trim();
+                if(email.equals("")) {
+                    Toast.makeText(LoginActivity.this, R.string.insert_email, Toast.LENGTH_SHORT).show();
+                } else {
+                    mAuth.sendPasswordResetEmail(email) //Invia una email per reimpostare la password
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        Toast.makeText(LoginActivity.this, R.string.email_sent, Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                }
+                break;
         }
     }
 
@@ -154,15 +174,19 @@ public class LoginActivity extends AppCompatActivity {
         super.onDestroy();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         //Se l'utente preme indietro senza collegarsi per sicurezza ci si collega automaticamente come ospite
-        if (user == null) FirebaseAuth.getInstance().signInAnonymously();
+        //Ma solo se questa activity è stata lanciata dopo i primi avvii, quindi da CAMBIA ACCOUNT in PROFILO
         SharedPreferences preferences = getSharedPreferences("login", MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean("notSignedIn", false);
-        editor.apply();
+        if (user == null && !preferences.getBoolean("notSignedIn", true)) {
+            FirebaseAuth.getInstance().signInAnonymously();
+            editor.putBoolean("notSignedIn", false);
+            editor.apply();
+        }
     }
 
     @Override
     protected void onStart() {
         super.onStart();
     }
+
 }

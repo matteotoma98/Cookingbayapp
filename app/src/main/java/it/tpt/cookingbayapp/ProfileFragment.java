@@ -46,9 +46,9 @@ import java.util.Map;
 public class ProfileFragment extends Fragment implements View.OnClickListener{
 
     private Button exit; //Bottone per uscire dall'account
-    private Button switch_account; //Bottone per cambiare account
-    private Button change_username; //Bottone per modificare l'username dell'utente
-    private Button change_password; // Bottone per modificare la password dell'utente
+    private Button switchAccount; //Bottone per cambiare account
+    private Button changeUsername; //Bottone per modificare l'username dell'utente
+    private Button changePassword; // Bottone per modificare la password dell'utente
     private FirebaseAuth mAuth;
     private ImageView profilePic; //Foto di profile
     private ImageView saveUsername;
@@ -73,9 +73,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         profilePic = view.findViewById(R.id.userProfilePic);
-        change_username = view.findViewById(R.id.change_username);
+        changeUsername = view.findViewById(R.id.change_username);
         exit = view.findViewById(R.id.logout);
-        switch_account = view.findViewById(R.id.switch_account);
+        switchAccount = view.findViewById(R.id.switch_account);
         username = view.findViewById(R.id.profileUsername);
         layout = view.findViewById(R.id.profileCoordinatorLayout);
         editTextUsername = view.findViewById(R.id.editTextUsername);
@@ -83,16 +83,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         undoUsername = view.findViewById(R.id.undoUsername);
         usernameLayout = view.findViewById(R.id.modifyusername);
         usernameLayout.setVisibility(View.GONE);
-        change_password = view.findViewById(R.id.profileChangePsw);
+        changePassword = view.findViewById(R.id.profileChangePsw);
         updateUI(); //Aggiorna l'ui con le informazioni dell'utente
-
-        change_password.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PswDialog passwordDialog = new PswDialog(); //Custom dialog per il cambio della password
-                passwordDialog.show(getChildFragmentManager(), "custom");
-            }
-        });
 
         return view;
     }
@@ -106,18 +98,13 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        //Click Listener della conferma del nuovo nome utente
+        //Inizializzazione dei vari click listener
         saveUsername.setOnClickListener(this);
-        //Click Listener dell'annulla modifiche al nome utente
         undoUsername.setOnClickListener(this);
-        //Click Listener dell'immagine di profilo
         profilePic.setOnClickListener(this);
-        //Click listener per cambiare account
-        switch_account.setOnClickListener(this);
-        //Click listener per uscire (e connettersi dunque come ospite)
+        switchAccount.setOnClickListener(this);
         exit.setOnClickListener(this);
-        //Click Listener per cambiare username
-        change_username.setOnClickListener(this);
+        changeUsername.setOnClickListener(this);
 
     }
 
@@ -226,7 +213,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
     public void updateUI() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null && user.isAnonymous()) {
-            username.setText("Utente anonimo");
+            username.setText(R.string.user_anonymous);
             Glide.with(getContext())
                     .load(user.getPhotoUrl())
                     .error(R.drawable.missingprofile)
@@ -244,7 +231,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        FirebaseUser user = auth.getCurrentUser();
         uid = user.getUid();
         switch (v.getId()) {
             case R.id.change_username: //Cambia username
@@ -279,7 +267,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
                     name.put("username", usernameText);
                     //Aggiungi l'username nel documento dell'utente per poterlo visualizzare anche nei commenti
                     db.collection("Users").document(uid).set(name, SetOptions.merge());
-                    //Aggiungi l'username tutte le sue ricette per diminuire le call a Firestore nel feed
+                    //Aggiungi l'username a tutte le sue ricette per diminuire le call a Firestore nel feed
                     db.collection("Recipes")
                             .whereEqualTo("authorId", uid)
                             .get()
@@ -350,8 +338,17 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
                                             });
                                 }
                             });
-                } else Snackbar.make(layout, R.string.user, Snackbar.LENGTH_SHORT).show();
+                } else Snackbar.make(layout, R.string.already_anonymous, Snackbar.LENGTH_SHORT).show();
                 break;
+
+            case R.id.profileChangePsw: //Cambia la password
+                if(user!=null && !user.isAnonymous()) {
+                    PswDialog passwordDialog = new PswDialog(); //Custom dialog per il cambio della password
+                    passwordDialog.show(getChildFragmentManager(), "custom");
+                } else
+                    Snackbar.make(layout, R.string.anonymous, Snackbar.LENGTH_SHORT).show();
+                break;
+
         }
     }
 }

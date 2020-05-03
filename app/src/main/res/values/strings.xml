@@ -32,9 +32,10 @@
     <string name="edit_username">Modifica Nome Utente</string>
     <string name="else_string">Oppure</string>
     <string name="email">Email</string>
+    <string name="email_sent">Abbiamo inviato una e-mail per reimpostare la password</string>
     <string name="error_signup">Errore</string>
     <string name="exit">Esci</string>
-    <string name="exit_error">Impossibile disconnettersi</string>
+    <string name="exit_error">Impossibile accedere come ospite</string>
     <string name="exit_no_save">Esci senza salvare</string>
     <string name="favourite">Aggiungi ai preferiti</string>
     <string name="first_course">Primo Piatto</string>
@@ -48,6 +49,7 @@
     <string name="ingredient">Ingrediente</string>
     <string name="ingredients">Ingredienti</string>
     <string name="insert_comment">Inserisci commento</string>
+    <string name="insert_email">Perfavore inserisci l\'e-mail del tuo account</string>
     <string name="insert_text_search">Inserisci il testo da cercare</string>
     <string name="insert_title">Inserisci il titolo</string>
     <string name="like">like</string>
@@ -67,6 +69,7 @@
     <string name="no_recipe">La ricerca non ha apportato nessun risultato</string>
     <string name="old_password"> Inserisci vecchia password </string>
     <string name="password">Password</string>
+    <string name="password_forgot">Non ricordi più la password?</string>
     <string name="password_cancel">Annulla</string>
     <string name="password_conf">Le nuove password non coincidono!</string>
     <string name="password_confirm">Conferma</string>
@@ -82,6 +85,7 @@
     <string name="recipe_deleted">Ricetta eliminata</string>
     <string name="recipe_not_saved">Ricetta non salvata</string>
     <string name="required">Inserire tutte le informazioni!</string>
+    <string name="reset_password">REIMPOSTA</string>
     <string name="sandwich">Panino</string>
     <string name="save_publish">Salva e pubblica</string>
     <string name="save_username">saveusername</string>
@@ -111,8 +115,9 @@
     <string name="undo">undousername</string>
     <string name="uploading">Attendi l\'upload delle immagini</string>
     <string name="user">Utente</string>
+    <string name="user_anonymous">Ospite</string>
     <string name="user_modify">Modifica nome utente</string>
     <string name="username">Username</string>
-    <string name="username_anonymous">Non puoi cambiare il nome utente se non sei registrato!</string>
+    <string name="username_anonymous">Non puoi cambiare il nome utente in modalità ospite!</string>
     <string name="zero">0</string>
 </resources>
