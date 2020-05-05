@@ -38,7 +38,7 @@
     <string name="exit_error">Impossibile accedere come ospite</string>
     <string name="exit_no_save">Esci senza salvare</string>
     <string name="favourite">Aggiungi ai preferiti</string>
-    <string name="first_course">Primo Piatto</string>
+    <string name="first_course">Primo</string>
     <string name="general_info">Informazioni generali</string>
     <string name="have_an_account">Possiedi già un account?</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -94,7 +94,7 @@
     <string name="search_by_ingredients">Ricerca per ingredienti</string>
     <string name="search_by_text_not_possible">La ricerca tramite testo non è disponibile</string>
     <string name="search_by_time">Tempo di preparazione \u003C </string>
-    <string name="second_course">Secondo Piatto</string>
+    <string name="second_course">Secondo</string>
     <string name="section">Section</string>
     <string name="set_timer">Imposta un timer</string>
     <string name="share_comment">Pubblica commento</string>

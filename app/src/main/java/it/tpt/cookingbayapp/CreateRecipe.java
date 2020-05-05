@@ -115,8 +115,8 @@ public class CreateRecipe extends AppCompatActivity {
         ddType = findViewById(R.id.dropdownType);
         actwType = findViewById(R.id.actw);
         String[] ddItems = new String[]{
-                "Primo Piatto",
-                "Secondo Piatto",
+                "Primo",
+                "Secondo",
                 "Dessert",
                 "Antipasto",
                 "Contorno",
@@ -199,7 +199,9 @@ public class CreateRecipe extends AppCompatActivity {
             mRecipe = new Recipe();
             mRecipe.setAuthorName(currentUser.getDisplayName());
             mRecipe.setAuthorId(currentUser.getUid());
-            mRecipe.setProfilePicUrl(currentUser.getPhotoUrl().toString());
+            if (currentUser.getPhotoUrl()!=null) mRecipe.setProfilePicUrl(currentUser.getPhotoUrl().toString());
+            else mRecipe.setProfilePicUrl("missingprofile");
+
             mRecipe.setComments(new ArrayList<Comment>());
         }
 

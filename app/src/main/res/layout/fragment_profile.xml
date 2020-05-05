@@ -92,7 +92,7 @@
             android:layout_gravity="center"
             android:text="@string/edit_username"
             android:textColor="@color/colorAccent"
-            app:icon="@drawable/ic_person_outline_black_24dp"
+            app:icon="@drawable/ic_person_black_24dp"
             app:iconTint="@color/colorAccent" />
 
         <Button
@@ -120,7 +120,7 @@
             android:layout_gravity="center"
             android:text="@string/switch_account"
             android:textColor="@color/colorAccent"
-            app:icon="@drawable/ic_people_outline_black_24dp"
+            app:icon="@drawable/ic_people_black_24dp"
             app:iconTint="@color/colorAccent" />
 
         <Button

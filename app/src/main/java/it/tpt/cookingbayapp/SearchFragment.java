@@ -117,10 +117,10 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
             public void onCheckedChanged(ChipGroup group, @IdRes int checkedId) {
                 switch (group.getCheckedChipId()) {
                     case R.id.chpPrimo:
-                        selectedChip="Primo Piatto";
+                        selectedChip="Primo";
                         break;
                     case R.id.chpSecondo:
-                        selectedChip="Secondo Piatto";
+                        selectedChip="Secondo";
                         break;
                     case R.id.chpDessert:
                         selectedChip="Dessert";
