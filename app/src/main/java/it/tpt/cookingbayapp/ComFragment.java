@@ -49,7 +49,6 @@ public class ComFragment extends Fragment {
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         mRecyclerView = view.findViewById(R.id.comRecycler);
-        mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         boolean isOwnRecipe = userId.equals(authorId); //Verifica che la ricetta è personale
         mAdapter = new CommentRecyclerAdapter(comments, getContext(), recipeId, userId, isOwnRecipe);
