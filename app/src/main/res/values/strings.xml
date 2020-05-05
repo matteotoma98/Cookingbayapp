@@ -75,6 +75,7 @@
     <string name="password_confirm">Conferma</string>
     <string name="password_done">Password cambiata correttamente</string>
     <string name="password_length">La password deve avere un minimo di 6 caratteri!</string>
+    <string name="password_required">Inserisci la tua vecchia password!</string>
     <string name="preview_pic">imganteprima</string>
     <string name="profilePic">profilePic</string>
     <string name="profilepic">profilePic</string>

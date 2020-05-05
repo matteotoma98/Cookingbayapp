@@ -105,6 +105,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         switchAccount.setOnClickListener(this);
         exit.setOnClickListener(this);
         changeUsername.setOnClickListener(this);
+        changePassword.setOnClickListener(this);
 
     }
 

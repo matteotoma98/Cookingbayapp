@@ -51,33 +51,37 @@ public class PswDialog extends DialogFragment {
                 oldPass = mOldPsw.getText().toString();
                 newPass = mNewPsw.getText().toString();
                 confPass = mConfirmPsw.getText().toString();
-                if (newPass.length() < 6) {
-                    Toast.makeText((Context) getActivity(), R.string.password_length, Toast.LENGTH_SHORT).show();
+                if (oldPass.equals("")) {
+                    Toast.makeText((Context) getActivity(), R.string.password_required, Toast.LENGTH_SHORT).show();
                 } else {
-                    if (!newPass.equals(confPass)) {
-                        Toast.makeText((Context) getActivity(), R.string.password_conf, Toast.LENGTH_SHORT).show();
+                    if (newPass.length() < 6) {
+                        Toast.makeText((Context) getActivity(), R.string.password_length, Toast.LENGTH_SHORT).show();
                     } else {
-                        //Per cambiare password bisogna prima riautenticarsi
-                        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                        AuthCredential credential = EmailAuthProvider
-                                .getCredential(user.getEmail(), oldPass);
+                        if (!newPass.equals(confPass)) {
+                            Toast.makeText((Context) getActivity(), R.string.password_conf, Toast.LENGTH_SHORT).show();
+                        } else {
+                            //Per cambiare password bisogna prima riautenticarsi
+                            final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                            AuthCredential credential = EmailAuthProvider
+                                    .getCredential(user.getEmail(), oldPass);
 
-                        user.reauthenticate(credential) //Riautentica dunque l'utente
-                                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        user.updatePassword(newPass) //Aggiorna la password
-                                                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                    @Override
-                                                    public void onComplete(@NonNull Task<Void> task) {
-                                                        if (task.isSuccessful()) {
-                                                            Toast.makeText((Context) getActivity(), R.string.password_done, Toast.LENGTH_SHORT).show();
-                                                            dismiss();
+                            user.reauthenticate(credential) //Riautentica dunque l'utente
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            user.updatePassword(newPass) //Aggiorna la password
+                                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<Void> task) {
+                                                            if (task.isSuccessful()) {
+                                                                Toast.makeText((Context) getActivity(), R.string.password_done, Toast.LENGTH_SHORT).show();
+                                                                dismiss();
+                                                            }
                                                         }
-                                                    }
-                                                });
-                                    }
-                                });
+                                                    });
+                                        }
+                                    });
+                        }
                     }
                 }
             }
