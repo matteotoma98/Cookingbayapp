@@ -37,6 +37,7 @@ public class ReauthDialog extends DialogFragment {
     private Button mBtnDelete, mBtnDiscard;
     private TextInputEditText password;
     public static final int LOGIN_REQUEST = 101;
+    private FirebaseFirestore db;
 
     @Nullable
     @Override
@@ -45,8 +46,8 @@ public class ReauthDialog extends DialogFragment {
         View view = inflater.inflate(R.layout.reauth_dialog, container, false);
         mBtnDiscard= view.findViewById(R.id.btnUndo);
         mBtnDelete= view.findViewById(R.id.btnDeleteAccount);
-        password = view.findViewById(R.id.txtInsertComment);
-
+        password = view.findViewById(R.id.txtReauthPass);
+        db = FirebaseFirestore.getInstance();
 
         mBtnDiscard.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,26 +73,26 @@ public class ReauthDialog extends DialogFragment {
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {
                                         final String uid = user.getUid();
-                                        user.delete()
-                                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        db.collection("Recipes")
+                                                .whereEqualTo("authorId", uid)
+                                                .get()
+                                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                                     @Override
-                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                                         if (task.isSuccessful()) {
-                                                            FirebaseFirestore db = FirebaseFirestore.getInstance();
-                                                            db.collection("Recipes")
-                                                                    .whereEqualTo("authorId", uid)
-                                                                    .get()
-                                                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                                                document.getReference().delete();
+                                                            }
+                                                            String deletePath = "images/" + uid;
+                                                            FirebaseStorage storage = FirebaseStorage.getInstance();
+                                                            StorageReference listRef = storage.getReference().child(deletePath);
+                                                            deleteFolderElements(listRef);
+                                                            db.collection("Users").document(uid).delete();
+                                                            user.delete()
+                                                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
                                                                         @Override
-                                                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                                        public void onComplete(@NonNull Task<Void> task) {
                                                                             if (task.isSuccessful()) {
-                                                                                for (QueryDocumentSnapshot document : task.getResult()) {
-                                                                                    document.getReference().delete();
-                                                                                }
-                                                                                String deletePath = "images/" + uid;
-                                                                                FirebaseStorage storage = FirebaseStorage.getInstance();
-                                                                                StorageReference listRef = storage.getReference().child(deletePath);
-                                                                                deleteFolderElements(listRef);
                                                                                 dismiss();
                                                                                 Intent intent = new Intent(getActivity(), LoginActivity.class);
                                                                                 getActivity().startActivityForResult(intent, LOGIN_REQUEST);
@@ -101,7 +102,6 @@ public class ReauthDialog extends DialogFragment {
                                                         }
                                                     }
                                                 });
-
                                     } else Toast.makeText((Context) getActivity(), R.string.password_wrong, Toast.LENGTH_SHORT).show();
                                 }
                             });
