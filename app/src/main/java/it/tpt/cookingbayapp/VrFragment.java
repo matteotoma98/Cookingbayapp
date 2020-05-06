@@ -182,7 +182,7 @@ public class VrFragment extends Fragment implements View.OnClickListener {
                                 ArrayList<String> disliked = (ArrayList<String>) document.get("disliked");
                                 if(liked.contains(recipeId)) {
                                     isAlreadyLiked = true;
-                                    like.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorAccent));
+                                    like.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorLightBlue));
                                     dislike.setColorFilter(ContextCompat.getColor(getContext(), R.color.likeDislikeNotClicked));
                                     likeCounterText.setText(String.valueOf(likeCounter));
                                     dislikeCounterText.setText(String.valueOf(dislikeCounter));
@@ -192,7 +192,7 @@ public class VrFragment extends Fragment implements View.OnClickListener {
                                 }
                                 else if(disliked.contains(recipeId)) {
                                     isAlreadyDisliked = true;
-                                    dislike.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorAccent));
+                                    dislike.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorLightBlue));
                                     like.setColorFilter(ContextCompat.getColor(getContext(), R.color.likeDislikeNotClicked));
                                     dislikeCounterText.setText(String.valueOf(dislikeCounter));
                                     likeCounterText.setText(String.valueOf(likeCounter));
@@ -220,7 +220,7 @@ public class VrFragment extends Fragment implements View.OnClickListener {
                         likeCounterText.setText(String.valueOf(likeCounter));
                         likeClicked = false;
                     } else {
-                        like.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorAccent));
+                        like.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorLightBlue));
                         dislike.setColorFilter(ContextCompat.getColor(getContext(), R.color.likeDislikeNotClicked));
                         likeCounterText.setText(String.valueOf(likeCounter + 1));
                         dislikeCounterText.setText(String.valueOf(dislikeCounter));
@@ -235,7 +235,7 @@ public class VrFragment extends Fragment implements View.OnClickListener {
                         dislikeCounterText.setText(String.valueOf(dislikeCounter));
                         dislikeClicked = false;
                     } else {
-                        dislike.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorAccent));
+                        dislike.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorLightBlue));
                         like.setColorFilter(ContextCompat.getColor(getContext(), R.color.likeDislikeNotClicked));
                         dislikeCounterText.setText(String.valueOf(dislikeCounter + 1));
                         likeCounterText.setText(String.valueOf(likeCounter));

@@ -1,14 +1,21 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimary">@color/colorAccent</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:statusBarColor">@color/colorPrimary</item>
-        <item name="android:navigationBarColor">@color/colorPrimaryDark</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="actionBarTheme">@style/actionWhite</item>
     </style>
+
+
+    <style name="actionWhite" >
+        <item name="colorPrimary">@color/colorPrimary</item>
+    </style>
+
+
 
     <style name="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense" parent="" />
 
@@ -17,11 +24,11 @@
     </style>
     <style name="NoActionLogin" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:statusBarColor">@color/colorAccent</item>
-        <item name="android:navigationBarColor">@color/colorAccent</item>
+        <item name="colorPrimary">@color/colorAccent</item>
+        <item name="colorPrimaryDark">@color/colorPrimary</item>
+        <item name="colorAccent">@color/colorLightBlue</item>
+        <item name="android:statusBarColor">@color/colorPrimary</item>
+        <item name="android:windowLightStatusBar">true</item>
     </style>
     <style name="SplashScreen" parent="Theme.MaterialComponents.Light.NoActionBar">
 

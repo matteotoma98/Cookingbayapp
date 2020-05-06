@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/login"
-        android:textColor="@color/colorAccent"
+        android:textColor="@color/colorLightBlue"
         android:textSize="40sp"
         android:textStyle="bold" />
 
@@ -52,9 +52,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="4dp"
-        android:background="@color/colorPrimary"
+        android:backgroundTint="@color/colorAccent"
         android:hint="@string/login"
-        android:textColorHint="@android:color/white"
+        android:textColorHint="@color/colorPrimary"
         android:textSize="17sp" />
 
     <LinearLayout
@@ -74,7 +74,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/reset_password"
-            android:textColor="@color/colorAccent"
+            android:textColor="@color/colorLightBlue"
             app:iconTint="@color/colorAccent" />
     </LinearLayout>
 
@@ -95,7 +95,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/signup"
-            android:textColor="@color/colorAccent"
+            android:textColor="@color/colorLightBlue"
             app:iconTint="@color/colorAccent" />
     </LinearLayout>
 
@@ -116,7 +116,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/login_as_guest"
-            android:textColor="@color/colorAccent"
+            android:textColor="@color/colorLightBlue"
             app:iconTint="@color/colorAccent" />
     </LinearLayout>
 </LinearLayout>
