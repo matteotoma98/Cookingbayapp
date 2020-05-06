@@ -49,6 +49,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
     private Button switchAccount; //Bottone per cambiare account
     private Button changeUsername; //Bottone per modificare l'username dell'utente
     private Button changePassword; // Bottone per modificare la password dell'utente
+    private Button deleteAccount;
     private FirebaseAuth mAuth;
     private ImageView profilePic; //Foto di profile
     private ImageView saveUsername;
@@ -84,6 +85,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         usernameLayout = view.findViewById(R.id.modifyusername);
         usernameLayout.setVisibility(View.GONE);
         changePassword = view.findViewById(R.id.profileChangePsw);
+        deleteAccount = view.findViewById(R.id.delete_account);
         updateUI(); //Aggiorna l'ui con le informazioni dell'utente
 
         return view;
@@ -106,6 +108,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         exit.setOnClickListener(this);
         changeUsername.setOnClickListener(this);
         changePassword.setOnClickListener(this);
+        deleteAccount.setOnClickListener(this);
 
     }
 
@@ -346,6 +349,14 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
                 if(user!=null && !user.isAnonymous()) {
                     PswDialog passwordDialog = new PswDialog(); //Custom dialog per il cambio della password
                     passwordDialog.show(getChildFragmentManager(), "custom");
+                } else
+                    Snackbar.make(layout, R.string.anonymous, Snackbar.LENGTH_SHORT).show();
+                break;
+
+            case R.id.delete_account:
+                if(user!=null && !user.isAnonymous()) {
+                    ReauthDialog deleteDialog = new ReauthDialog();
+                    deleteDialog.show(getChildFragmentManager(), "custom");
                 } else
                     Snackbar.make(layout, R.string.anonymous, Snackbar.LENGTH_SHORT).show();
                 break;

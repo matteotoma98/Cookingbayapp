@@ -2,7 +2,6 @@ package it.tpt.cookingbayapp;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,7 +51,7 @@ public class PswDialog extends DialogFragment {
                 newPass = mNewPsw.getText().toString();
                 confPass = mConfirmPsw.getText().toString();
                 if (oldPass.equals("")) {
-                    Toast.makeText((Context) getActivity(), R.string.password_required, Toast.LENGTH_SHORT).show();
+                    Toast.makeText((Context) getActivity(), R.string.password_old_required, Toast.LENGTH_SHORT).show();
                 } else {
                     if (newPass.length() < 6) {
                         Toast.makeText((Context) getActivity(), R.string.password_length, Toast.LENGTH_SHORT).show();
@@ -69,16 +68,18 @@ public class PswDialog extends DialogFragment {
                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
-                                            user.updatePassword(newPass) //Aggiorna la password
-                                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                        @Override
-                                                        public void onComplete(@NonNull Task<Void> task) {
-                                                            if (task.isSuccessful()) {
-                                                                Toast.makeText((Context) getActivity(), R.string.password_done, Toast.LENGTH_SHORT).show();
-                                                                dismiss();
+                                            if (task.isSuccessful()) {
+                                                user.updatePassword(newPass) //Aggiorna la password
+                                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<Void> task) {
+                                                                if (task.isSuccessful()) {
+                                                                    Toast.makeText((Context) getActivity(), R.string.password_done, Toast.LENGTH_SHORT).show();
+                                                                    dismiss();
+                                                                }
                                                             }
-                                                        }
-                                                    });
+                                                        });
+                                            } else Toast.makeText((Context) getActivity(), R.string.password_wrong, Toast.LENGTH_SHORT).show();
                                         }
                                     });
                         }

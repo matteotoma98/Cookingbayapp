@@ -1,55 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="15dp">
 
     <TextView
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:text="@string/share_comment"
+        android:text="@string/reauthenticate"
         android:textColor="@color/primaryText"
-        android:textSize="15sp" />
+        android:textSize="15sp"/>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/txtlayInsertComment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:hint="@string/insert_comment"
+        android:hint="@string/password"
         app:boxBackgroundColor="@android:color/white"
-        app:counterEnabled="true"
-        app:counterMaxLength="240">
+        app:counterMaxLength="25"
+        app:endIconMode="password_toggle">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/txtInsertComment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:maxLength="240" />
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/txtReauthPass"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:maxLength="25" />
     </com.google.android.material.textfield.TextInputLayout>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="end"
-        android:orientation="horizontal">
-
+        android:orientation="horizontal"
+        android:gravity="end">
         <Button
-            android:id="@+id/btnDiscardComment"
+            android:id="@+id/btnUndo"
             style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/delete"
+            android:text="@string/cancel"
             android:textColor="@color/colorAccent" />
-
         <Button
-            android:id="@+id/btnPublishComment"
+            android:id="@+id/btnDeleteAccount"
             style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/publish"
+            android:text="@string/delete_account"
             android:textColor="@color/colorAccent" />
     </LinearLayout>
 </LinearLayout>

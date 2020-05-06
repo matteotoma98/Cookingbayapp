@@ -122,6 +122,16 @@
             android:textColor="@color/colorAccent"
             app:icon="@drawable/ic_people_black_24dp"
             app:iconTint="@color/colorAccent" />
+        <Button
+            android:id="@+id/delete_account"
+            style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/delete_account"
+            android:textColor="@color/colorAccent"
+            app:icon="@drawable/ic_remove_circle_black_24dp"
+            app:iconTint="@color/colorAccent" />
 
         <Button
             android:id="@+id/logout"

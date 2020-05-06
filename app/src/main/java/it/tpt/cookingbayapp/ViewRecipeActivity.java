@@ -42,6 +42,8 @@ public class ViewRecipeActivity extends AppCompatActivity {
     private boolean iconset;
     private boolean alreadyFavourite;
 
+    private FirebaseUser mUser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +82,8 @@ public class ViewRecipeActivity extends AppCompatActivity {
         viewPagerAdapter.addFragment(mComFragment, "Commenti");
         mViewPager.setAdapter(viewPagerAdapter);
 
+        mUser = FirebaseAuth.getInstance().getCurrentUser();
+
     }
 
     @Override
@@ -87,15 +91,14 @@ public class ViewRecipeActivity extends AppCompatActivity {
         super.onDestroy();
         //Viene aggiunta o rimossa la ricetta dai preferiti solo al termine dell'activity per evitare continue call al database ad ogni click
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if(alreadyFavourite && !iconset) {//Se l'utente ha deciso di rimuoverlo dai preferiti
-            db.collection("Users").document(user.getUid())
+        if (alreadyFavourite && !iconset) {//Se l'utente ha deciso di rimuoverlo dai preferiti
+            db.collection("Users").document(mUser.getUid())
                     .update("favourites", FieldValue.arrayRemove(recipeId));
-        }
-        else if(iconset && !alreadyFavourite) { //Altrimenti se l'utente ha deciso di aggiungerlo ai preferiti e non è gia stato aggiunto
-            db.collection("Users").document(user.getUid())
+        } else if (iconset && !alreadyFavourite) { //Altrimenti se l'utente ha deciso di aggiungerlo ai preferiti e non è gia stato aggiunto
+            db.collection("Users").document(mUser.getUid())
                     .update("favourites", FieldValue.arrayUnion(recipeId));
         }
+
     }
 
     @Override
@@ -115,14 +118,15 @@ public class ViewRecipeActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.addFavourite) {
-            if (iconset) {
-                item.setIcon(R.drawable.ic_favorite_border_black_24dp);
-                iconset = false;
-            } else {
-                item.setIcon(R.drawable.ic_favorite_black_24dp);
-                iconset = true;
+            if (mUser != null && !mUser.isAnonymous()) {
+                if (iconset) {
+                    item.setIcon(R.drawable.ic_favorite_border_black_24dp);
+                    iconset = false;
+                } else {
+                    item.setIcon(R.drawable.ic_favorite_black_24dp);
+                    iconset = true;
+                }
             }
-
         }
         return super.onOptionsItemSelected(item);
     }
@@ -143,14 +147,12 @@ public class ViewRecipeActivity extends AppCompatActivity {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
                                 ArrayList<String> favourites = (ArrayList<String>) document.get("favourites");
-                                if(favourites.contains(recipeId)) {
+                                if (favourites.contains(recipeId)) {
                                     alreadyFavourite = true;
                                     favMenuBtn.setIcon(R.drawable.ic_favorite_black_24dp);
                                     iconset = true;
                                 }
                             }
-                        } else {
-
                         }
                     }
                 });
