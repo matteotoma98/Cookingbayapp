@@ -2,6 +2,7 @@ package it.tpt.cookingbayapp;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
@@ -34,8 +35,8 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivityForResult(intent, LOGIN_REQUEST);
         } else {
-            if (currentUser.isAnonymous()) getSupportActionBar().setTitle("Cooking Bay");
-            else getSupportActionBar().setTitle(currentUser.getDisplayName());
+            if (currentUser.isAnonymous()) getSupportActionBar().setSubtitle("Ospite");
+            else getSupportActionBar().setSubtitle(currentUser.getDisplayName());
         }
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
@@ -83,9 +84,9 @@ public class MainActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 // Successfully signed in
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                if (user.isAnonymous()) getSupportActionBar().setTitle("Cooking Bay");
+                if (user.isAnonymous()) getSupportActionBar().setTitle("Ospite");
                 else {
-                    getSupportActionBar().setTitle(user.getDisplayName());
+                    getSupportActionBar().setSubtitle(user.getDisplayName());
                 }
                 //String username = intent.getExtras().getString("username");
                 //getSupportActionBar().setTitle(username); //dà il nome e il cognome in alto nella action bar

@@ -73,7 +73,7 @@ public class ViewRecipeActivity extends AppCompatActivity {
         commentBundle.putString("authorId", recipe.getAuthorId());
         mComFragment.setArguments(commentBundle); //Passa i commenti al fragment della visualizzazione dei commenti
 
-        getSupportActionBar().setTitle(recipe.getTitle());
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //View pager per le Tab "RICETTA" e "COMMENTI"
         mTabLayout.setupWithViewPager(mViewPager);
@@ -84,6 +84,12 @@ public class ViewRecipeActivity extends AppCompatActivity {
 
         mUser = FirebaseAuth.getInstance().getCurrentUser();
 
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return true;
     }
 
     @Override

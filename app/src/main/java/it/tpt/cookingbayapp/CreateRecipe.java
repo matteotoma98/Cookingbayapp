@@ -111,6 +111,8 @@ public class CreateRecipe extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_recipe);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         //Istruzioni per settare correttamente l'AutoCompleteTextView (Menu a tendina)
         ddType = findViewById(R.id.dropdownType);
         actwType = findViewById(R.id.actw);
@@ -187,7 +189,7 @@ public class CreateRecipe extends AppCompatActivity {
             mRecipe = editRecipe;
 
         } else { //Se è in corso la creazione di una nuova ricetta
-            getSupportActionBar().setTitle("Crea nuova ricetta");
+            getSupportActionBar().setTitle("Crea ricetta");
             //Passa la lista degli ingredienti e degli step ai corrispondenti adapter
             ArrayList<Step> tempArray = new ArrayList<>();
             mAdapter = new StepAdapter(new ArrayList<Step>(), this);
@@ -253,6 +255,12 @@ public class CreateRecipe extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return true;
     }
 
     @Override

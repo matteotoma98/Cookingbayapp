@@ -262,7 +262,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
                                         usernameLayout.setVisibility(View.GONE);
                                         username.setText(usernameText);
                                         username.setVisibility(View.VISIBLE);
-                                        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(usernameText);
+                                        ((AppCompatActivity) getActivity()).getSupportActionBar().setSubtitle(usernameText);
                                         Log.d("TEXTUSERNAME", "username changed.");
                                     }
                                 }
@@ -331,7 +331,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
                                                         // Sign in success, update UI with the signed-in user's information
                                                         Log.d("signin", "signInAnonymously:success");
                                                         updateUI();
-                                                        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Cooking Bay");
+                                                        ((AppCompatActivity) getActivity()).getSupportActionBar().setSubtitle("Ospite");
                                                         Snackbar.make(layout, R.string.logged_as_anonymous, Snackbar.LENGTH_SHORT).show();
                                                     } else {
                                                         // If sign in fails, display a message to the user.
