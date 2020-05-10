@@ -8,5 +8,6 @@
     <color name="secondaryText">#757575</color>
     <color name="likeDislikeNotClicked">#7d7d7d</color>
     <color name="bottomNavUnselected">#656565</color>
+    <color name="statusBarLight">#e0e0e0</color>
     <color name="alert">#FF0000</color>
 </resources>
