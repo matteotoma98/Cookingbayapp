@@ -1,7 +1,5 @@
 package it.tpt.cookingbayapp.recipeObject;
 
-import android.net.Uri;
-
 import java.io.Serializable;
 
 /*Classe utilizzata per i commenti della ricetta

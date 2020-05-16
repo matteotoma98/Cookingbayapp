@@ -17,6 +17,7 @@
             android:layout_height="match_parent" />
 
     </androidx.core.widget.NestedScrollView>
+
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/commentCoordinatorLayout"
         android:layout_width="match_parent"
@@ -33,7 +34,7 @@
             android:backgroundTint="@color/colorAccent"
             app:borderWidth="0dp"
             app:srcCompat="@drawable/ic_insert_comment_black_24dp"
-            app:tint="@android:color/white"/>
+            app:tint="@android:color/white" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </RelativeLayout>

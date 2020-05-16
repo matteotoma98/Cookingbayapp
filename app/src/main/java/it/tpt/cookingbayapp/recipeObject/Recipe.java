@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class Recipe implements Serializable{
+public class Recipe implements Serializable {
     private String title;
     private String previewUrl;
     private String profilePicUrl;
@@ -23,7 +23,8 @@ public class Recipe implements Serializable{
     private int dislikes;
 
     //Per le classi da utilizzare con FireStore serve sempre un costruttore senza argomenti disponibile
-    public Recipe(){ }
+    public Recipe() {
+    }
 
     public Recipe(String title, String previewUrl, String profilePicUrl, int time, String type, String authorId, String authorName, ArrayList<Ingredient> ingredients, ArrayList<Section> sections, long date) {
         this.title = title;

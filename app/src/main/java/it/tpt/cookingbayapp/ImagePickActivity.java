@@ -9,7 +9,6 @@ import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Parcelable;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
@@ -138,7 +137,7 @@ public class ImagePickActivity {
             ContentResolver objectContentResolver = context.getContentResolver();
             MimeTypeMap objectMimeTypeMap = MimeTypeMap.getSingleton();
             String extension = objectMimeTypeMap.getExtensionFromMimeType(objectContentResolver.getType(uri));
-            if(extension == null) return "jpg";
+            if (extension == null) return "jpg";
             else return extension;
 
         } catch (Exception e) {

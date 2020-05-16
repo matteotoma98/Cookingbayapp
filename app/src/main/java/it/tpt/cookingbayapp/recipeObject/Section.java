@@ -10,9 +10,10 @@ public class Section implements Serializable {
     private String imageUrl;
     private int timer;
 
-    public Section(){ }
+    public Section() {
+    }
 
-    public Section(String text, String imageUrl, int timer){
+    public Section(String text, String imageUrl, int timer) {
         this.text = text;
         this.imageUrl = imageUrl;
         this.timer = timer;

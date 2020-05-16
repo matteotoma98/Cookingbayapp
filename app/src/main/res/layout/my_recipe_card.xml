@@ -43,8 +43,7 @@
                     android:maxLines="1"
                     android:textSize="17sp"
                     android:textStyle="bold"
-                    android:textColor="@color/primaryText"
- />
+                    android:textColor="@color/primaryText" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"

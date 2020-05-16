@@ -1,4 +1,4 @@
-package it.tpt.cookingbayapp.CommentRecycler;
+package it.tpt.cookingbayapp.commentRecycler;
 
 import android.view.View;
 import android.widget.ImageView;

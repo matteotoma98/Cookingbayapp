@@ -1,7 +1,6 @@
 package it.tpt.cookingbayapp;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +18,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import it.tpt.cookingbayapp.CommentRecycler.CommentRecyclerAdapter;
+import it.tpt.cookingbayapp.commentRecycler.CommentRecyclerAdapter;
 import it.tpt.cookingbayapp.recipeObject.Comment;
 
 public class ComDialog extends DialogFragment {
@@ -34,15 +33,14 @@ public class ComDialog extends DialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.com_dialog, container, false);
-        mBtnDiscard= view.findViewById(R.id.btnDiscardComment);
-        mBtnPublish= view.findViewById(R.id.btnPublishComment);
-        mTxtInsertComment= view.findViewById(R.id.txtInsertComment);
+        mBtnDiscard = view.findViewById(R.id.btnDiscardComment);
+        mBtnPublish = view.findViewById(R.id.btnPublishComment);
+        mTxtInsertComment = view.findViewById(R.id.txtInsertComment);
 
 
         mBtnDiscard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("discard", "Discard Pressed");
                 getDialog().dismiss();
             }
         });
@@ -50,11 +48,10 @@ public class ComDialog extends DialogFragment {
         mBtnPublish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("publish", "Publish Pressed");
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 final Comment comment = new Comment(user.getUid(), getmTxtInsertComment());
-                if(!user.isAnonymous() && !getmTxtInsertComment().equals("")) { //Se non è anonimo
-                    if(!getmTxtInsertComment().equals("")) { //Se il testo non è vuoto
+                if (!user.isAnonymous() && !getmTxtInsertComment().equals("")) { //Se non è anonimo
+                    if (!getmTxtInsertComment().equals("")) { //Se il testo non è vuoto
                         FirebaseFirestore db = FirebaseFirestore.getInstance();
                         db.collection("Recipes").document(recipeId)
                                 .update("comments", FieldValue.arrayUnion(comment))

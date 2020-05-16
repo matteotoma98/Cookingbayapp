@@ -1,7 +1,6 @@
 package it.tpt.cookingbayapp;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,19 +64,18 @@ public class FavFragment extends Fragment {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
                                 ArrayList<String> favourites = (ArrayList<String>) document.get("favourites"); //Ottiene la lista delle ricette preferie (Id)
-                                for(String id : favourites) { //Ottieni uno ad uno tali ricette e controlla i cambiamenti in tempo reale
+                                for (String id : favourites) { //Ottieni uno ad uno tali ricette e controlla i cambiamenti in tempo reale
                                     db.collection("Recipes").document(id)
                                             .addSnapshotListener(new EventListener<DocumentSnapshot>() {
                                                 @Override
                                                 public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                                                    if (e != null) {
-                                                        Log.w("TAG", "Listen failed.", e);
-                                                        return;
-                                                    }
-                                                    if(documentSnapshot.exists()) {
+                                                    if (e != null) return;
+                                                    if (documentSnapshot.exists()) {
                                                         String docId = documentSnapshot.getId();
-                                                        if (!recipeAdapter.getRecipeIds().contains(docId)) recipeAdapter.addRecipe(documentSnapshot.toObject(Recipe.class), docId);
-                                                        else recipeAdapter.updateRecipe(documentSnapshot.toObject(Recipe.class), docId);
+                                                        if (!recipeAdapter.getRecipeIds().contains(docId))
+                                                            recipeAdapter.addRecipe(documentSnapshot.toObject(Recipe.class), docId);
+                                                        else
+                                                            recipeAdapter.updateRecipe(documentSnapshot.toObject(Recipe.class), docId);
                                                     }
                                                 }
                                             });

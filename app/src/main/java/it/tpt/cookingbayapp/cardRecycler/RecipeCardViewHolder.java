@@ -11,7 +11,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import it.tpt.cookingbayapp.R;
 import it.tpt.cookingbayapp.RecipeClickListener;
 
-public class RecipeCardViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+public class RecipeCardViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
     ImageView preview;
     CircleImageView profilePic;
@@ -33,13 +33,12 @@ public class RecipeCardViewHolder extends RecyclerView.ViewHolder implements Vie
     }
 
 
-
     @Override
     public void onClick(View v) {
         this.recipeClickListener.onRecipeClickListener(v, getLayoutPosition());
     }
 
-    public void setRecipeClickListener(RecipeClickListener rc){
+    public void setRecipeClickListener(RecipeClickListener rc) {
         this.recipeClickListener = rc;
     }
 }

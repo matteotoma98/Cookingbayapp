@@ -11,10 +11,9 @@
     </style>
 
 
-    <style name="actionWhite" >
+    <style name="actionWhite">
         <item name="colorPrimary">@color/colorPrimary</item>
     </style>
-
 
 
     <style name="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense" parent="" />
@@ -22,6 +21,7 @@
     <style name="NoActionMain" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="android:statusBarColor">@color/colorPrimary</item>
     </style>
+
     <style name="NoActionLogin" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorAccent</item>
@@ -30,6 +30,7 @@
         <item name="android:statusBarColor">@color/colorPrimary</item>
         <item name="android:windowLightStatusBar">true</item>
     </style>
+
     <style name="SplashScreen" parent="Theme.MaterialComponents.Light.NoActionBar">
 
         <item name="colorPrimary">@color/colorPrimary</item>

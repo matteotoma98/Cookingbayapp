@@ -1,19 +1,17 @@
 package it.tpt.cookingbayapp;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -134,7 +132,6 @@ public class VrFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.i("VRFRAG", "On destroy called");
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         if (likeClicked && !isAlreadyLiked) { //Se l'utente ha messo mi piace e non lo aveva già messo
             db.collection("Users").document(currentUser.getUid()) //Aggiungi l'id della ricetta alla lista personale
@@ -180,7 +177,7 @@ public class VrFragment extends Fragment implements View.OnClickListener {
                                 //Liste delle ricette piaciute e non piaciute
                                 ArrayList<String> liked = (ArrayList<String>) document.get("liked");
                                 ArrayList<String> disliked = (ArrayList<String>) document.get("disliked");
-                                if(liked.contains(recipeId)) {
+                                if (liked.contains(recipeId)) {
                                     isAlreadyLiked = true;
                                     like.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorLightBlue));
                                     dislike.setColorFilter(ContextCompat.getColor(getContext(), R.color.likeDislikeNotClicked));
@@ -189,8 +186,7 @@ public class VrFragment extends Fragment implements View.OnClickListener {
                                     likeClicked = true;
                                     dislikeClicked = false;
                                     likeCounter--;
-                                }
-                                else if(disliked.contains(recipeId)) {
+                                } else if (disliked.contains(recipeId)) {
                                     isAlreadyDisliked = true;
                                     dislike.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorLightBlue));
                                     like.setColorFilter(ContextCompat.getColor(getContext(), R.color.likeDislikeNotClicked));
@@ -201,8 +197,6 @@ public class VrFragment extends Fragment implements View.OnClickListener {
                                     dislikeCounter--;
                                 }
                             }
-                        } else {
-
                         }
                     }
                 });

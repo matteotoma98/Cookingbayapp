@@ -1,20 +1,13 @@
 package it.tpt.cookingbayapp;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,21 +19,22 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
@@ -201,7 +195,8 @@ public class CreateRecipe extends AppCompatActivity {
             mRecipe = new Recipe();
             mRecipe.setAuthorName(currentUser.getDisplayName());
             mRecipe.setAuthorId(currentUser.getUid());
-            if (currentUser.getPhotoUrl()!=null) mRecipe.setProfilePicUrl(currentUser.getPhotoUrl().toString());
+            if (currentUser.getPhotoUrl() != null)
+                mRecipe.setProfilePicUrl(currentUser.getPhotoUrl().toString());
             else mRecipe.setProfilePicUrl("missingprofile");
 
             mRecipe.setComments(new ArrayList<Comment>());
@@ -281,7 +276,7 @@ public class CreateRecipe extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.exitNoSave) { //Esci senza salvare (stessa funzione del premere indietro)
-            if (isUploading == false) { //Se è in corso l'upload evita che l'utente prema questa opzione
+            if (!isUploading) { //Se è in corso l'upload evita che l'utente prema questa opzione
                 Toast.makeText(this, R.string.recipe_not_saved, Toast.LENGTH_SHORT).show();
                 finish();
             }
@@ -290,7 +285,7 @@ public class CreateRecipe extends AppCompatActivity {
                 View view = findViewById(R.id.createRecipeLinearLayout1);
                 Snackbar.make(view, R.string.minimum_info_required, Snackbar.LENGTH_LONG).show();
             } else {
-                if (isUploading == false) {
+                if (!isUploading) {
                     generatedId = randomAlphaNumeric();
                     if (isEditing) folder = currentUser.getUid() + "/" + recipeId;
                     else folder = currentUser.getUid() + "/" + generatedId;
@@ -475,17 +470,10 @@ public class CreateRecipe extends AppCompatActivity {
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-                                Log.d("TAG", "DocumentSnapshot successfully written!");
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.w("TAG", "Error writing document", e);
+                                Toast.makeText(CreateRecipe.this, R.string.done_editing, Toast.LENGTH_LONG).show();
+                                finish();
                             }
                         });
-                Toast.makeText(CreateRecipe.this, R.string.done_editing, Toast.LENGTH_LONG).show();
-                finish();
             } else { //Aggiunge una nuova ricetta
                 mRecipe.setDate(Timestamp.now().getSeconds());
                 db.collection("Recipes").document(generatedId)
@@ -493,50 +481,42 @@ public class CreateRecipe extends AppCompatActivity {
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-                                Log.d("Firestore up", "DocumentSnapshot written with ID: " + generatedId);
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.w("Firestore up", "Error adding document", e);
+                                Toast.makeText(CreateRecipe.this, R.string.done_sharing, Toast.LENGTH_LONG).show();
+                                finish();
                             }
                         });
-                Toast.makeText(CreateRecipe.this, R.string.done_sharing, Toast.LENGTH_LONG).show();
-                finish();
             }
         }
 
-    @Override
-    protected void onCancelled() { //Nel caso l'activity venga chiusa prima del completamento elimina i file caricati
-        super.onCancelled();
-        String deletePath = "images/" + currentUser.getUid() + "/" + title.getText().toString().trim();
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference listRef = storage.getReference().child(deletePath);
-        //Elimina tutti i file della cartella specificata (La cartella in se viene eliminata da Firebase automaticamente se non contiene più file)
-        //Eliminare direttamente la cartella al momento non è possibile
-        listRef.listAll()
-                .addOnSuccessListener(new OnSuccessListener<ListResult>() {
-                    @Override
-                    public void onSuccess(ListResult listResult) {
-                        for (StorageReference prefix : listResult.getPrefixes()) {
-                            //Prefixes sono le cartelle
-                        }
+        @Override
+        protected void onCancelled() { //Nel caso l'activity venga chiusa prima del completamento elimina i file caricati
+            super.onCancelled();
+            String deletePath = "images/" + currentUser.getUid() + "/" + title.getText().toString().trim();
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+            StorageReference listRef = storage.getReference().child(deletePath);
+            //Elimina tutti i file della cartella specificata (La cartella in se viene eliminata da Firebase automaticamente se non contiene più file)
+            //Eliminare direttamente la cartella al momento non è possibile
+            listRef.listAll()
+                    .addOnSuccessListener(new OnSuccessListener<ListResult>() {
+                        @Override
+                        public void onSuccess(ListResult listResult) {
+                            for (StorageReference prefix : listResult.getPrefixes()) {
+                                //Prefixes sono le cartelle
+                            }
 
-                        for (StorageReference item : listResult.getItems()) {
-                            item.delete();
+                            for (StorageReference item : listResult.getItems()) {
+                                item.delete();
+                            }
                         }
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.i("AsyncTask", "error");
-                    }
-                });
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                        }
+                    });
+        }
+
     }
-
-}
 
     private ArrayList findUnaskedPermissions(ArrayList<String> wanted) {
         ArrayList<String> result = new ArrayList<>();

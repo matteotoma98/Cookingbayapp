@@ -1,6 +1,6 @@
 package it.tpt.cookingbayapp.personalCardRecycler;
 
-import android.content.DialogInterface;
+
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -9,10 +9,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-
-import de.hdodenhof.circleimageview.CircleImageView;
-import it.tpt.cookingbayapp.MainActivity;
 import it.tpt.cookingbayapp.R;
 import it.tpt.cookingbayapp.RecipeClickListener;
 
@@ -43,7 +39,7 @@ public class PersonalCardViewHolder extends RecyclerView.ViewHolder implements V
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.deleterecipe:
                 this.recipeClickListener.onDeleteClickListener(v, getAdapterPosition());
                 break;

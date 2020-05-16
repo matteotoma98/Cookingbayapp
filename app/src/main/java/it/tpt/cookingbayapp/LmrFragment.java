@@ -2,11 +2,9 @@ package it.tpt.cookingbayapp;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -104,15 +102,14 @@ public class LmrFragment extends Fragment {
                                     .addSnapshotListener(new EventListener<QuerySnapshot>() {
                                         @Override
                                         public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
-                                            if (e != null) {
-                                                Log.w("TAG", "Listen failed.", e);
-                                                return;
-                                            }
+                                            if (e != null) return;
+
                                             for (DocumentChange dc : value.getDocumentChanges()) {
                                                 switch (dc.getType()) {
                                                     case ADDED:
                                                         //Deve esserci questo controllo altrimenti al primo avvio duplica le ricette
-                                                        if(!firstDownload) adapter.addRecipe(dc.getDocument().toObject(Recipe.class), dc.getDocument().getId());
+                                                        if (!firstDownload)
+                                                            adapter.addRecipe(dc.getDocument().toObject(Recipe.class), dc.getDocument().getId());
                                                         break;
                                                     case MODIFIED:
                                                         adapter.updateRecipe(dc.getDocument().toObject(Recipe.class), dc.getDocument().getId());
@@ -120,10 +117,8 @@ public class LmrFragment extends Fragment {
                                                 }
                                             }
                                             firstDownload = false;
-                                            Log.i("FinishRDG", "Recipes updated");
                                         }
                                     });
-                            Log.i("FinishRDG", "Recipes downloaded");
                         }
                     }
                 });

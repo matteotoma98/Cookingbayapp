@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-
 import com.bumptech.glide.Glide;
 
 import java.util.List;
@@ -61,8 +60,9 @@ public class RecipeCardRecyclerViewAdapter extends RecyclerView.Adapter<RecipeCa
 
     /**
      * Aggiunge una ricetta e il suo Id alle rispettive liste
+     *
      * @param recipe La ricetta
-     * @param id L'Id della ricetta
+     * @param id     L'Id della ricetta
      */
     public void addRecipe(Recipe recipe, String id) {
         recipeList.add(recipe);
@@ -70,20 +70,24 @@ public class RecipeCardRecyclerViewAdapter extends RecyclerView.Adapter<RecipeCa
         notifyDataSetChanged();
         //notifyItemInserted(recipeList.size()-1);
     }
+
     /**
      * Aggiorna una ricetta
+     *
      * @param recipe La ricetta
-     * @param id L'id della ricetta per trovare l'indice
+     * @param id     L'id della ricetta per trovare l'indice
      */
     public void updateRecipe(Recipe recipe, String id) {
         int index = recipeIds.indexOf(id);
         recipeList.set(index, recipe);
         notifyItemChanged(index);
     }
+
     /**
      * Elimina una ricetta
+     *
      * @param recipe La ricetta
-     * @param id L'id della ricetta per trovare l'indice
+     * @param id     L'id della ricetta per trovare l'indice
      */
     public void deleteRecipe(Recipe recipe, String id) {
         int index = recipeIds.indexOf(id);
@@ -110,10 +114,11 @@ public class RecipeCardRecyclerViewAdapter extends RecyclerView.Adapter<RecipeCa
             holder.title.setText(recipe.getTitle());
             holder.user.setText(recipe.getAuthorName());
             holder.type.setText(recipe.getType());
-            holder.time.setText(String.valueOf(recipe.getTime()) + " min");
-            if(!recipe.getProfilePicUrl().equals("missingprofile"))
+            holder.time.setText(recipe.getTime() + " min");
+            if (!recipe.getProfilePicUrl().equals("missingprofile"))
                 Glide.with(holder.profilePic.getContext()).load(recipe.getProfilePicUrl()).error(R.drawable.missingprofile).into(holder.profilePic);
-            else  Glide.with(holder.profilePic.getContext()).load(R.drawable.missingprofile).into(holder.profilePic);
+            else
+                Glide.with(holder.profilePic.getContext()).load(R.drawable.missingprofile).into(holder.profilePic);
             Glide.with(holder.preview.getContext()).load(recipe.getPreviewUrl()).into(holder.preview);
 
         }

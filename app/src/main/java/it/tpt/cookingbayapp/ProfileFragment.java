@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,7 +42,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class ProfileFragment extends Fragment implements View.OnClickListener{
+public class ProfileFragment extends Fragment implements View.OnClickListener {
 
     private Button exit; //Bottone per uscire dall'account
     private Button switchAccount; //Bottone per cambiare account
@@ -144,15 +143,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
                             UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                                     .setPhotoUri(Uri.parse(url))
                                     .build();
-                            user.updateProfile(profileUpdates)
-                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if (task.isSuccessful()) {
-                                                Log.d("UPDATEPROPIC", "User profile updated.");
-                                            }
-                                        }
-                                    });
+                            user.updateProfile(profileUpdates);
                             Map<String, Object> picUrl = new HashMap<>();
                             picUrl.put("profilePicUrl", url);
                             //Aggiungi l'url nel documento dell'utente per poterlo visualizzare anche nei commenti
@@ -168,9 +159,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
                                                 for (final QueryDocumentSnapshot document : task.getResult()) {
                                                     document.getReference().update("profilePicUrl", url);
                                                 }
-
-                                            } else {
-                                                Log.d("TAG", "Error getting documents: ", task.getException());
                                             }
                                         }
                                     });
@@ -189,7 +177,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         if (requestCode == PROPIC_REQUEST && resultCode == getActivity().RESULT_OK) {
-            Log.i("PICUPLOADPROFILE", "RESULT OK");
             if (ImagePickActivity.getPickImageResultUri(getActivity(), intent, "profile") != null) {
                 //Prendi l'uri assegnato alla cache
                 profileUri = ImagePickActivity.getPickImageResultUri(getActivity(), intent, "profile");
@@ -263,7 +250,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
                                         username.setText(usernameText);
                                         username.setVisibility(View.VISIBLE);
                                         ((AppCompatActivity) getActivity()).getSupportActionBar().setSubtitle(usernameText);
-                                        Log.d("TEXTUSERNAME", "username changed.");
                                     }
                                 }
                             });
@@ -282,9 +268,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
                                         for (final QueryDocumentSnapshot document : task.getResult()) {
                                             document.getReference().update("authorName", usernameText);
                                         }
-
-                                    } else {
-                                        Log.d("TAG", "Error getting documents: ", task.getException());
                                     }
                                 }
                             });
@@ -297,8 +280,10 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
                 break;
 
             case R.id.userProfilePic: //Cambia immagine di profilo
-                if (!user.isAnonymous()) startActivityForResult(ImagePickActivity.getPickImageChooserIntent(getActivity(), "profile"), PROPIC_REQUEST);
-                else Snackbar.make(layout, R.string.profilepic_anonymous, Snackbar.LENGTH_LONG).show();
+                if (!user.isAnonymous())
+                    startActivityForResult(ImagePickActivity.getPickImageChooserIntent(getActivity(), "profile"), PROPIC_REQUEST);
+                else
+                    Snackbar.make(layout, R.string.profilepic_anonymous, Snackbar.LENGTH_LONG).show();
                 break;
 
             case R.id.switch_account: //Cambia account
@@ -329,24 +314,23 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
                                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                                     if (task.isSuccessful()) {
                                                         // Sign in success, update UI with the signed-in user's information
-                                                        Log.d("signin", "signInAnonymously:success");
                                                         updateUI();
                                                         ((AppCompatActivity) getActivity()).getSupportActionBar().setSubtitle("Ospite");
                                                         Snackbar.make(layout, R.string.logged_as_anonymous, Snackbar.LENGTH_SHORT).show();
                                                     } else {
                                                         // If sign in fails, display a message to the user.
-                                                        Log.w("signinerror", "signInAnonymously:failure", task.getException());
                                                         Toast.makeText((Context) getActivity(), R.string.exit_error, Toast.LENGTH_SHORT).show();
                                                     }
                                                 }
                                             });
                                 }
                             });
-                } else Snackbar.make(layout, R.string.already_anonymous, Snackbar.LENGTH_SHORT).show();
+                } else
+                    Snackbar.make(layout, R.string.already_anonymous, Snackbar.LENGTH_SHORT).show();
                 break;
 
             case R.id.profileChangePsw: //Cambia la password
-                if(user!=null && !user.isAnonymous()) {
+                if (user != null && !user.isAnonymous()) {
                     PswDialog passwordDialog = new PswDialog(); //Custom dialog per il cambio della password
                     passwordDialog.show(getChildFragmentManager(), "custom");
                 } else
@@ -354,7 +338,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
                 break;
 
             case R.id.delete_account:
-                if(user!=null && !user.isAnonymous()) {
+                if (user != null && !user.isAnonymous()) {
                     ReauthDialog deleteDialog = new ReauthDialog();
                     deleteDialog.show(getChildFragmentManager(), "custom");
                 } else

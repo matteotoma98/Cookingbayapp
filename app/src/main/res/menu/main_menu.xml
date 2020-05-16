@@ -3,16 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
 
     >
-    <item android:id="@id/exitNoSave"
+    <item
+        android:id="@id/exitNoSave"
         android:title="@string/exit_no_save"
         android:icon="@drawable/ic_delete_forever_black_24dp"
         android:iconTint="@android:color/black"
-        app:showAsAction="ifRoom"
-        />
-    <item android:id="@id/exitSave"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@id/exitSave"
         android:title="@string/save_publish"
-        android:icon= "@drawable/ic_save_black_24dp"
+        android:icon="@drawable/ic_save_black_24dp"
         android:iconTint="@android:color/black"
-        app:showAsAction="ifRoom"
-        />
+        app:showAsAction="ifRoom" />
 </menu>

@@ -52,7 +52,7 @@ public class StepAdapter extends RecyclerView.Adapter<StepViewHolder> {
         View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.step_item, parent, false);
         final StepViewHolder holder = new StepViewHolder(layoutView);
 
-        if(viewType == 0) {
+        if (viewType == 0) {
             holder.delete.setVisibility(View.GONE); //Il primo step non può essere eliminato perciò il bottone elimina viene nascosto
             holder.stepstar.setVisibility(View.VISIBLE);
         }
@@ -137,6 +137,7 @@ public class StepAdapter extends RecyclerView.Adapter<StepViewHolder> {
 
     /**
      * Serve per ottenere in modo corretto la posizione nel onCreateViewHolder
+     *
      * @param position
      * @return position
      */
@@ -175,14 +176,14 @@ public class StepAdapter extends RecyclerView.Adapter<StepViewHolder> {
                         .centerCrop()
                         .into(holder.imgStep);
             }
-            if(disabled) {
+            if (disabled) {
                 holder.stepMinutes.setEnabled(false);
                 holder.stepHours.setEnabled(false);
                 holder.steptext.setEnabled(false);
                 holder.imgStep.setEnabled(false);
                 holder.delete.setEnabled(false);
             }
-            if(editing) {
+            if (editing) {
                 holder.delete.setVisibility(View.GONE);
             }
 
@@ -195,11 +196,13 @@ public class StepAdapter extends RecyclerView.Adapter<StepViewHolder> {
 
     /**
      * Serve per ottenere la posizione dell'holder che è stato cliccato
+     *
      * @return Posizione dell'holder cliccato
      */
     public int getCurrentPicPosition() {
         return currentPicPosition;
     }
+
     public void setCurrentPicPosition(int currentPicPosition) {
         this.currentPicPosition = currentPicPosition;
     }

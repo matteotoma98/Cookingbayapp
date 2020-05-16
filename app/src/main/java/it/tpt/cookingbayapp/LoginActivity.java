@@ -1,17 +1,15 @@
 package it.tpt.cookingbayapp;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
-
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -28,7 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener{
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     private TextInputEditText textEmail, textPassword;
     private Button btnRegister;
@@ -86,13 +84,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                         setResult(RESULT_OK);
                                         finish();
                                         // Sign in success, update UI with the signed-in user's information
-                                        Log.d("loginsuccess", "signInWithEmail:success");
                                     } else {
                                         // If sign in fails, display a message to the user.
-                                        Log.w("loginfailure", "signInWithEmail:failure", task.getException());
                                         Toast.makeText(LoginActivity.this, "Errore nell'accesso all'account",
                                                 Toast.LENGTH_SHORT).show();
-
                                     }
 
                                 }
@@ -119,12 +114,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                             public void onComplete(@NonNull Task<AuthResult> task) {
                                                 if (task.isSuccessful()) {
                                                     // Sign in success, update UI with the signed-in user's information
-                                                    Log.d("signin", "signInAnonymously:success");
                                                     setResult(RESULT_OK);
                                                     finish();
                                                 } else {
                                                     // If sign in fails, display a message to the user.
-                                                    Log.w("signinerror", "signInAnonymously:failure", task.getException());
                                                     Toast.makeText(LoginActivity.this, R.string.exit_error, Toast.LENGTH_SHORT).show();
                                                 }
                                             }
@@ -135,7 +128,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             case R.id.resetPsw:
                 String email = textEmail.getText().toString().trim();
-                if(email.equals("")) {
+                if (email.equals("")) {
                     Toast.makeText(LoginActivity.this, R.string.insert_email, Toast.LENGTH_SHORT).show();
                 } else {
                     mAuth.sendPasswordResetEmail(email) //Invia una email per reimpostare la password
@@ -154,9 +147,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     /**
      * Scrive un nuovo utente registrato nel FirebaseFirestore
+     *
      * @param username Nome utente
-     * @param email Email
-     * @param uid Id dell'utente
+     * @param email    Email
+     * @param uid      Id dell'utente
      */
     private void writeUserToDb(String username, String email, String uid) {
         Map<String, Object> user = new HashMap<>();

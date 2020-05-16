@@ -2,17 +2,15 @@ package it.tpt.cookingbayapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -24,10 +22,8 @@ import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-
 import java.util.ArrayList;
 import java.util.Calendar;
-
 
 import it.tpt.cookingbayapp.cardRecycler.RecipeCardRecyclerViewAdapter;
 import it.tpt.cookingbayapp.recipeObject.Recipe;
@@ -59,7 +55,6 @@ public class RdgFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
 
         db = FirebaseFirestore.getInstance();
-        Log.i("sec", String.valueOf(getCurrentDayInSeconds()));
         downloadRecipes(0); //Scarica le ricette
 
         //int largePadding = getResources().getDimensionPixelSize(R.dimen.shr_product_grid_spacing);
@@ -94,7 +89,6 @@ public class RdgFragment extends Fragment {
                                 recipeIds.add(document.getId());
                                 count++;
                             }
-                            Log.i("giorni", String.valueOf(daysBefore) + " Count= " + count);
                             if (count < 3) downloadRecipes(daysBefore + 1);
                             else {
                                 recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1, GridLayoutManager.VERTICAL, false));
@@ -105,10 +99,8 @@ public class RdgFragment extends Fragment {
                                         .addSnapshotListener(new EventListener<QuerySnapshot>() {
                                             @Override
                                             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
-                                                if (e != null) {
-                                                    Log.w("TAG", "Listen failed.", e);
-                                                    return;
-                                                }
+                                                if (e != null) return;
+
                                                 for (DocumentChange dc : value.getDocumentChanges()) {
                                                     switch (dc.getType()) {
                                                         case MODIFIED:
@@ -119,10 +111,8 @@ public class RdgFragment extends Fragment {
                                                             break;
                                                     }
                                                 }
-                                                Log.i("FinishRDG", "Recipes updated");
                                             }
                                         });
-                                Log.i("FinishRDG", "Recipes downloaded");
                             }
                         }
                     }

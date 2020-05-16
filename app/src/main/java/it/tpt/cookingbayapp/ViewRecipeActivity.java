@@ -1,5 +1,11 @@
 package it.tpt.cookingbayapp;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -7,11 +13,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
-
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -132,6 +133,8 @@ public class ViewRecipeActivity extends AppCompatActivity {
                     item.setIcon(R.drawable.ic_favorite_black_24dp);
                     iconset = true;
                 }
+            } else {
+                Toast.makeText(this, R.string.anonymous, Toast.LENGTH_LONG).show();
             }
         }
         return super.onOptionsItemSelected(item);

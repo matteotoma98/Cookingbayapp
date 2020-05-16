@@ -122,6 +122,7 @@
             android:textColor="@color/colorAccent"
             app:icon="@drawable/ic_people_black_24dp"
             app:iconTint="@color/colorAccent" />
+
         <Button
             android:id="@+id/delete_account"
             style="@style/Widget.MaterialComponents.Button.TextButton.Icon"

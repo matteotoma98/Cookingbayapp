@@ -1,14 +1,13 @@
 package it.tpt.cookingbayapp;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -17,7 +16,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 
-import it.tpt.cookingbayapp.CommentRecycler.CommentRecyclerAdapter;
+import it.tpt.cookingbayapp.commentRecycler.CommentRecyclerAdapter;
 import it.tpt.cookingbayapp.recipeObject.Comment;
 
 
@@ -60,13 +59,12 @@ public class ComFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                if(!user.isAnonymous()) {
+                if (!user.isAnonymous()) {
                     ComDialog commentDialog = new ComDialog();
                     commentDialog.setmAdapter(mAdapter); //Per passare l'adapter ed aggiungere il commento in locale
                     commentDialog.setRecipeId(recipeId); //L'id della ricetta per aggiungere il commento su Firestore
                     commentDialog.show(getChildFragmentManager(), "custom");
-                }
-                else Snackbar.make(layout, R.string.anonymous, Snackbar.LENGTH_LONG).show();
+                } else Snackbar.make(layout, R.string.anonymous, Snackbar.LENGTH_LONG).show();
             }
         });
         return view;

@@ -54,17 +54,16 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionViewHolder> {
         if (sectionList != null && position < sectionList.size()) {
             holder.sectionTitle.setText("Step " + (position + 1));
             holder.sectionText.setText(sectionList.get(position).getText());
-            if(sectionList.get(position).getTimer()==0) holder.timer.setVisibility(View.GONE);
+            if (sectionList.get(position).getTimer() == 0) holder.timer.setVisibility(View.GONE);
             if (sectionList.get(position).getImageUrl().equals("")) {
                 final LinearLayout.LayoutParams layoutparams = (LinearLayout.LayoutParams) holder.sectionText.getLayoutParams();
                 final LinearLayout.LayoutParams layoutparams2 = (LinearLayout.LayoutParams) holder.sectionTitle.getLayoutParams();
-                layoutparams.setMargins(0,0,0,0);
-                layoutparams2.setMargins(0,0,0,0);
+                layoutparams.setMargins(0, 0, 0, 0);
+                layoutparams2.setMargins(0, 0, 0, 0);
                 holder.sectionTitle.setLayoutParams(layoutparams2);
                 holder.sectionText.setLayoutParams(layoutparams);
                 holder.sectionPic.setVisibility(View.GONE);
-            }
-            else {
+            } else {
                 Glide.with(holder.sectionPic.getContext())
                         .load(sectionList.get(position).getImageUrl())
                         .into(holder.sectionPic);

@@ -1,4 +1,4 @@
-package it.tpt.cookingbayapp.CommentRecycler;
+package it.tpt.cookingbayapp.commentRecycler;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -43,10 +43,9 @@ public class CommentRecyclerAdapter extends RecyclerView.Adapter<CommentViewHold
     public CommentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.comment_item, parent, false);
         final CommentViewHolder holder = new CommentViewHolder(layoutView);
-        if(isOwnRecipe) {
+        if (isOwnRecipe) {
             holder.delete.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             holder.delete.setVisibility(View.GONE);
         }
 
@@ -65,11 +64,12 @@ public class CommentRecyclerAdapter extends RecyclerView.Adapter<CommentViewHold
 
     @Override
     public void onBindViewHolder(@NonNull final CommentViewHolder holder, final int position) {
-        if(comments!=null && position < comments.size()) {
+        if (comments != null && position < comments.size()) {
 
             holder.content.setText(comments.get(position).getContent());
 
-            if(comments.get(position).getUserId().equals(userId)) holder.delete.setVisibility(View.VISIBLE);
+            if (comments.get(position).getUserId().equals(userId))
+                holder.delete.setVisibility(View.VISIBLE);
 
             db.collection("Users").document(comments.get(position).getUserId())
                     .get()
@@ -85,8 +85,6 @@ public class CommentRecyclerAdapter extends RecyclerView.Adapter<CommentViewHold
                                             .error(R.drawable.missingprofile)
                                             .into(holder.profilePic);
                                 }
-                            } else {
-
                             }
                         }
                     });
@@ -96,7 +94,7 @@ public class CommentRecyclerAdapter extends RecyclerView.Adapter<CommentViewHold
 
     public void addComment(Comment comment) {
         comments.add(comment);
-        notifyItemInserted(getItemCount()-1);
+        notifyItemInserted(getItemCount() - 1);
     }
 
     @Override

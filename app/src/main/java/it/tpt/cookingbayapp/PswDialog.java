@@ -79,7 +79,8 @@ public class PswDialog extends DialogFragment {
                                                                 }
                                                             }
                                                         });
-                                            } else Toast.makeText((Context) getActivity(), R.string.password_wrong, Toast.LENGTH_SHORT).show();
+                                            } else
+                                                Toast.makeText((Context) getActivity(), R.string.password_wrong, Toast.LENGTH_SHORT).show();
                                         }
                                     });
                         }

@@ -6,7 +6,7 @@ public class Ingredient implements Serializable {
     private String name;
     private String quantity;
 
-    public Ingredient(){
+    public Ingredient() {
 
     }
 

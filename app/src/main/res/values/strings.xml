@@ -59,8 +59,8 @@
     <string name="login">Accedi</string>
     <string name="login_as_guest">Accedi come ospite</string>
     <string name="mandatory">*</string>
-    <string name="menuExit"/>
-    <string name="menuFile"/>
+    <string name="menuExit" />
+    <string name="menuFile" />
     <string name="method">Procedimento</string>
     <string name="min">Min</string>
     <string name="minimum_info_required">Informazioni obbligatorie o immagine di anteprima mancanti!</string>
@@ -108,7 +108,7 @@
     <string name="starter">Antipasto</string>
     <string name="step">Step</string>
     <string name="step_n">Step N</string>
-    <string name="string_undo"/>
+    <string name="string_undo" />
     <string name="switch_account">Cambia account</string>
     <string name="time">Tempo</string>
     <string name="timer">Avvia timer</string>

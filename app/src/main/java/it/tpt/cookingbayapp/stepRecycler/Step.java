@@ -13,7 +13,7 @@ public class Step implements Serializable {
     private Uri stepUri;
     private boolean hasPicture;
 
-    public Step(){
+    public Step() {
 
     }
 

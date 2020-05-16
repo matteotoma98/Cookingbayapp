@@ -2,7 +2,6 @@ package it.tpt.cookingbayapp;
 
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,27 +78,29 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
 
     /**
      * Genera la query a seconda dei dati immessi dall'utente
+     *
      * @return query Firebase
      */
     private Query generateQuery() {
         Query query = null;
         String trimmed = searchText.getText().toString().toLowerCase().trim();
-        if(!trimmed.equals("") && searchText.isEnabled()) {
+        if (!trimmed.equals("") && searchText.isEnabled()) {
             String[] words = trimmed.split(" ");
             query = recipes.whereArrayContainsAny("titleWords", Arrays.asList(words));
         }
-        if(!selectedChip.equals("")) {
-            if(query!=null) query = query.whereEqualTo("type", selectedChip);
+        if (!selectedChip.equals("")) {
+            if (query != null) query = query.whereEqualTo("type", selectedChip);
             else query = recipes.whereEqualTo("type", selectedChip);
         }
-        if(ingAdapter.getItemCount()!=0) {
-            if(query!=null) query = query.whereArrayContainsAny("ingNames", ingAdapter.getIngredients());
+        if (ingAdapter.getItemCount() != 0) {
+            if (query != null)
+                query = query.whereArrayContainsAny("ingNames", ingAdapter.getIngredients());
             else query = recipes.whereArrayContainsAny("ingNames", ingAdapter.getIngredients());
 
         }
-        if(!TextUtils.isEmpty(searchTime.getText())) {
+        if (!TextUtils.isEmpty(searchTime.getText())) {
             int timeToSearch = Integer.parseInt(searchTime.getText().toString());
-            if(query!=null) query = query.whereLessThanOrEqualTo("time", timeToSearch);
+            if (query != null) query = query.whereLessThanOrEqualTo("time", timeToSearch);
             else query = recipes.whereLessThanOrEqualTo("time", timeToSearch);
         }
 
@@ -117,25 +118,25 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
             public void onCheckedChanged(ChipGroup group, @IdRes int checkedId) {
                 switch (group.getCheckedChipId()) {
                     case R.id.chpPrimo:
-                        selectedChip="Primo";
+                        selectedChip = "Primo";
                         break;
                     case R.id.chpSecondo:
-                        selectedChip="Secondo";
+                        selectedChip = "Secondo";
                         break;
                     case R.id.chpDessert:
-                        selectedChip="Dessert";
+                        selectedChip = "Dessert";
                         break;
                     case R.id.chpAntipasto:
-                        selectedChip="Antipasto";
+                        selectedChip = "Antipasto";
                         break;
                     case R.id.chpContorno:
-                        selectedChip="Contorno";
+                        selectedChip = "Contorno";
                         break;
                     case R.id.chpBevanda:
-                        selectedChip="Bevanda";
+                        selectedChip = "Bevanda";
                         break;
                     case R.id.chpPanino:
-                        selectedChip="Panino";
+                        selectedChip = "Panino";
                         break;
                     default:
                         selectedChip = "";
@@ -151,33 +152,29 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
             case R.id.addIngName:
                 String ing = ingName.getText().toString().trim();
                 if (!ing.equals("")) {
-                    if(ingAdapter.getItemCount() < 10) { //Purtroppo Firebase non permette la ricerca di più di 10 elementi
+                    if (ingAdapter.getItemCount() < 10) { //Purtroppo Firebase non permette la ricerca di più di 10 elementi
                         ingAdapter.addIngredient(ing.toLowerCase());
                         searchText.setEnabled(false);
                         searchText.setText(R.string.search_by_text_not_possible);
-                    }
-                    else {
+                    } else {
                         Toast.makeText(getContext(), "R.string.too_many_ing", Toast.LENGTH_LONG).show();
                     }
                 }
                 break;
             case R.id.delIngName:
                 ingAdapter.delIngredient();
-                if(ingAdapter.getItemCount()==0) {
+                if (ingAdapter.getItemCount() == 0) {
                     searchText.setEnabled(true);
                     searchText.setText("");
                 }
                 break;
             case R.id.btnSearch:
-                if(generateQuery()!=null) {
+                if (generateQuery() != null) {
                     generateQuery()
                             .addSnapshotListener(new EventListener<QuerySnapshot>() {
                                 @Override
                                 public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
-                                    if (e != null) {
-                                        Log.w("TAG", "Listen failed.", e);
-                                        return;
-                                    }
+                                    if (e != null) return;
                                     ArrayList<Recipe> recipeList = new ArrayList<>();
                                     ArrayList<String> recipeIds = new ArrayList<>();
                                     for (QueryDocumentSnapshot doc : value) {
@@ -185,11 +182,11 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
                                         recipeList.add(recipe);
                                         recipeIds.add(doc.getId());
                                     }
-                                    if(recipeList.isEmpty()) Toast.makeText(getContext(), R.string.no_recipe, Toast.LENGTH_LONG).show();
+                                    if (recipeList.isEmpty())
+                                        Toast.makeText(getContext(), R.string.no_recipe, Toast.LENGTH_LONG).show();
                                     recipeRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1, GridLayoutManager.VERTICAL, false));
                                     recipeAdapter = new RecipeCardRecyclerViewAdapter(getActivity(), recipeList, recipeIds);
                                     recipeRecyclerView.setAdapter(recipeAdapter);
-                                    Log.i("FinishLMR", "Recipes downloaded");
                                 }
                             });
                 }

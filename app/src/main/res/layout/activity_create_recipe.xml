@@ -39,10 +39,12 @@
             android:textColor="@color/colorAccent"
             android:textSize="17sp"
             android:textStyle="bold" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -53,6 +55,7 @@
                 android:textColor="@color/alert"
                 android:textSize="20sp"
                 android:textStyle="bold" />
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/createRecipeTitleLayout"
                 android:layout_width="match_parent"
@@ -64,6 +67,7 @@
                 app:boxBackgroundColor="@android:color/white"
                 app:counterEnabled="true"
                 app:counterMaxLength="60">
+
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/createRecipeTitle"
                     android:layout_width="match_parent"
@@ -71,6 +75,7 @@
                     android:maxLength="60" />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -81,6 +86,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -91,6 +97,7 @@
                     android:textColor="@color/alert"
                     android:textSize="20sp"
                     android:textStyle="bold" />
+
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="110dp"
                     android:layout_height="wrap_content"
@@ -107,7 +114,7 @@
                         android:layout_width="95dp"
                         android:layout_height="wrap_content"
                         android:inputType="number"
-                        android:maxLength="3"/>
+                        android:maxLength="3" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <LinearLayout
@@ -115,6 +122,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:layout_marginStart="-15dp">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
@@ -135,6 +143,7 @@
                         app:boxBackgroundColor="@android:color/white"
                         app:startIconContentDescription="type"
                         app:startIconDrawable="@drawable/ic_restaurant_black_24dp">
+
                         <AutoCompleteTextView
                             android:id="@+id/actw"
                             android:layout_width="match_parent"
@@ -146,6 +155,7 @@
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -165,6 +175,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:layout_marginStart="10dp">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
@@ -172,6 +183,7 @@
                         android:textColor="@color/alert"
                         android:textSize="20sp"
                         android:textStyle="bold" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
@@ -180,11 +192,12 @@
                         android:textSize="17sp"
                         android:textStyle="bold" />
                 </LinearLayout>
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/ingDisplay_recycler"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:paddingStart="15dp"/>
+                    android:paddingStart="15dp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"

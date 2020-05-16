@@ -29,8 +29,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.StorageReference;
 
-import it.tpt.cookingbayapp.recipeObject.Recipe;
-
 
 public class ReauthDialog extends DialogFragment {
 
@@ -44,8 +42,8 @@ public class ReauthDialog extends DialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.reauth_dialog, container, false);
-        mBtnDiscard= view.findViewById(R.id.btnUndo);
-        mBtnDelete= view.findViewById(R.id.btnDeleteAccount);
+        mBtnDiscard = view.findViewById(R.id.btnUndo);
+        mBtnDelete = view.findViewById(R.id.btnDeleteAccount);
         password = view.findViewById(R.id.txtReauthPass);
         db = FirebaseFirestore.getInstance();
 
@@ -61,7 +59,7 @@ public class ReauthDialog extends DialogFragment {
             public void onClick(View v) {
                 final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 final String pass = password.getText().toString();
-                if(pass.equals("")) {
+                if (pass.equals("")) {
                     Toast.makeText((Context) getActivity(), R.string.password_required, Toast.LENGTH_SHORT).show();
                 } else {
                     AuthCredential credential = EmailAuthProvider
@@ -102,7 +100,8 @@ public class ReauthDialog extends DialogFragment {
                                                         }
                                                     }
                                                 });
-                                    } else Toast.makeText((Context) getActivity(), R.string.password_wrong, Toast.LENGTH_SHORT).show();
+                                    } else
+                                        Toast.makeText((Context) getActivity(), R.string.password_wrong, Toast.LENGTH_SHORT).show();
                                 }
                             });
                 }
@@ -115,6 +114,7 @@ public class ReauthDialog extends DialogFragment {
 
     /**
      * Metodo ricorsivo per eliminare le cartelle di Firebase Storage
+     *
      * @param folder
      */
     private void deleteFolderElements(StorageReference folder) {
@@ -138,7 +138,6 @@ public class ReauthDialog extends DialogFragment {
                     }
                 });
     }
-
 
 
 }

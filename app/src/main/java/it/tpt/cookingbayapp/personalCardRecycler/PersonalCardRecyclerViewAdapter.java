@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -78,21 +77,19 @@ public class PersonalCardRecyclerViewAdapter extends RecyclerView.Adapter<Person
                                     @Override
                                     public void onSuccess(Void aVoid) {
                                         Toast.makeText(mContext, R.string.recipe_deleted, Toast.LENGTH_LONG).show();
-                                        Log.d("DELETEDOC", "DocumentSnapshot successfully deleted!");
+
                                     }
                                 })
                                 .addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
                                         Toast.makeText(mContext, R.string.delete_error, Toast.LENGTH_LONG).show();
-                                        Log.w("DELETEDOC", "Error deleting document", e);
                                     }
                                 });
 
                         FirebaseAuth mAuth = FirebaseAuth.getInstance();
                         FirebaseUser currentUser = mAuth.getCurrentUser();
                         String deletePath = "images/" + currentUser.getUid() + "/" + recipeIds.get(position);
-                        Log.i("path", deletePath);
                         recipeList.remove(position);
                         recipeIds.remove(position);
                         notifyItemRemoved(position);
@@ -117,7 +114,7 @@ public class PersonalCardRecyclerViewAdapter extends RecyclerView.Adapter<Person
                                 .addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
-                                        // Uh-oh, an error occurred!
+                                        // An error occurred!
                                     }
                                 });
                     }
@@ -145,8 +142,9 @@ public class PersonalCardRecyclerViewAdapter extends RecyclerView.Adapter<Person
 
     /**
      * Aggiunge una ricetta e il suo Id alle rispettive liste
+     *
      * @param recipe La ricetta
-     * @param id L'Id della ricetta
+     * @param id     L'Id della ricetta
      */
     public void addRecipe(Recipe recipe, String id) {
         recipeList.add(recipe);
@@ -154,10 +152,12 @@ public class PersonalCardRecyclerViewAdapter extends RecyclerView.Adapter<Person
         notifyDataSetChanged();
         //notifyItemInserted(recipeList.size()-1);
     }
+
     /**
      * Aggiorna una ricetta
+     *
      * @param recipe La ricetta
-     * @param id L'id della ricetta per trovare l'indice
+     * @param id     L'id della ricetta per trovare l'indice
      */
     public void updateRecipe(Recipe recipe, String id) {
         int index = recipeIds.indexOf(id);
