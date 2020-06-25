@@ -120,14 +120,14 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginStart="-15dp">
+                    android:layout_marginStart="-15dp"
+                    android:orientation="horizontal">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_marginTop="10dp"
                         android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
                         android:text="*"
                         android:textColor="@color/alert"
                         android:textSize="20sp"
@@ -138,8 +138,8 @@
                         style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-
                         android:hint="@string/type"
+                        android:longClickable="false"
                         app:boxBackgroundColor="@android:color/white"
                         app:startIconContentDescription="type"
                         app:startIconDrawable="@drawable/ic_restaurant_black_24dp">
@@ -150,7 +150,8 @@
                             android:layout_height="match_parent"
                             android:layout_gravity="bottom"
                             android:focusable="false"
-                            android:inputType="none" />
+                            android:inputType="none"
+                            android:longClickable="false" />
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
             </LinearLayout>
@@ -173,8 +174,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginStart="10dp">
+                    android:layout_marginStart="10dp"
+                    android:orientation="horizontal">
 
                     <TextView
                         android:layout_width="wrap_content"
