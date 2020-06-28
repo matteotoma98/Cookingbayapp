@@ -120,7 +120,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 uid = user.getUid();
 
-                final String nameOfimage = "profile_pic." + ImagePickActivity.getExtension(getContext(), profileUri);
+                final String nameOfimage = "profile_pic";
                 StorageReference objectStorageReference;
                 objectStorageReference = FirebaseStorage.getInstance().getReference("images/" + uid); // Create folder to Firebase Storage
                 final StorageReference imageRef = objectStorageReference.child(nameOfimage);

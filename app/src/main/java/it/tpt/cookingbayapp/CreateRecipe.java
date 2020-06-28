@@ -245,6 +245,7 @@ public class CreateRecipe extends AppCompatActivity {
             public void onClick(View v) {
                 if (permissionsToRequest.size() > 0) { //Controlla che non vi siano permessi non accettati
                     requestPermissions(permissionsToRequest.toArray(new String[permissionsToRequest.size()]), ALL_PERMISSIONS_RESULT);
+                    startActivityForResult(ImagePickActivity.getPickImageChooserIntent(CreateRecipe.this, "preview"), PREVIEW_REQUEST);
                 } else {
                     startActivityForResult(ImagePickActivity.getPickImageChooserIntent(CreateRecipe.this, "preview"), PREVIEW_REQUEST);
                 }
@@ -447,10 +448,12 @@ public class CreateRecipe extends AppCompatActivity {
             ArrayList<Section> sections = new ArrayList<>();
             List<Step> templist = mAdapter.getSteps();
             for (int i = 0; i < mAdapter.getItemCount(); i++) {
-                int hours = (TextUtils.isEmpty(templist.get(i).getHours())) ? 0 : Integer.parseInt(templist.get(i).getHours());
-                int minutes = (TextUtils.isEmpty(templist.get(i).getMinutes())) ? 0 : Integer.parseInt(templist.get(i).getMinutes());
-                int time = hours * 3600 + minutes * 60;
-                sections.add(new Section(templist.get(i).getText().trim(), templist.get(i).getUrl(), time));
+                if(!templist.get(i).getText().trim().equals("") || !templist.get(i).getUrl().trim().equals("")) {
+                    int hours = (TextUtils.isEmpty(templist.get(i).getHours())) ? 0 : Integer.parseInt(templist.get(i).getHours());
+                    int minutes = (TextUtils.isEmpty(templist.get(i).getMinutes())) ? 0 : Integer.parseInt(templist.get(i).getMinutes());
+                    int time = hours * 3600 + minutes * 60;
+                    sections.add(new Section(templist.get(i).getText().trim(), templist.get(i).getUrl(), time));
+                }
             }
             mRecipe.setSections(sections);
 

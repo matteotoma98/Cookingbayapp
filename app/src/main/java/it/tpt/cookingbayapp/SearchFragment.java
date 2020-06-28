@@ -157,7 +157,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
                         searchText.setEnabled(false);
                         searchText.setText(R.string.search_by_text_not_possible);
                     } else {
-                        Toast.makeText(getContext(), "R.string.too_many_ing", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), R.string.too_many_ing, Toast.LENGTH_LONG).show();
                     }
                 }
                 break;

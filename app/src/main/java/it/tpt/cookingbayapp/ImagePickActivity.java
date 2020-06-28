@@ -99,7 +99,7 @@ public class ImagePickActivity {
     public static void uploadToStorage(final Context context, Uri imageLocationPath, String folder, String fileName, final Step step) {
         try {
             if (imageLocationPath != null) {
-                final String nameOfimage = fileName + "." + getExtension(context, imageLocationPath);
+                final String nameOfimage = fileName; //+ "." + getExtension(context, imageLocationPath);
 
                 StorageReference objectStorageReference;
                 objectStorageReference = FirebaseStorage.getInstance().getReference("images/" + folder); // Create folder to Firebase Storage
