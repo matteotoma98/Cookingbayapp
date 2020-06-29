@@ -84,6 +84,12 @@ public class CommentRecyclerAdapter extends RecyclerView.Adapter<CommentViewHold
                                             .load(document.getString("profilePicUrl"))
                                             .error(R.drawable.missingprofile)
                                             .into(holder.profilePic);
+                                } else {
+                                    holder.username.setText(R.string.user_deleted);
+                                    Glide.with(mContext)
+                                            .load(R.drawable.missingprofile)
+                                            .error(R.drawable.missingprofile)
+                                            .into(holder.profilePic);
                                 }
                             }
                         }

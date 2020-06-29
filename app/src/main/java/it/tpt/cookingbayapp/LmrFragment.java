@@ -1,10 +1,13 @@
 package it.tpt.cookingbayapp;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -44,13 +47,24 @@ public class LmrFragment extends Fragment {
     private ListenerRegistration registration; //Serve per tenere traccia degli SnapshotListener di firebase ed eliminarli quando non servono
     private boolean firstDownload; //Per eseguire il download di tutte le ricette solo una volta all'atto dell'onCreate
 
+    //Membri utilizzati per la richiesta dei permessi
+    private ArrayList<String> permissionsToRequest;
+    private ArrayList<String> permissionsRejected = new ArrayList<>();
+    private ArrayList<String> permissions = new ArrayList<>();
+    private final static int ALL_PERMISSIONS_RESULT = 107;
+
     public LmrFragment() {
 
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+        permissions.add(Manifest.permission.CAMERA);
+        permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        permissions.add(Manifest.permission.READ_EXTERNAL_STORAGE);
+        permissionsToRequest = findUnaskedPermissions(permissions);
     }
 
     @Nullable
@@ -134,8 +148,12 @@ public class LmrFragment extends Fragment {
             public void onClick(View v) {
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 if (!user.isAnonymous()) {
-                    Intent i = new Intent(getActivity(), CreateRecipe.class);
-                    startActivity(i);
+                    if (permissionsToRequest.size() > 0) { //Controlla che non vi siano permessi non accettati
+                        requestPermissions(permissionsToRequest.toArray(new String[permissionsToRequest.size()]), ALL_PERMISSIONS_RESULT);
+                    } else {
+                        Intent i = new Intent(getActivity(), CreateRecipe.class);
+                        startActivity(i);
+                    }
                 } else Snackbar.make(layout, R.string.anonymous, Snackbar.LENGTH_LONG).show();
             }
         });
@@ -145,5 +163,30 @@ public class LmrFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         if (registration != null) registration.remove();
+    }
+
+    private ArrayList findUnaskedPermissions(ArrayList<String> wanted) {
+        ArrayList<String> result = new ArrayList<>();
+
+        for (String perm : wanted) {
+            if (!(getActivity().checkSelfPermission(perm) == PackageManager.PERMISSION_GRANTED)) {
+                result.add(perm);
+            }
+        }
+
+        return result;
+    }
+
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == ALL_PERMISSIONS_RESULT) {
+            for (String perm : permissionsToRequest) {
+                if (!(getActivity().checkSelfPermission(perm) == PackageManager.PERMISSION_GRANTED))
+                    permissionsRejected.add(perm);
+            }
+            if (permissionsRejected.size() > 0) {
+                if (shouldShowRequestPermissionRationale(permissionsRejected.get(0)))
+                    Toast.makeText(getContext(), "Approva tutto", Toast.LENGTH_SHORT).show();
+            } else permissionsToRequest.clear();
+        }
     }
 }

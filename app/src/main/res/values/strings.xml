@@ -121,6 +121,7 @@
     <string name="uploading">Attendi l\'upload delle immagini</string>
     <string name="user">Utente</string>
     <string name="user_anonymous">Ospite</string>
+    <string name="user_deleted">Utente eliminato</string>
     <string name="user_modify">Modifica nome utente</string>
     <string name="username">Username</string>
     <string name="username_anonymous">Non puoi cambiare il nome utente in modalità ospite!</string>
